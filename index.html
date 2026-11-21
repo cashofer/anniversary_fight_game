@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>結婚紀念日大亂鬥：高血量耐打版＋老婆限定助攻＋浪漫音樂 (2014.11.23)</title>
+  <title>13週年結婚紀念日大亂鬥(2026.11.23)</title>
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -797,7 +797,7 @@
             <span class="p1-badge" style="display:none;">出戰</span>
           </div>
           <div class="char-move-line">😭 狂哭震波・💖 愛心波・💧 眼淚衝刺</div>
-          <div class="char-trans-line">&lt;50% 血量變身：✨ 美少女戰士</div>
+          <div class="char-trans-line">&lt;50% 血量變身：✨ 美少女戰士（星光特效）</div>
         </button>
 
         <button type="button" class="char-select-card" data-pick-p1="eian" onclick="pickTitleP1('eian')">
@@ -806,7 +806,7 @@
             <span class="p1-badge" style="display:none;">出戰</span>
           </div>
           <div class="char-move-line">💨 放臭屁雲團・⚽ 足球波・🌪️ 臭氣衝刺</div>
-          <div class="char-trans-line">&lt;50% 血量變身：🦸 超人</div>
+          <div class="char-trans-line">&lt;50% 血量變身：🦸 超人（披風光環特效）</div>
         </button>
       </div>
 
@@ -835,7 +835,7 @@
       </div>
 
       <div class="start-actions">
-        <button type="button" class="start-fight-btn" onclick="startFromTitleScreen()">⚔️ 開始對戰（260 HP＋浪漫音樂）</button>
+        <button type="button" class="start-fight-btn" onclick="startFromTitleScreen()">⚔️ 開始對戰 </button>
         <button type="button" class="title-exit-btn" onclick="exitGame()">✕ Exit</button>
       </div>
     </div>
@@ -1087,6 +1087,14 @@
         playSynthTone(390, 0.12, "triangle", 0.15);
         setTimeout(function () { playSynthTone(520, 0.14, "sine", 0.14); }, 90);
         setTimeout(function () { playSynthTone(290, 0.2, "triangle", 0.14); }, 180);
+      } else if (kind === "sailor") {
+        playSynthTone(587.33, 0.11, "sine", 0.14);
+        setTimeout(function () { playSynthTone(783.99, 0.11, "sine", 0.14); }, 80);
+        setTimeout(function () { playSynthTone(1046.5, 0.22, "triangle", 0.15); }, 160);
+      } else if (kind === "superman") {
+        playSynthTone(261.63, 0.12, "sawtooth", 0.14);
+        setTimeout(function () { playSynthTone(392.00, 0.12, "triangle", 0.14); }, 85);
+        setTimeout(function () { playSynthTone(523.25, 0.22, "square", 0.13); }, 170);
       } else if (kind === "transform") {
         playSynthTone(220, 0.14, "triangle", 0.14);
         setTimeout(function () { playSynthTone(440, 0.14, "triangle", 0.14); }, 90);
@@ -1182,7 +1190,7 @@
         dressColor: "#f472b6",
         strokeColor: "#9d174d",
         transformName: "✨ 美少女戰士",
-        transformBanner: "✨ 女女 Reina 變身「美少女戰士」！星光強化！",
+        transformBanner: "✨ 女女 Reina 變身「美少女戰士」！星光閃耀＋ATK x1.65 · DEF x1.4！",
         skill1: { label: "😭 狂哭", kind: "cry", hitText: "😭 女女狂哭震波!", dmg: 23, reach: 158 },
         skill2: { label: "💖 愛心波", kind: "proj", projIcon: "💖", hitText: "💖 愛心波!", dmg: 17 },
         skill3: { label: "💧 眼淚衝刺", kind: "pinch", hitText: "💧 眼淚衝刺!", dmg: 21, reach: 126 }
@@ -1194,7 +1202,7 @@
         dressColor: "#38bdf8",
         strokeColor: "#0369a1",
         transformName: "🦸 超人",
-        transformBanner: "🦸 仔仔 Eian 變身「超人」！超能爆發！",
+        transformBanner: "🦸 仔仔 Eian 變身「超人」！超能光環＋紅披風＋ATK x1.65 · DEF x1.4！",
         skill1: { label: "💨 放臭屁", kind: "fart", hitText: "💨 仔仔放臭屁!", dmg: 24, reach: 152 },
         skill2: { label: "⚽ 足球波", kind: "proj", projIcon: "⚽", hitText: "⚽ 足球波!", dmg: 17 },
         skill3: { label: "🌪️ 臭氣衝刺", kind: "pinch", hitText: "🌪️ 臭氣衝刺!", dmg: 22, reach: 128 }
@@ -1513,9 +1521,9 @@
           this.hasTransformed = true;
           const spec = this.getSpec();
 
-          screenShakeSec = 0.7;
-          screenFlashSec = 0.45;
-          transformBannerSec = 2.0;
+          screenShakeSec = 0.72;
+          screenFlashSec = 0.46;
+          transformBannerSec = 2.1;
           currentBannerText = spec.transformBanner;
 
           if (this.charId === "servant") {
@@ -1533,6 +1541,24 @@
             addSparks(this.x, this.y - 56, "#fde047", 10);
             playActionSfx("pig");
             addFloatingText(this.x, this.y - 172, "🐷 暴走大肥豬膨脹!", "#db2777");
+          } else if (this.charId === "reina") {
+            // 女女 Reina 變身 ✨ 美少女戰士特效
+            screenFlashColor = "rgba(244, 114, 182, 0.38)";
+            addShockRing(this.x, this.y - 60, "#ec4899", 140);
+            addShockRing(this.x, this.y - 60, "#facc15", 98);
+            addSparks(this.x, this.y - 62, "#f472b6", 18);
+            addSparks(this.x, this.y - 62, "#fde047", 12);
+            playActionSfx("sailor");
+            addFloatingText(this.x, this.y - 172, "✨ 代表月亮懲罰你！美少女戰士變身!", "#db2777");
+          } else if (this.charId === "eian") {
+            // 仔仔 Eian 變身 🦸 超人特效
+            screenFlashColor = "rgba(56, 189, 248, 0.36)";
+            addShockRing(this.x, this.y - 62, "#ef4444", 142);
+            addShockRing(this.x, this.y - 62, "#facc15", 102);
+            addSparks(this.x, this.y - 64, "#38bdf8", 16);
+            addSparks(this.x, this.y - 64, "#facc15", 14);
+            playActionSfx("superman");
+            addFloatingText(this.x, this.y - 172, "🦸 超人光環覺醒！衝啊!", "#0284c7");
           } else {
             screenFlashColor = "rgba(250, 204, 21, 0.34)";
             addShockRing(this.x, this.y - 64, "#facc15", 125);
@@ -1694,7 +1720,7 @@
         c.translate(this.x, this.y);
 
         const isKid = this.charId === "reina" || this.charId === "eian";
-        const baseScale = isKid ? 0.86 : 1.0;
+        const baseScale = isKid ? (this.transformed ? 0.96 : 0.86) : 1.0;
         const bobY = this.grounded && Math.abs(this.vx) < 8 ? Math.sin(this.breatheCycle) * 2.0 : 0;
         const stepSwing = Math.sin(this.walkCycle) * 9;
         const headY = -88 + bobY;
@@ -1707,6 +1733,7 @@
         c.save();
         c.scale(baseScale, baseScale);
 
+        // 變身專屬特效光環
         if (this.transformed) {
           if (this.charId === "servant") {
             c.save();
@@ -1737,20 +1764,58 @@
             c.fill();
             c.stroke();
             c.restore();
-          } else {
-            c.strokeStyle = "rgba(250, 204, 21, 0.85)";
-            c.fillStyle = "rgba(251, 146, 60, 0.22)";
-            c.lineWidth = 3.5;
+          } else if (this.charId === "reina") {
+            // 女女變身美少女戰士：旋轉星光光圈與閃爍星星
+            c.save();
+            c.translate(0, -56 + bobY);
+            c.strokeStyle = "rgba(236, 72, 153, 0.85)";
+            c.fillStyle = "rgba(251, 207, 232, 0.24)";
+            c.lineWidth = 3;
+            const rPulse = 52 + Math.sin(frameCounter * 0.2) * 4;
             c.beginPath();
-            c.arc(0, -56, 56 + Math.sin(frameCounter * 0.2) * 3, 0, Math.PI * 2);
+            c.arc(0, 0, rPulse, 0, Math.PI * 2);
             c.fill();
             c.stroke();
+
+            c.font = "16px sans-serif";
+            c.textAlign = "center";
+            for (let s = 0; s < 6; s++) {
+              const ang = frameCounter * 0.05 + (Math.PI * 2 * s) / 6;
+              const sx = Math.cos(ang) * (rPulse + 4);
+              const sy = Math.sin(ang) * (rPulse * 0.85);
+              c.fillText(s % 2 === 0 ? "✨" : "💖", sx, sy + 5);
+            }
+            c.restore();
+          } else if (this.charId === "eian") {
+            // 仔仔變身超人：紅披風＋金藍超能光環
+            c.save();
+            const capeWave = Math.sin(frameCounter * 0.22) * 7;
+            c.fillStyle = "#dc2626";
+            c.strokeStyle = "#7f1d1d";
+            c.lineWidth = 2.5;
+            c.beginPath();
+            c.moveTo(-this.facing * 8, -72 + bobY);
+            c.lineTo(-this.facing * 44, -44 + capeWave);
+            c.lineTo(-this.facing * 32, -24 + capeWave);
+            c.lineTo(-this.facing * 6, -34 + bobY);
+            c.closePath();
+            c.fill();
+            c.stroke();
+
+            c.strokeStyle = "rgba(250, 204, 21, 0.9)";
+            c.fillStyle = "rgba(56, 189, 248, 0.22)";
+            c.lineWidth = 3.5;
+            c.beginPath();
+            c.arc(0, -56, 54 + Math.sin(frameCounter * 0.22) * 3.5, 0, Math.PI * 2);
+            c.fill();
+            c.stroke();
+            c.restore();
           }
         }
 
         const spec = this.getSpec();
         const bodyFill = this.transformed
-          ? (this.charId === "queen" ? "#f9a8d4" : (this.charId === "servant" ? "#d97706" : (this.charId === "reina" ? "#fb7185" : "#ef4444")))
+          ? (this.charId === "queen" ? "#f9a8d4" : (this.charId === "servant" ? "#d97706" : (this.charId === "reina" ? "#f43f5e" : "#2563eb")))
           : spec.dressColor;
         const bodyStroke = this.transformed ? "#7c2d12" : spec.strokeColor;
 
@@ -1793,6 +1858,17 @@
           c.stroke();
         }
 
+        // 仔仔超人胸前星徽
+        if (this.transformed && this.charId === "eian") {
+          c.fillStyle = "#facc15";
+          c.strokeStyle = "#b91c1c";
+          c.lineWidth = 1.8;
+          c.beginPath();
+          c.arc(0, -54 + bobY, 8, 0, Math.PI * 2);
+          c.fill();
+          c.stroke();
+        }
+
         c.fillStyle = this.transformed && this.charId === "queen" ? "#fbcfe8" : "#fde68a";
         c.beginPath();
         c.arc(0, headY, 21, 0, Math.PI * 2);
@@ -1819,6 +1895,11 @@
             c.fill();
             c.fillText("🐷", 0, headY - 24);
           } else if (this.charId === "reina") {
+            c.fillStyle = "rgba(244, 114, 182, 0.55)";
+            c.beginPath();
+            c.arc(-11, headY + 3, 4.5, 0, Math.PI * 2);
+            c.arc(11, headY + 3, 4.5, 0, Math.PI * 2);
+            c.fill();
             c.fillText("✨", 0, headY - 24);
           } else if (this.charId === "eian") {
             c.fillText("🦸", 0, headY - 24);
