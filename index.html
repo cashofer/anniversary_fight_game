@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>結婚紀念日大亂鬥：老婆限定仔女助攻＋浪漫音樂 (2014.11.23)</title>
+  <title>結婚紀念日大亂鬥：高血量耐打版＋老婆限定助攻＋浪漫音樂 (2014.11.23)</title>
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -768,7 +768,7 @@
   <section id="titleScreen" class="title-screen" aria-label="遊戲主頁面選角">
     <div class="title-card">
       <div class="title-header">
-        <h1 class="main-game-title">👑 結婚紀念日大亂鬥：選擇你的出戰角色</h1>
+        <h1 class="main-game-title">👑 結婚紀念日大亂鬥：選擇你的出戰角色（260 HP 耐打版）</h1>
         <span id="titleAnnivBadge" class="anniv-pill">💍 2014.11.23・計算中...</span>
       </div>
 
@@ -835,7 +835,7 @@
       </div>
 
       <div class="start-actions">
-        <button type="button" class="start-fight-btn" onclick="startFromTitleScreen()">⚔️ 開始對戰（含浪漫音樂）</button>
+        <button type="button" class="start-fight-btn" onclick="startFromTitleScreen()">⚔️ 開始對戰（260 HP＋浪漫音樂）</button>
         <button type="button" class="title-exit-btn" onclick="exitGame()">✕ Exit</button>
       </div>
     </div>
@@ -847,7 +847,7 @@
       <div class="side-hud">
         <div class="side-header">
           <span id="p1HudLabel" class="p1-name">👑 老婆大人</span>
-          <span id="p1HpText" style="color:#be185d;">HP 100</span>
+          <span id="p1HpText" style="color:#be185d;">HP 260</span>
         </div>
         <div class="hp-track">
           <div id="p1HpBar" class="hp-fill-p1"></div>
@@ -900,10 +900,10 @@
         </div>
         <div class="hp-track">
           <div id="p2HpBar" class="hp-fill-p2"></div>
-          <span id="p2HpText" class="hp-text align-right">HP 100</span>
+          <span id="p2HpText" class="hp-text align-right">HP 260</span>
         </div>
         <div class="super-label" style="color:#1e40af;">
-          <span>血量 &lt; 50% 變身覺醒</span>
+          <span>血量 &lt; 50% (130) 變身</span>
           <span id="p2MultText">x1 / x1</span>
         </div>
       </div>
@@ -984,7 +984,6 @@
     let bgmTimerId = null;
     let bgmNoteIndex = 0;
 
-    // 浪漫溫馨琶音旋律（Fmaj7 -> Em7 -> Dm7 -> Cmaj7 柔和音階頻率）
     const ROMANTIC_NOTES = [
       349.23, 440.00, 523.25, 659.25,
       329.63, 392.00, 493.88, 587.33,
@@ -1111,6 +1110,7 @@
     const WORLD_H = 440;
     const FLOOR_Y = 374;
     const GRAVITY = 1520;
+    const BASE_MAX_HP = 260;
 
     function fitCanvasToContainer() {
       try {
@@ -1159,9 +1159,9 @@
         strokeColor: "#831843",
         transformName: "🐷 暴走大肥豬",
         transformBanner: "🐷 老婆大人變身「暴走大肥豬」！圓滾衝擊＋ATK x1.8 · DEF x1.5！",
-        skill1: { label: "🍳 平底鍋連擊", kind: "pan", hitText: "🍳 平底鍋連擊!", dmg: 14, reach: 136 },
-        skill2: { label: "🛍️ 買買買波", kind: "proj", projIcon: "🛍️", hitText: "🛍️ 買買買波!", dmg: 13 },
-        skill3: { label: "👂 捏耳朵神功", kind: "pinch", hitText: "👂 捏耳朵神功!", dmg: 19, reach: 140 }
+        skill1: { label: "🍳 平底鍋連擊", kind: "pan", hitText: "🍳 平底鍋連擊!", dmg: 20, reach: 136 },
+        skill2: { label: "🛍️ 買買買波", kind: "proj", projIcon: "🛍️", hitText: "🛍️ 買買買波!", dmg: 18 },
+        skill3: { label: "👂 捏耳朵神功", kind: "pinch", hitText: "👂 捏耳朵神功!", dmg: 26, reach: 140 }
       },
       servant: {
         id: "servant",
@@ -1171,9 +1171,9 @@
         strokeColor: "#1e3a8a",
         transformName: "🦁 LION 獅王",
         transformBanner: "🦁 老公僕人變身「LION 獅王」！狂獅鬃毛光環＋ATK x2 · DEF x2！",
-        skill1: { label: "🥣 僕人揮拳", kind: "strike", hitText: "🥣 僕人重拳!", dmg: 11, reach: 112 },
-        skill2: { label: "💳 卡片波", kind: "proj", projIcon: "💳", hitText: "💳 卡片波!", dmg: 11 },
-        skill3: { label: "🙇‍♂️ 求生道歉", kind: "pinch", hitText: "🙇‍♂️ 求生道歉!", dmg: 15, reach: 122 }
+        skill1: { label: "🥣 僕人揮拳", kind: "strike", hitText: "🥣 僕人重拳!", dmg: 16, reach: 112 },
+        skill2: { label: "💳 卡片波", kind: "proj", projIcon: "💳", hitText: "💳 卡片波!", dmg: 16 },
+        skill3: { label: "🙇‍♂️ 求生道歉", kind: "pinch", hitText: "🙇‍♂️ 求生道歉!", dmg: 21, reach: 122 }
       },
       reina: {
         id: "reina",
@@ -1183,9 +1183,9 @@
         strokeColor: "#9d174d",
         transformName: "✨ 美少女戰士",
         transformBanner: "✨ 女女 Reina 變身「美少女戰士」！星光強化！",
-        skill1: { label: "😭 狂哭", kind: "cry", hitText: "😭 女女狂哭震波!", dmg: 17, reach: 158 },
-        skill2: { label: "💖 愛心波", kind: "proj", projIcon: "💖", hitText: "💖 愛心波!", dmg: 12 },
-        skill3: { label: "💧 眼淚衝刺", kind: "pinch", hitText: "💧 眼淚衝刺!", dmg: 15, reach: 126 }
+        skill1: { label: "😭 狂哭", kind: "cry", hitText: "😭 女女狂哭震波!", dmg: 23, reach: 158 },
+        skill2: { label: "💖 愛心波", kind: "proj", projIcon: "💖", hitText: "💖 愛心波!", dmg: 17 },
+        skill3: { label: "💧 眼淚衝刺", kind: "pinch", hitText: "💧 眼淚衝刺!", dmg: 21, reach: 126 }
       },
       eian: {
         id: "eian",
@@ -1195,9 +1195,9 @@
         strokeColor: "#0369a1",
         transformName: "🦸 超人",
         transformBanner: "🦸 仔仔 Eian 變身「超人」！超能爆發！",
-        skill1: { label: "💨 放臭屁", kind: "fart", hitText: "💨 仔仔放臭屁!", dmg: 18, reach: 152 },
-        skill2: { label: "⚽ 足球波", kind: "proj", projIcon: "⚽", hitText: "⚽ 足球波!", dmg: 12 },
-        skill3: { label: "🌪️ 臭氣衝刺", kind: "pinch", hitText: "🌪️ 臭氣衝刺!", dmg: 16, reach: 128 }
+        skill1: { label: "💨 放臭屁", kind: "fart", hitText: "💨 仔仔放臭屁!", dmg: 24, reach: 152 },
+        skill2: { label: "⚽ 足球波", kind: "proj", projIcon: "⚽", hitText: "⚽ 足球波!", dmg: 17 },
+        skill3: { label: "🌪️ 臭氣衝刺", kind: "pinch", hitText: "🌪️ 臭氣衝刺!", dmg: 22, reach: 128 }
       }
     };
 
@@ -1248,7 +1248,7 @@
     let p2CharId = "servant";
     let currentStageKey = "living";
     let aiDifficulty = "gentle";
-    let battleStatus = "title"; // "title" | "active" | "finished" | "exited"
+    let battleStatus = "title";
     let remainingTime = 99;
     let timeAcc = 0;
     let frameCounter = 0;
@@ -1468,8 +1468,8 @@
         this.vx = 0;
         this.vy = 0;
         this.facing = cfg.facing;
-        this.maxHp = 100;
-        this.hp = 100;
+        this.maxHp = BASE_MAX_HP;
+        this.hp = BASE_MAX_HP;
         this.grounded = true;
         this.shieldSec = 0;
         this.attackSec = 0;
@@ -1493,7 +1493,8 @@
         this.vx = 0;
         this.vy = 0;
         this.facing = facing;
-        this.hp = this.maxHp;
+        this.maxHp = BASE_MAX_HP;
+        this.hp = BASE_MAX_HP;
         this.grounded = true;
         this.shieldSec = 0;
         this.attackSec = 0;
@@ -1992,7 +1993,7 @@
           vx: dir * (boost ? 415 : 355),
           fromPlayer1: true,
           icon: this.shotEmoji,
-          dmg: boost ? 9 : 6,
+          dmg: boost ? 14 : 10,
           scale: boost ? 1.15 : 0.94,
           life: 1.25
         });
