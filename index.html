@@ -28,13 +28,13 @@
       touch-action: none;
     }
 
-    /* 全畫面主容器：直屏或橫屏皆填滿可視區域，避免裁切與溢出 */
+    /* 橫向主容器：鎖定寬度與高度於可視區域內，避免裁切與溢出 */
     .game-shell {
       width: 100vw;
       width: 100dvw;
       height: 100vh;
       height: 100dvh;
-      max-width: none;
+      max-width: 1120px;
       margin: 0 auto;
       padding: calc(env(safe-area-inset-top, 0px) + 5px) calc(env(safe-area-inset-right, 0px) + 8px) calc(env(safe-area-inset-bottom, 0px) + 5px) calc(env(safe-area-inset-left, 0px) + 8px);
       display: flex;
@@ -149,13 +149,6 @@
       color: #ffffff;
       border-color: #831843;
       box-shadow: 0 2px 0 #831843;
-    }
-
-    .mini-btn.exit-btn {
-      background: linear-gradient(180deg, #f1f5f9 0%, #cbd5e1 100%);
-      color: #0f172a;
-      border-color: #475569;
-      box-shadow: 0 2px 0 #475569;
     }
 
     .mini-btn:active {
@@ -305,7 +298,7 @@
       justify-content: space-between;
     }
 
-    /* 全畫面戰鬥舞台外框：直屏與橫屏皆填滿可用空間 */
+    /* 橫向 16:9 戰鬥舞台外框：自適應可用空間並維持橫向比例 */
     .stage-wrapper {
       position: relative;
       flex: 1 1 auto;
@@ -318,7 +311,28 @@
       overflow: hidden;
     }
 
+    .rotate-hint-banner {
+      display: none;
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(131, 24, 67, 0.9);
+      color: #fef08a;
+      border: 1.5px solid #facc15;
+      border-radius: 999px;
+      padding: 2px 10px;
+      font-size: 10px;
+      font-weight: 900;
+      white-space: nowrap;
+      z-index: 12;
+      pointer-events: none;
+    }
+
     @media (orientation: portrait) and (max-width: 767px) {
+      .rotate-hint-banner {
+        display: block;
+      }
       .top-hud-bar {
         grid-template-columns: 1fr 1fr;
       }
@@ -329,18 +343,6 @@
       .selectors-line {
         flex-wrap: wrap;
       }
-      .touch-dock {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 6px;
-      }
-      .dpad-group {
-        justify-content: center;
-      }
-      .skills-group {
-        justify-content: center;
-        flex-wrap: wrap;
-      }
     }
 
     .canvas-stage-box {
@@ -348,6 +350,7 @@
       width: 100%;
       height: 100%;
       max-width: 100%;
+      aspect-ratio: 16 / 9;
       max-height: 100%;
       background: #fff1f2;
       border: 3px solid #db2777;
@@ -364,7 +367,7 @@
       touch-action: none;
     }
 
-    /* 底部左右分區觸控列 */
+    /* 底部左右分區橫向觸控列 */
     .touch-dock {
       background: rgba(255, 255, 255, 0.96);
       border: 2px solid #f472b6;
@@ -478,7 +481,7 @@
       box-shadow: 0 1px 0 #831843;
     }
 
-    /* K.O. 紀念日條約彈窗與離開畫面 */
+    /* K.O. 紀念日條約彈窗 */
     .ko-modal {
       position: fixed;
       inset: 0;
@@ -544,26 +547,11 @@
       cursor: pointer;
       touch-action: none;
     }
-
-    .exit-screen {
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(135deg, #fff1f5 0%, #fce7f3 100%);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      z-index: 95;
-    }
-
-    .exit-screen.show {
-      display: flex;
-    }
   </style>
 </head>
 <body>
   <div class="game-shell">
-    <!-- 1. 精湊頂部 HUD 列 -->
+    <!-- 1. 橫向精湊頂部 HUD 列 -->
     <header class="top-hud-bar">
       <!-- 左側：老婆大人 HP & 超必殺能量條 -->
       <div class="side-hud">
@@ -583,7 +571,7 @@
         </div>
       </div>
 
-      <!-- 中央：結婚紀念日天數、倒數秒數、場景選擇、AI 難度、音效、重開與離開 -->
+      <!-- 中央：結婚紀念日天數、倒數秒數、場景選擇、AI 難度、音效與重開 -->
       <div class="center-hud">
         <div class="center-top-row">
           <div class="title-and-days">
@@ -594,7 +582,6 @@
           <div class="top-actions">
             <button id="soundToggleBtn" type="button" class="mini-btn" onclick="toggleSoundMode()">🔊</button>
             <button type="button" class="mini-btn reset" onclick="restartBattle()">🔄 重開</button>
-            <button type="button" class="mini-btn exit-btn" onclick="exitGame()">✕ Exit</button>
           </div>
         </div>
 
@@ -632,15 +619,16 @@
       </div>
     </header>
 
-    <!-- 2. 全畫面戰鬥畫布區 -->
+    <!-- 2. 橫向 16:9 戰鬥畫布區 -->
     <main class="stage-wrapper" id="stageWrapper">
+      <div class="rotate-hint-banner">📱 橫向螢幕遊玩體驗最佳！</div>
       <div class="canvas-stage-box" id="canvasStageBox">
         <canvas id="battleCanvas" width="800" height="450"></canvas>
       </div>
     </main>
 
-    <!-- 3. 底部左右分區觸控控制區 -->
-    <footer class="touch-dock" aria-label="觸控操作">
+    <!-- 3. 底部左右分區橫向觸控控制區 -->
+    <footer class="touch-dock" aria-label="橫向觸控操作">
       <div class="dpad-group">
         <button id="btnMoveLeft" type="button" class="pad-btn" aria-label="向左移動">◀</button>
         <button id="btnMoveRight" type="button" class="pad-btn" aria-label="向右移動">▶</button>
@@ -655,19 +643,6 @@
         <button id="btnKidsAssist" type="button" class="skill-btn assist-btn">👦👧 Eian &amp; Reina 助攻</button>
       </div>
     </footer>
-  </div>
-
-  <!-- 4. 離開遊戲畫面 -->
-  <div id="exitScreen" class="exit-screen" role="dialog" aria-modal="true" aria-labelledby="exitTitle">
-    <div class="ko-card">
-      <div class="ko-banner" style="color:#be185d;">💖 EXIT</div>
-      <div id="exitTitle" class="ko-title">已結束本局對戰</div>
-      <div class="ko-treaty">
-        結婚紀念日快樂（自 2014.11.23 起算）！<br />
-        若瀏覽器未自動關閉此分頁，可隨時關閉視窗，或點擊下方按鈕重新開始。
-      </div>
-      <button type="button" class="replay-big-btn" onclick="reenterGame()">重新進入遊戲</button>
-    </div>
   </div>
 
   <!-- 5. K.O. 紀念日條約彈窗 -->
@@ -781,9 +756,8 @@
     }
 
     // =========================================================================
-    // 3. 畫布尺寸與立即首幀繪製保證（直屏／橫屏皆全畫面填滿）
+    // 3. 畫布尺寸與立即首幀繪製保證（不依賴 ResizeObserver 延遲）
     // =========================================================================
-    const stageWrapper = document.getElementById("stageWrapper");
     const stageBox = document.getElementById("canvasStageBox");
     const canvas = document.getElementById("battleCanvas");
     const ctx = canvas.getContext("2d");
@@ -797,8 +771,16 @@
       try {
         const wrapW = stageWrapper ? stageWrapper.clientWidth : (window.innerWidth - 16);
         const wrapH = stageWrapper ? stageWrapper.clientHeight : (window.innerHeight - 150);
-        const targetW = Math.max(220, Math.floor(wrapW || 800));
-        const targetH = Math.max(140, Math.floor(wrapH || 450));
+        const availW = Math.max(240, wrapW || 800);
+        const availH = Math.max(135, wrapH || 450);
+
+        // 嚴格維持 16:9 橫向比例並填滿可用空間
+        let targetW = availW;
+        let targetH = Math.round(targetW * 9 / 16);
+        if (targetH > availH) {
+          targetH = availH;
+          targetW = Math.round(targetH * 16 / 9);
+        }
 
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
         if (stageBox) {
@@ -807,8 +789,8 @@
         }
         canvas.style.width = targetW + "px";
         canvas.style.height = targetH + "px";
-        canvas.width = Math.max(1, Math.round(targetW * dpr));
-        canvas.height = Math.max(1, Math.round(targetH * dpr));
+        canvas.width = Math.max(1, Math.round(WORLD_W * dpr));
+        canvas.height = Math.max(1, Math.round(WORLD_H * dpr));
       } catch (err) {
         canvas.width = WORLD_W;
         canvas.height = WORLD_H;
@@ -826,6 +808,19 @@
         fitCanvasToContainer();
       });
       ro.observe(stageWrapper);
+    }
+
+    fitCanvasToContainer();
+    window.addEventListener("resize", fitCanvasToContainer);
+    window.addEventListener("orientationchange", function () {
+      fitCanvasToContainer();
+      setTimeout(fitCanvasToContainer, 80);
+    });
+    if (typeof ResizeObserver !== "undefined" && stageBox) {
+      const ro = new ResizeObserver(function () {
+        fitCanvasToContainer();
+      });
+      ro.observe(stageBox);
     }
 
     // =========================================================================
@@ -876,7 +871,7 @@
 
     let currentStageKey = "living";
     let aiDifficulty = "gentle"; // "gentle" | "survival"
-    let battleStatus = "active"; // "active" | "finished" | "exited"
+    let battleStatus = "active"; // "active" | "finished"
     let remainingTime = 99;
     let timeAcc = 0;
     let frameCounter = 0;
@@ -920,29 +915,6 @@
         }
       });
       playSynthTone(480, 0.07, "sine", 0.08);
-    }
-
-    function exitGame() {
-      moveInput.left = false;
-      moveInput.right = false;
-      if (!window.confirm("確定要離開遊戲嗎？")) return;
-      battleStatus = "exited";
-      const modalEl = document.getElementById("koModal");
-      if (modalEl) modalEl.classList.remove("show");
-      const exitEl = document.getElementById("exitScreen");
-      if (exitEl) exitEl.classList.add("show");
-      try {
-        window.close();
-      } catch (err) {
-        // 瀏覽器限制關閉分頁時保留離開畫面提示
-      }
-    }
-
-    function reenterGame() {
-      const exitEl = document.getElementById("exitScreen");
-      if (exitEl) exitEl.classList.remove("show");
-      restartBattle();
-      fitCanvasToContainer();
     }
 
     // =========================================================================
@@ -1886,7 +1858,7 @@
     }
 
     function openKoModal() {
-      if (battleStatus !== "active") return;
+      if (battleStatus === "finished") return;
       battleStatus = "finished";
       playActionSfx("ko");
 
