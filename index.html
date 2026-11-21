@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>結婚紀念日大亂鬥：老婆大人 vs 老公僕人 (2014.11.23)</title>
   <style>
-    /* 全域重設與手機防誤觸滾動、縮放與選取 */
+    /* 全域重設與 Safari 防誤觸滾動、縮放與選取 */
     *, *::before, *::after {
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
@@ -26,9 +26,10 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
       overflow: hidden;
       touch-action: none;
+      overscroll-behavior: none;
     }
 
-    /* 全畫面主容器：直屏與橫屏皆填滿可視區域，避免裁切與溢出 */
+    /* 橫屏優先全畫面主容器 */
     .game-shell {
       width: 100vw;
       width: 100dvw;
@@ -36,11 +37,11 @@
       height: 100dvh;
       max-width: none;
       margin: 0 auto;
-      padding: calc(env(safe-area-inset-top, 0px) + 4px) calc(env(safe-area-inset-right, 0px) + 6px) calc(env(safe-area-inset-bottom, 0px) + 4px) calc(env(safe-area-inset-left, 0px) + 6px);
+      padding: calc(env(safe-area-inset-top, 0px) + 5px) calc(env(safe-area-inset-right, 0px) + 8px) calc(env(safe-area-inset-bottom, 0px) + 5px) calc(env(safe-area-inset-left, 0px) + 8px);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 4px;
+      gap: 5px;
       overflow: hidden;
     }
 
@@ -48,13 +49,13 @@
     .top-hud-bar {
       background: rgba(255, 255, 255, 0.96);
       border: 2px solid #f472b6;
-      border-radius: 12px;
-      padding: 4px 7px;
+      border-radius: 13px;
+      padding: 5px 8px;
       display: grid;
-      grid-template-columns: 1.1fr auto 1.1fr;
+      grid-template-columns: 1.15fr auto 1.15fr;
       align-items: center;
-      gap: 6px;
-      box-shadow: 0 2px 8px rgba(219, 39, 119, 0.14);
+      gap: 7px;
+      box-shadow: 0 3px 10px rgba(219, 39, 119, 0.14);
       touch-action: none;
       z-index: 10;
     }
@@ -62,7 +63,7 @@
     .side-hud {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 3px;
       min-width: 0;
     }
 
@@ -70,8 +71,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 3px;
-      font-size: 10.5px;
+      gap: 4px;
+      font-size: 11px;
       font-weight: 900;
     }
 
@@ -93,22 +94,21 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;
+      gap: 3px;
     }
 
     .center-top-row {
       display: flex;
       align-items: center;
-      gap: 4px;
-      flex-wrap: wrap;
-      justify-content: center;
+      gap: 5px;
+      flex-wrap: nowrap;
     }
 
     .title-and-days {
       display: flex;
       align-items: center;
-      gap: 3px;
-      font-size: 10px;
+      gap: 4px;
+      font-size: 11px;
       font-weight: 900;
       color: #9d174d;
       white-space: nowrap;
@@ -119,8 +119,8 @@
       color: #713f12;
       border: 1.5px solid #ca8a04;
       border-radius: 999px;
-      padding: 1px 6px;
-      font-size: 9.5px;
+      padding: 1px 7px;
+      font-size: 10.5px;
       font-weight: 900;
       white-space: nowrap;
     }
@@ -128,20 +128,20 @@
     .top-actions {
       display: flex;
       align-items: center;
-      gap: 3px;
+      gap: 4px;
     }
 
     .mini-btn {
       border: 1.5px solid #db2777;
       background: #ffffff;
       color: #be185d;
-      border-radius: 7px;
-      padding: 1.5px 5px;
-      font-size: 10px;
+      border-radius: 8px;
+      padding: 2px 6px;
+      font-size: 10.5px;
       font-weight: 800;
       cursor: pointer;
       touch-action: none;
-      box-shadow: 0 1.5px 0 #fbcfe8;
+      box-shadow: 0 2px 0 #fbcfe8;
       white-space: nowrap;
     }
 
@@ -149,14 +149,14 @@
       background: linear-gradient(180deg, #f472b6 0%, #be185d 100%);
       color: #ffffff;
       border-color: #831843;
-      box-shadow: 0 1.5px 0 #831843;
+      box-shadow: 0 2px 0 #831843;
     }
 
     .mini-btn.exit-btn {
       background: linear-gradient(180deg, #f1f5f9 0%, #cbd5e1 100%);
       color: #0f172a;
       border-color: #475569;
-      box-shadow: 0 1.5px 0 #475569;
+      box-shadow: 0 2px 0 #475569;
     }
 
     .mini-btn:active {
@@ -167,20 +167,18 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 4px;
-      flex-wrap: wrap;
+      gap: 6px;
+      flex-wrap: nowrap;
     }
 
     .pill-group {
       display: flex;
       align-items: center;
-      gap: 2px;
-      flex-wrap: wrap;
-      justify-content: center;
+      gap: 3px;
     }
 
     .selector-label {
-      font-size: 9.5px;
+      font-size: 10px;
       font-weight: 800;
       color: #64748b;
       white-space: nowrap;
@@ -191,8 +189,8 @@
       background: #f8fafc;
       color: #334155;
       border-radius: 999px;
-      padding: 1px 5px;
-      font-size: 9.5px;
+      padding: 1px 6px;
+      font-size: 10px;
       font-weight: 800;
       white-space: nowrap;
       cursor: pointer;
@@ -216,8 +214,8 @@
       color: #713f12;
       border: 1.5px solid #ca8a04;
       border-radius: 999px;
-      padding: 1px 7px;
-      font-size: 10.5px;
+      padding: 1px 8px;
+      font-size: 11.5px;
       font-weight: 900;
       white-space: nowrap;
     }
@@ -227,12 +225,10 @@
       color: #1e40af;
       border: 1px solid #60a5fa;
       border-radius: 999px;
-      padding: 1px 5px;
-      font-size: 9px;
+      padding: 1px 6px;
+      font-size: 9.5px;
       font-weight: 900;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     .status-chip.giant-active {
@@ -242,9 +238,9 @@
     }
 
     .hp-track {
-      height: 11px;
+      height: 13px;
       background: #e2e8f0;
-      border-radius: 6px;
+      border-radius: 7px;
       border: 1.5px solid #94a3b8;
       overflow: hidden;
       position: relative;
@@ -274,8 +270,8 @@
       inset: 0;
       display: flex;
       align-items: center;
-      padding: 0 5px;
-      font-size: 9px;
+      padding: 0 6px;
+      font-size: 9.5px;
       font-weight: 900;
       color: #ffffff;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
@@ -287,7 +283,7 @@
 
     /* 老婆大人超必殺能量條 */
     .super-track {
-      height: 7px;
+      height: 8px;
       background: #fce7f3;
       border-radius: 999px;
       border: 1px solid #f472b6;
@@ -303,19 +299,18 @@
     }
 
     .super-label {
-      font-size: 9px;
+      font-size: 9.5px;
       font-weight: 900;
       color: #9d174d;
       display: flex;
       justify-content: space-between;
-      gap: 4px;
     }
 
-    /* 全畫面戰鬥舞台外框：直屏與橫屏皆填滿可用空間 */
+    /* 橫屏戰鬥舞台外框 */
     .stage-wrapper {
       position: relative;
       flex: 1 1 auto;
-      min-height: 180px;
+      min-height: 150px;
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -324,49 +319,28 @@
       overflow: hidden;
     }
 
-    /* 直屏優先版面微調：讓舞台更高、控制列緊湊不擁擠 */
-    @media (orientation: portrait) {
+    @media (orientation: portrait) and (max-width: 767px) {
       .top-hud-bar {
         grid-template-columns: 1fr 1fr;
-        gap: 4px 6px;
-        padding: 4px 6px;
       }
       .center-hud {
         grid-column: 1 / -1;
         order: -1;
       }
       .selectors-line {
-        gap: 3px 6px;
+        flex-wrap: wrap;
       }
       .touch-dock {
         flex-direction: column;
         align-items: stretch;
-        gap: 4px;
-        padding: 4px 6px;
-      }
-      .dpad-group {
-        justify-content: space-between;
         gap: 6px;
       }
-      .pad-btn {
-        flex: 1 1 0;
-        width: auto;
-        height: 38px;
-        font-size: 14px;
-        border-radius: 10px;
+      .dpad-group {
+        justify-content: center;
       }
       .skills-group {
-        justify-content: space-between;
-        flex-wrap: nowrap;
-        gap: 4px;
-      }
-      .skill-btn {
-        flex: 1 1 0;
-        min-width: 0;
-        height: 36px;
-        padding: 0 3px;
-        font-size: 9px;
-        border-radius: 9px;
+        justify-content: center;
+        flex-wrap: wrap;
       }
     }
 
@@ -377,10 +351,10 @@
       max-width: 100%;
       max-height: 100%;
       background: #fff1f2;
-      border: 2.5px solid #db2777;
-      border-radius: 14px;
+      border: 3px solid #db2777;
+      border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 4px 14px rgba(190, 24, 93, 0.18);
+      box-shadow: 0 6px 18px rgba(190, 24, 93, 0.2);
       touch-action: none;
     }
 
@@ -395,7 +369,7 @@
     .touch-dock {
       background: rgba(255, 255, 255, 0.96);
       border: 2px solid #f472b6;
-      border-radius: 13px;
+      border-radius: 14px;
       padding: 5px 8px;
       display: flex;
       align-items: center;
@@ -808,7 +782,7 @@
     }
 
     // =========================================================================
-    // 3. 畫布尺寸與立即首幀繪製保證（直屏／橫屏皆全畫面填滿）
+    // 3. 畫布尺寸與立即首幀繪製保證（Safari 橫屏優先全畫面填滿）
     // =========================================================================
     const stageWrapper = document.getElementById("stageWrapper");
     const stageBox = document.getElementById("canvasStageBox");
@@ -822,10 +796,10 @@
 
     function fitCanvasToContainer() {
       try {
-        const wrapW = stageWrapper ? stageWrapper.clientWidth : (window.innerWidth - 12);
-        const wrapH = stageWrapper ? stageWrapper.clientHeight : (window.innerHeight - 170);
+        const wrapW = stageWrapper ? stageWrapper.clientWidth : (window.innerWidth - 16);
+        const wrapH = stageWrapper ? stageWrapper.clientHeight : (window.innerHeight - 150);
         const targetW = Math.max(220, Math.floor(wrapW || 800));
-        const targetH = Math.max(150, Math.floor(wrapH || 450));
+        const targetH = Math.max(140, Math.floor(wrapH || 450));
 
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
         if (stageBox) {
@@ -846,8 +820,11 @@
     window.addEventListener("resize", fitCanvasToContainer);
     window.addEventListener("orientationchange", function () {
       fitCanvasToContainer();
-      setTimeout(fitCanvasToContainer, 90);
+      setTimeout(fitCanvasToContainer, 120);
     });
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", fitCanvasToContainer);
+    }
     if (typeof ResizeObserver !== "undefined" && stageWrapper) {
       const ro = new ResizeObserver(function () {
         fitCanvasToContainer();
@@ -1115,7 +1092,7 @@
         if (this.cooldownSec > 0 || this.attackSec > 0) return;
         this.shieldSec = 0;
         this.attackKind = kind;
-        this.attackSec = 0.28;
+        this.attackSec = kind === "pan" ? 0.34 : 0.28;
         this.cooldownSec = kind === "pinch" ? 0.36 : 0.28;
 
         playActionSfx(kind);
@@ -1158,12 +1135,12 @@
           addShockRing(this.x, this.y - 56, "#f43f5e", usedSuper ? 95 : 70);
           if (this.isQueen && !usedSuper) gainQueenSuper(14);
         } else if (kind === "pan") {
-          addShockRing(this.x + this.facing * 30, this.y - 56, "#fbbf24", usedSuper ? 85 : 58);
+          addShockRing(this.x + this.facing * 42, this.y - 62, "#fbbf24", usedSuper ? 105 : 78);
           if (this.isQueen && !usedSuper) gainQueenSuper(10);
         }
 
         if (target) {
-          const reach = kind === "pinch" ? 128 : (this.giantMonster ? 130 : 98);
+          const reach = kind === "pinch" ? 128 : (kind === "pan" ? 122 : (this.giantMonster ? 130 : 98));
           const dx = (target.x - this.x) * this.facing;
           const dy = Math.abs(target.y - this.y);
           if (dx >= -26 && dx <= reach && dy < (this.giantMonster ? 135 : 96)) {
@@ -1233,12 +1210,14 @@
         const bobY = this.grounded && Math.abs(this.vx) < 8 ? Math.sin(this.breatheCycle) * 2.0 : 0;
         const stepSwing = Math.sin(this.walkCycle) * 9;
 
+        // 地面陰影
         c.fillStyle = "rgba(15, 23, 42, 0.24)";
         c.beginPath();
         c.ellipse(0, 4, 34 * scaleFactor, 8 * scaleFactor, 0, 0, Math.PI * 2);
         c.fill();
 
         if (this.isQueen) {
+          // 老婆大人：粉紅禮服、雙馬尾與皇冠
           c.strokeStyle = "#be185d";
           c.lineWidth = 7;
           c.lineCap = "round";
@@ -1298,11 +1277,30 @@
           c.fill();
 
           if (this.attackSec > 0) {
-            c.font = "26px sans-serif";
-            c.textAlign = "center";
             if (this.attackKind === "pan") {
-              c.fillText("🍳", this.facing * 46, headY + 14);
+              // 放大平底鍋視覺與揮擊光弧
+              const swingProg = 1 - Math.max(0, this.attackSec / 0.34);
+              const panX = this.facing * (54 + Math.sin(swingProg * Math.PI) * 14);
+              const panY = headY + 8 - Math.cos(swingProg * Math.PI) * 10;
+
+              c.save();
+              c.strokeStyle = "rgba(250, 204, 21, 0.78)";
+              c.lineWidth = 5;
+              c.beginPath();
+              c.arc(this.facing * 26, headY + 12, 46, -0.85, 0.65);
+              c.stroke();
+
+              c.translate(panX, panY);
+              c.scale(this.facing * 1.65, 1.65);
+              c.rotate(-0.45 + swingProg * 0.95);
+              c.font = "34px sans-serif";
+              c.textAlign = "center";
+              c.textBaseline = "middle";
+              c.fillText("🍳", 0, 0);
+              c.restore();
             } else if (this.attackKind === "pinch") {
+              c.font = "28px sans-serif";
+              c.textAlign = "center";
               c.fillText("👂", this.facing * 46, headY + 12);
             }
           }
@@ -1315,6 +1313,7 @@
           c.fillStyle = "#831843";
           c.fillText("👑 老婆大人", 0, headY - 43);
         } else {
+          // 老公僕人 / 低於 50% 血量變身大怪獸（皆配戴清晰眼鏡）
           c.save();
           c.scale(scaleFactor, scaleFactor);
 
@@ -1398,6 +1397,7 @@
           c.arc(this.facing * 5 + 6, headY, 2.8, 0, Math.PI * 2);
           c.fill();
 
+          // 老公僕人眼鏡
           const gx = this.facing * 5 + 1.5;
           c.fillStyle = "rgba(255, 255, 255, 0.4)";
           c.strokeStyle = this.giantMonster ? "#fef08a" : "#0f172a";
@@ -1620,6 +1620,7 @@
     function inflictDamage(attacker, defender, rawDamage, hitText) {
       if (!defender || battleStatus !== "active") return;
 
+      // 老公僕人變身大怪獸時防禦力加倍（DEF x2 -> 承傷減半 0.5x）
       const defMult = (!defender.isQueen && defender.giantMonster) ? 0.5 : 1.0;
       let finalDmg = Math.max(1, Math.round(rawDamage * defMult));
 
