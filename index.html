@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>結婚紀念日大亂鬥：主頁選角 2D 版 (2014.11.23)</title>
+  <title>結婚紀念日大亂鬥：橫屏適配＋LION＆肥豬變身優化 (2014.11.23)</title>
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -36,7 +36,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: calc(env(safe-area-inset-top, 0px) + 8px) calc(env(safe-area-inset-right, 0px) + 12px) calc(env(safe-area-inset-bottom, 0px) + 8px) calc(env(safe-area-inset-left, 0px) + 12px);
+      padding: calc(env(safe-area-inset-top, 0px) + 6px) calc(env(safe-area-inset-right, 0px) + 10px) calc(env(safe-area-inset-bottom, 0px) + 6px) calc(env(safe-area-inset-left, 0px) + 10px);
       z-index: 60;
       overflow-y: auto;
       touch-action: pan-y;
@@ -48,15 +48,17 @@
 
     .title-card {
       width: 100%;
-      max-width: 820px;
-      background: rgba(255, 255, 255, 0.96);
+      max-width: 900px;
+      max-height: 96dvh;
+      overflow-y: auto;
+      background: rgba(255, 255, 255, 0.97);
       border: 3px solid #db2777;
-      border-radius: 22px;
-      padding: 14px 16px;
-      box-shadow: 0 16px 38px rgba(190, 24, 93, 0.2);
+      border-radius: 20px;
+      padding: 11px 14px;
+      box-shadow: 0 14px 34px rgba(190, 24, 93, 0.2);
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
 
     .title-header {
@@ -68,7 +70,7 @@
     }
 
     .main-game-title {
-      font-size: 19px;
+      font-size: 17px;
       font-weight: 900;
       color: #831843;
       margin: 0;
@@ -79,8 +81,8 @@
       color: #713f12;
       border: 1.5px solid #ca8a04;
       border-radius: 999px;
-      padding: 3px 10px;
-      font-size: 11.5px;
+      padding: 2px 10px;
+      font-size: 11px;
       font-weight: 900;
       white-space: nowrap;
     }
@@ -88,10 +90,10 @@
     .char-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 8px;
+      gap: 7px;
     }
 
-    @media (max-width: 680px) {
+    @media (max-width: 640px) {
       .char-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
@@ -100,11 +102,11 @@
     .char-select-card {
       background: #fff1f2;
       border: 2px solid #f9a8d4;
-      border-radius: 14px;
-      padding: 8px 9px;
+      border-radius: 13px;
+      padding: 7px 8px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
       cursor: pointer;
       text-align: left;
       transition: transform 0.1s ease, border-color 0.1s ease, background 0.1s ease;
@@ -113,15 +115,15 @@
     .char-select-card.selected-p1 {
       background: linear-gradient(180deg, #fdf2f8 0%, #fbcfe8 100%);
       border-color: #be185d;
-      box-shadow: 0 4px 12px rgba(190, 24, 93, 0.22);
-      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(190, 24, 93, 0.22);
+      transform: translateY(-1px);
     }
 
     .char-card-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 900;
       color: #831843;
     }
@@ -131,19 +133,19 @@
       color: #ffffff;
       border-radius: 999px;
       padding: 1px 6px;
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 900;
     }
 
     .char-move-line {
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 800;
       color: #334155;
-      line-height: 1.3;
+      line-height: 1.25;
     }
 
     .char-trans-line {
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 900;
       color: #b45309;
       line-height: 1.25;
@@ -153,23 +155,23 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
       background: #fdf2f8;
       border: 1.5px solid #f9a8d4;
-      border-radius: 14px;
-      padding: 8px 10px;
+      border-radius: 12px;
+      padding: 6px 9px;
     }
 
     .opt-group {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 3.5px;
       flex-wrap: wrap;
     }
 
     .opt-label {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 900;
       color: #64748b;
       margin-right: 2px;
@@ -180,8 +182,8 @@
       background: #ffffff;
       color: #334155;
       border-radius: 999px;
-      padding: 3px 8px;
-      font-size: 11px;
+      padding: 2px 7.5px;
+      font-size: 10.5px;
       font-weight: 800;
       cursor: pointer;
     }
@@ -195,19 +197,19 @@
     .start-actions {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .start-fight-btn {
       flex: 1 1 auto;
       border: none;
-      border-radius: 15px;
-      padding: 12px 18px;
-      font-size: 16px;
+      border-radius: 13px;
+      padding: 10px 16px;
+      font-size: 15px;
       font-weight: 900;
       color: #ffffff;
       background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
-      box-shadow: 0 5px 15px rgba(190, 24, 93, 0.35);
+      box-shadow: 0 4px 12px rgba(190, 24, 93, 0.35);
       cursor: pointer;
     }
 
@@ -217,9 +219,9 @@
 
     .title-exit-btn {
       border: 2px solid #475569;
-      border-radius: 15px;
-      padding: 11px 14px;
-      font-size: 13px;
+      border-radius: 13px;
+      padding: 9px 13px;
+      font-size: 12.5px;
       font-weight: 900;
       color: #0f172a;
       background: linear-gradient(180deg, #f1f5f9 0%, #cbd5e1 100%);
@@ -227,7 +229,7 @@
       white-space: nowrap;
     }
 
-    /* 橫屏優先全畫面戰鬥容器 */
+    /* 橫屏優先戰鬥主容器 */
     .game-shell {
       width: 100vw;
       width: 100dvw;
@@ -235,32 +237,33 @@
       height: 100dvh;
       max-width: none;
       margin: 0 auto;
-      padding: calc(env(safe-area-inset-top, 0px) + 5px) calc(env(safe-area-inset-right, 0px) + 8px) calc(env(safe-area-inset-bottom, 0px) + 5px) calc(env(safe-area-inset-left, 0px) + 8px);
+      padding: calc(env(safe-area-inset-top, 0px) + 4px) calc(env(safe-area-inset-right, 0px) + 6px) calc(env(safe-area-inset-bottom, 0px) + 4px) calc(env(safe-area-inset-left, 0px) + 6px);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 5px;
+      gap: 4px;
       overflow: hidden;
     }
 
     .top-hud-bar {
       background: rgba(255, 255, 255, 0.96);
       border: 2px solid #f472b6;
-      border-radius: 13px;
-      padding: 5px 8px;
+      border-radius: 12px;
+      padding: 4px 7px;
       display: grid;
-      grid-template-columns: 1.15fr auto 1.15fr;
+      grid-template-columns: 1.05fr auto 1.05fr;
       align-items: center;
-      gap: 7px;
-      box-shadow: 0 3px 10px rgba(219, 39, 119, 0.14);
+      gap: 6px;
+      box-shadow: 0 2px 8px rgba(219, 39, 119, 0.14);
       touch-action: none;
       z-index: 10;
+      flex-shrink: 0;
     }
 
     .side-hud {
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 2px;
       min-width: 0;
     }
 
@@ -269,7 +272,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 4px;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 900;
     }
 
@@ -291,21 +294,21 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2.5px;
+      gap: 2px;
     }
 
     .center-top-row {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       flex-wrap: nowrap;
     }
 
     .title-and-days {
       display: flex;
       align-items: center;
-      gap: 4px;
-      font-size: 10.5px;
+      gap: 3px;
+      font-size: 10px;
       font-weight: 900;
       color: #9d174d;
       white-space: nowrap;
@@ -316,8 +319,8 @@
       color: #713f12;
       border: 1.5px solid #ca8a04;
       border-radius: 999px;
-      padding: 1px 6px;
-      font-size: 10px;
+      padding: 0.5px 5px;
+      font-size: 9.5px;
       font-weight: 900;
       white-space: nowrap;
     }
@@ -325,20 +328,20 @@
     .top-actions {
       display: flex;
       align-items: center;
-      gap: 3.5px;
+      gap: 3px;
     }
 
     .mini-btn {
       border: 1.5px solid #db2777;
       background: #ffffff;
       color: #be185d;
-      border-radius: 8px;
-      padding: 2px 6px;
-      font-size: 10px;
+      border-radius: 7px;
+      padding: 1.5px 5px;
+      font-size: 9.5px;
       font-weight: 800;
       cursor: pointer;
       touch-action: none;
-      box-shadow: 0 2px 0 #fbcfe8;
+      box-shadow: 0 1.5px 0 #fbcfe8;
       white-space: nowrap;
     }
 
@@ -346,14 +349,14 @@
       background: linear-gradient(180deg, #f472b6 0%, #be185d 100%);
       color: #ffffff;
       border-color: #831843;
-      box-shadow: 0 2px 0 #831843;
+      box-shadow: 0 1.5px 0 #831843;
     }
 
     .mini-btn.exit-btn {
       background: linear-gradient(180deg, #f1f5f9 0%, #cbd5e1 100%);
       color: #0f172a;
       border-color: #475569;
-      box-shadow: 0 2px 0 #475569;
+      box-shadow: 0 1.5px 0 #475569;
     }
 
     .mini-btn:active {
@@ -364,20 +367,20 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
+      gap: 4px;
       flex-wrap: wrap;
     }
 
     .pill-group {
       display: flex;
       align-items: center;
-      gap: 2.5px;
+      gap: 2px;
       flex-wrap: wrap;
       justify-content: center;
     }
 
     .selector-label {
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 800;
       color: #64748b;
       white-space: nowrap;
@@ -388,8 +391,8 @@
       background: #f8fafc;
       color: #334155;
       border-radius: 999px;
-      padding: 1px 5.5px;
-      font-size: 9.5px;
+      padding: 0.5px 5px;
+      font-size: 9px;
       font-weight: 800;
       white-space: nowrap;
       cursor: pointer;
@@ -413,8 +416,8 @@
       color: #713f12;
       border: 1.5px solid #ca8a04;
       border-radius: 999px;
-      padding: 1px 7px;
-      font-size: 11px;
+      padding: 0.5px 6px;
+      font-size: 10.5px;
       font-weight: 900;
       white-space: nowrap;
     }
@@ -424,8 +427,8 @@
       color: #1e40af;
       border: 1px solid #60a5fa;
       border-radius: 999px;
-      padding: 1px 6px;
-      font-size: 9.5px;
+      padding: 0.5px 5.5px;
+      font-size: 9px;
       font-weight: 900;
       white-space: nowrap;
     }
@@ -437,9 +440,9 @@
     }
 
     .hp-track {
-      height: 12px;
+      height: 11px;
       background: #e2e8f0;
-      border-radius: 7px;
+      border-radius: 6px;
       border: 1.5px solid #94a3b8;
       overflow: hidden;
       position: relative;
@@ -471,7 +474,7 @@
       display: flex;
       align-items: center;
       padding: 0 6px;
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 900;
       color: #ffffff;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
@@ -482,7 +485,7 @@
     }
 
     .super-track {
-      height: 7.5px;
+      height: 7px;
       background: #fce7f3;
       border-radius: 999px;
       border: 1px solid #f472b6;
@@ -498,7 +501,7 @@
     }
 
     .super-label {
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 900;
       color: #9d174d;
       display: flex;
@@ -506,10 +509,11 @@
       gap: 4px;
     }
 
+    /* 舞台區：在橫屏時最大化可用高度與寬度 */
     .stage-wrapper {
       position: relative;
       flex: 1 1 auto;
-      min-height: 140px;
+      min-height: 120px;
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -518,6 +522,141 @@
       overflow: hidden;
     }
 
+    .canvas-stage-box {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      background: #fff1f2;
+      border: 2.5px solid #db2777;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(190, 24, 93, 0.18);
+      touch-action: none;
+    }
+
+    canvas#battleCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+    }
+
+    /* 橫屏底部控制列：高度緊湊不擋舞台 */
+    .touch-dock {
+      background: rgba(255, 255, 255, 0.96);
+      border: 2px solid #f472b6;
+      border-radius: 12px;
+      padding: 4px 7px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      box-shadow: 0 2px 8px rgba(190, 24, 93, 0.14);
+      touch-action: none;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .dpad-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .pad-btn {
+      width: 40px;
+      height: 38px;
+      border-radius: 10px;
+      border: 2px solid #be185d;
+      background: linear-gradient(180deg, #ffffff 0%, #fce7f3 100%);
+      color: #9d174d;
+      font-size: 15px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      touch-action: none;
+      box-shadow: 0 2px 0 #fbcfe8;
+    }
+
+    .pad-btn.up-btn {
+      background: linear-gradient(180deg, #fef9c3 0%, #fde047 100%);
+      border-color: #ca8a04;
+      color: #854d0e;
+      box-shadow: 0 2px 0 #eab308;
+    }
+
+    .pad-btn.pressed {
+      background: #ec4899;
+      color: #ffffff;
+      transform: translateY(1px);
+    }
+
+    .skills-group {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .skills-group::-webkit-scrollbar {
+      display: none;
+    }
+
+    .skill-btn {
+      height: 38px;
+      padding: 0 7px;
+      border-radius: 10px;
+      border: 2px solid #9d174d;
+      background: linear-gradient(180deg, #f472b6 0%, #db2777 100%);
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 900;
+      line-height: 1.1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      white-space: nowrap;
+      cursor: pointer;
+      touch-action: none;
+      box-shadow: 0 2px 0 #831843;
+    }
+
+    .skill-btn.shield-btn {
+      background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%);
+      border-color: #1e40af;
+      box-shadow: 0 2px 0 #1e3a8a;
+    }
+
+    .skill-btn.assist-btn {
+      background: linear-gradient(180deg, #fde047 0%, #eab308 100%);
+      border-color: #a16207;
+      color: #1e293b;
+      box-shadow: 0 2px 0 #854d0e;
+    }
+
+    .skill-btn.super-ready {
+      animation: superPulse 0.9s infinite alternate;
+    }
+
+    @keyframes superPulse {
+      from { box-shadow: 0 0 4px #facc15; }
+      to { box-shadow: 0 0 12px #ec4899; }
+    }
+
+    .skill-btn:active, .skill-btn.pressed {
+      transform: translateY(1px);
+    }
+
+    /* 直向窄螢幕備援排版 */
     @media (orientation: portrait) and (max-width: 767px) {
       .top-hud-bar {
         grid-template-columns: 1fr 1fr;
@@ -529,7 +668,7 @@
       .touch-dock {
         flex-direction: column;
         align-items: stretch;
-        gap: 6px;
+        gap: 5px;
       }
       .dpad-group {
         justify-content: center;
@@ -538,140 +677,6 @@
         justify-content: center;
         flex-wrap: wrap;
       }
-    }
-
-    .canvas-stage-box {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      max-width: 100%;
-      max-height: 100%;
-      background: #fff1f2;
-      border: 3px solid #db2777;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 6px 18px rgba(190, 24, 93, 0.2);
-      touch-action: none;
-    }
-
-    canvas#battleCanvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-      touch-action: none;
-    }
-
-    .touch-dock {
-      background: rgba(255, 255, 255, 0.96);
-      border: 2px solid #f472b6;
-      border-radius: 14px;
-      padding: 5px 8px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      box-shadow: 0 3px 10px rgba(190, 24, 93, 0.15);
-      touch-action: none;
-      z-index: 10;
-    }
-
-    .dpad-group {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      flex-shrink: 0;
-    }
-
-    .pad-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 11px;
-      border: 2px solid #be185d;
-      background: linear-gradient(180deg, #ffffff 0%, #fce7f3 100%);
-      color: #9d174d;
-      font-size: 16px;
-      font-weight: 900;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      touch-action: none;
-      box-shadow: 0 3px 0 #fbcfe8;
-    }
-
-    .pad-btn.up-btn {
-      background: linear-gradient(180deg, #fef9c3 0%, #fde047 100%);
-      border-color: #ca8a04;
-      color: #854d0e;
-      box-shadow: 0 3px 0 #eab308;
-    }
-
-    .pad-btn.pressed {
-      background: #ec4899;
-      color: #ffffff;
-      transform: translateY(2px);
-      box-shadow: 0 1px 0 #9d174d;
-    }
-
-    .skills-group {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 5px;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-
-    .skills-group::-webkit-scrollbar {
-      display: none;
-    }
-
-    .skill-btn {
-      height: 42px;
-      padding: 0 8px;
-      border-radius: 11px;
-      border: 2px solid #9d174d;
-      background: linear-gradient(180deg, #f472b6 0%, #db2777 100%);
-      color: #ffffff;
-      font-size: 10.5px;
-      font-weight: 900;
-      line-height: 1.1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      white-space: nowrap;
-      cursor: pointer;
-      touch-action: none;
-      box-shadow: 0 3px 0 #831843;
-    }
-
-    .skill-btn.shield-btn {
-      background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%);
-      border-color: #1e40af;
-      box-shadow: 0 3px 0 #1e3a8a;
-    }
-
-    .skill-btn.assist-btn {
-      background: linear-gradient(180deg, #fde047 0%, #eab308 100%);
-      border-color: #a16207;
-      color: #1e293b;
-      box-shadow: 0 3px 0 #854d0e;
-    }
-
-    .skill-btn.super-ready {
-      animation: superPulse 0.9s infinite alternate;
-    }
-
-    @keyframes superPulse {
-      from { box-shadow: 0 0 4px #facc15; }
-      to { box-shadow: 0 0 14px #ec4899; }
-    }
-
-    .skill-btn:active, .skill-btn.pressed {
-      transform: translateY(2px);
-      box-shadow: 0 1px 0 #831843;
     }
 
     .ko-modal {
@@ -757,7 +762,7 @@
   </style>
 </head>
 <body>
-  <!-- 0. 遊戲開始前主頁面（先選角色再按開始對戰） -->
+  <!-- 0. 遊戲開始前主頁面 -->
   <section id="titleScreen" class="title-screen" aria-label="遊戲主頁面選角">
     <div class="title-card">
       <div class="title-header">
@@ -904,7 +909,7 @@
 
     <main class="stage-wrapper" id="stageWrapper">
       <div class="canvas-stage-box" id="canvasStageBox">
-        <canvas id="battleCanvas" width="800" height="450"></canvas>
+        <canvas id="battleCanvas" width="960" height="440"></canvas>
       </div>
     </main>
 
@@ -1033,10 +1038,18 @@
         setTimeout(function () { playSynthTone(98, 0.22, "square", 0.11); }, 85);
       } else if (kind === "shield") {
         playSynthTone(460, 0.1, "sine", 0.09);
+      } else if (kind === "lion") {
+        playSynthTone(140, 0.18, "sawtooth", 0.16);
+        setTimeout(function () { playSynthTone(195, 0.16, "square", 0.14); }, 85);
+        setTimeout(function () { playSynthTone(115, 0.25, "sawtooth", 0.16); }, 175);
+      } else if (kind === "pig") {
+        playSynthTone(390, 0.12, "triangle", 0.15);
+        setTimeout(function () { playSynthTone(520, 0.14, "sine", 0.14); }, 90);
+        setTimeout(function () { playSynthTone(290, 0.2, "triangle", 0.14); }, 180);
       } else if (kind === "transform") {
-        playSynthTone(185, 0.16, "sawtooth", 0.15);
-        setTimeout(function () { playSynthTone(370, 0.16, "triangle", 0.15); }, 95);
-        setTimeout(function () { playSynthTone(740, 0.24, "triangle", 0.15); }, 190);
+        playSynthTone(220, 0.14, "triangle", 0.14);
+        setTimeout(function () { playSynthTone(440, 0.14, "triangle", 0.14); }, 90);
+        setTimeout(function () { playSynthTone(880, 0.22, "sine", 0.14); }, 180);
       } else if (kind === "ko") {
         playSynthTone(523.25, 0.12, "triangle", 0.14);
         setTimeout(function () { playSynthTone(659.25, 0.12, "triangle", 0.14); }, 100);
@@ -1045,24 +1058,24 @@
     }
 
     // =========================================================================
-    // 3. 2D 畫布尺寸自適應（橫屏 Safari 優先）
+    // 3. 橫屏優先畫布尺寸適配
     // =========================================================================
     const stageWrapper = document.getElementById("stageWrapper");
     const stageBox = document.getElementById("canvasStageBox");
     const canvas = document.getElementById("battleCanvas");
     const ctx = canvas.getContext("2d");
 
-    const WORLD_W = 800;
-    const WORLD_H = 450;
-    const FLOOR_Y = 382;
+    const WORLD_W = 960;
+    const WORLD_H = 440;
+    const FLOOR_Y = 374;
     const GRAVITY = 1520;
 
     function fitCanvasToContainer() {
       try {
-        const wrapW = stageWrapper ? stageWrapper.clientWidth : (window.innerWidth - 16);
-        const wrapH = stageWrapper ? stageWrapper.clientHeight : (window.innerHeight - 150);
-        const targetW = Math.max(220, Math.floor(wrapW || 800));
-        const targetH = Math.max(140, Math.floor(wrapH || 450));
+        const wrapW = stageWrapper ? stageWrapper.clientWidth : (window.innerWidth - 12);
+        const wrapH = stageWrapper ? stageWrapper.clientHeight : (window.innerHeight - 135);
+        const targetW = Math.max(240, Math.floor(wrapW || 960));
+        const targetH = Math.max(130, Math.floor(wrapH || 440));
 
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
         if (stageBox) {
@@ -1093,7 +1106,7 @@
     }
 
     // =========================================================================
-    // 4. 四角色資料、四大場景、AI 難度與主頁選角流程
+    // 4. 四角色資料、四大場景、AI 難度與主頁選角
     // =========================================================================
     const ROSTER = {
       queen: {
@@ -1103,10 +1116,10 @@
         dressColor: "#ec4899",
         strokeColor: "#831843",
         transformName: "🐷 暴走大肥豬",
-        transformBanner: "🐷 老婆大人血量低於 50% 變身「大肥豬」！ATK x1.8 · DEF x1.5！",
-        skill1: { label: "🍳 平底鍋連擊", kind: "pan", hitText: "🍳 平底鍋連擊!", dmg: 14, reach: 124 },
+        transformBanner: "🐷 老婆大人變身「暴走大肥豬」！圓滾衝擊＋ATK x1.8 · DEF x1.5！",
+        skill1: { label: "🍳 平底鍋連擊", kind: "pan", hitText: "🍳 平底鍋連擊!", dmg: 14, reach: 136 },
         skill2: { label: "🛍️ 買買買波", kind: "proj", projIcon: "🛍️", hitText: "🛍️ 買買買波!", dmg: 13 },
-        skill3: { label: "👂 捏耳朵神功", kind: "pinch", hitText: "👂 捏耳朵神功!", dmg: 19, reach: 128 }
+        skill3: { label: "👂 捏耳朵神功", kind: "pinch", hitText: "👂 捏耳朵神功!", dmg: 19, reach: 140 }
       },
       servant: {
         id: "servant",
@@ -1115,10 +1128,10 @@
         dressColor: "#2563eb",
         strokeColor: "#1e3a8a",
         transformName: "🦁 LION 獅王",
-        transformBanner: "🦁 老公僕人血量低於 50% 變身「LION 獅王」！ATK x2 · DEF x2！",
-        skill1: { label: "🥣 僕人揮拳", kind: "strike", hitText: "🥣 僕人重拳!", dmg: 11, reach: 102 },
+        transformBanner: "🦁 老公僕人變身「LION 獅王」！狂獅鬃毛光環＋ATK x2 · DEF x2！",
+        skill1: { label: "🥣 僕人揮拳", kind: "strike", hitText: "🥣 僕人重拳!", dmg: 11, reach: 112 },
         skill2: { label: "💳 卡片波", kind: "proj", projIcon: "💳", hitText: "💳 卡片波!", dmg: 11 },
-        skill3: { label: "🙇‍♂️ 求生道歉", kind: "pinch", hitText: "🙇‍♂️ 求生道歉!", dmg: 15, reach: 112 }
+        skill3: { label: "🙇‍♂️ 求生道歉", kind: "pinch", hitText: "🙇‍♂️ 求生道歉!", dmg: 15, reach: 122 }
       },
       reina: {
         id: "reina",
@@ -1127,10 +1140,10 @@
         dressColor: "#f472b6",
         strokeColor: "#9d174d",
         transformName: "✨ 美少女戰士",
-        transformBanner: "✨ 女女 Reina 血量低於 50% 變身「美少女戰士」！星光強化！",
-        skill1: { label: "😭 狂哭", kind: "cry", hitText: "😭 女女狂哭震波!", dmg: 17, reach: 145 },
+        transformBanner: "✨ 女女 Reina 變身「美少女戰士」！星光強化！",
+        skill1: { label: "😭 狂哭", kind: "cry", hitText: "😭 女女狂哭震波!", dmg: 17, reach: 158 },
         skill2: { label: "💖 愛心波", kind: "proj", projIcon: "💖", hitText: "💖 愛心波!", dmg: 12 },
-        skill3: { label: "💧 眼淚衝刺", kind: "pinch", hitText: "💧 眼淚衝刺!", dmg: 15, reach: 116 }
+        skill3: { label: "💧 眼淚衝刺", kind: "pinch", hitText: "💧 眼淚衝刺!", dmg: 15, reach: 126 }
       },
       eian: {
         id: "eian",
@@ -1139,10 +1152,10 @@
         dressColor: "#38bdf8",
         strokeColor: "#0369a1",
         transformName: "🦸 超人",
-        transformBanner: "🦸 仔仔 Eian 血量低於 50% 變身「超人」！超能爆發！",
-        skill1: { label: "💨 放臭屁", kind: "fart", hitText: "💨 仔仔放臭屁!", dmg: 18, reach: 140 },
+        transformBanner: "🦸 仔仔 Eian 變身「超人」！超能爆發！",
+        skill1: { label: "💨 放臭屁", kind: "fart", hitText: "💨 仔仔放臭屁!", dmg: 18, reach: 152 },
         skill2: { label: "⚽ 足球波", kind: "proj", projIcon: "⚽", hitText: "⚽ 足球波!", dmg: 12 },
-        skill3: { label: "🌪️ 臭氣衝刺", kind: "pinch", hitText: "🌪️ 臭氣衝刺!", dmg: 16, reach: 118 }
+        skill3: { label: "🌪️ 臭氣衝刺", kind: "pinch", hitText: "🌪️ 臭氣衝刺!", dmg: 16, reach: 128 }
       }
     };
 
@@ -1200,6 +1213,7 @@
     let lastTimestamp = 0;
     let screenShakeSec = 0;
     let screenFlashSec = 0;
+    let screenFlashColor = "rgba(250, 204, 21, 0.38)";
     let transformBannerSec = 0;
     let currentBannerText = "";
     let p1SuperMeter = 35;
@@ -1324,7 +1338,7 @@
     }
 
     // =========================================================================
-    // 5. 特效粒子、投射物、浮動數字與 2D 格鬥角色類別
+    // 5. 特效粒子、投射物、浮動數字與角色類別
     // =========================================================================
     let activeProjectiles = [];
     let floatingTexts = [];
@@ -1366,8 +1380,8 @@
         r: 10,
         maxR: maxR || 72,
         color: color || "#ec4899",
-        life: 0.3,
-        maxLife: 0.3
+        life: 0.34,
+        maxLife: 0.34
       });
     }
 
@@ -1375,16 +1389,16 @@
       const n = count || 10;
       for (let i = 0; i < n; i++) {
         const ang = (Math.PI * 2 * i) / n + (Math.random() - 0.5) * 0.35;
-        const spd = 90 + Math.random() * 170;
+        const spd = 95 + Math.random() * 185;
         sparkParticles.push({
           x: x,
           y: y,
           vx: Math.cos(ang) * spd,
-          vy: Math.sin(ang) * spd - 40,
-          r: 3.2 + Math.random() * 3.2,
+          vy: Math.sin(ang) * spd - 45,
+          r: 3.2 + Math.random() * 3.4,
           color: color || "#facc15",
-          life: 0.36,
-          maxLife: 0.36
+          life: 0.4,
+          maxLife: 0.4
         });
       }
     }
@@ -1410,6 +1424,7 @@
         this.breatheCycle = cfg.isPlayer1 ? 0.4 : 1.9;
         this.transformed = false;
         this.hasTransformed = false;
+        this.transformAnimSec = 0;
       }
 
       getSpec() {
@@ -1433,23 +1448,45 @@
         this.walkCycle = 0;
         this.transformed = false;
         this.hasTransformed = false;
+        this.transformAnimSec = 0;
       }
 
-      // 血量低於 50% 變身：老公變 LION、老婆變大肥豬、女女變美少女戰士、仔仔變超人
+      // 血量低於 50% 變身：老公變 LION（專屬獅王特效）、老婆變大肥豬（優化肥豬造型與特效）
       checkHalfHpTransform() {
         if (this.hasTransformed) return;
         if (this.hp > 0 && this.hp < this.maxHp * 0.5) {
           this.transformed = true;
           this.hasTransformed = true;
+          this.transformAnimSec = 0.85;
           const spec = this.getSpec();
-          screenShakeSec = 0.65;
+
+          screenShakeSec = 0.7;
           screenFlashSec = 0.45;
           transformBannerSec = 2.0;
           currentBannerText = spec.transformBanner;
-          addShockRing(this.x, this.y - 68, "#facc15", 130);
-          addSparks(this.x, this.y - 68, "#ec4899", 16);
-          playActionSfx("transform");
-          addFloatingText(this.x, this.y - 175, `${spec.transformName} 變身!`, "#dc2626");
+
+          if (this.charId === "servant") {
+            screenFlashColor = "rgba(250, 204, 21, 0.36)";
+            addShockRing(this.x, this.y - 68, "#f59e0b", 145);
+            addShockRing(this.x, this.y - 68, "#facc15", 105);
+            addSparks(this.x, this.y - 72, "#facc15", 22);
+            playActionSfx("lion");
+            addFloatingText(this.x, this.y - 180, "🦁 ROAR! LION 獅王覺醒!", "#b45309");
+          } else if (this.charId === "queen") {
+            screenFlashColor = "rgba(244, 114, 182, 0.36)";
+            addShockRing(this.x, this.y - 56, "#ec4899", 140);
+            addShockRing(this.x, this.y - 56, "#fbcfe8", 95);
+            addSparks(this.x, this.y - 56, "#f472b6", 20);
+            addSparks(this.x, this.y - 56, "#fde047", 10);
+            playActionSfx("pig");
+            addFloatingText(this.x, this.y - 172, "🐷 暴走大肥豬膨脹!", "#db2777");
+          } else {
+            screenFlashColor = "rgba(250, 204, 21, 0.34)";
+            addShockRing(this.x, this.y - 64, "#facc15", 125);
+            addSparks(this.x, this.y - 64, "#38bdf8", 16);
+            playActionSfx("transform");
+            addFloatingText(this.x, this.y - 170, `${spec.transformName} 變身!`, "#dc2626");
+          }
         }
       }
 
@@ -1564,6 +1601,7 @@
         if (this.cooldownSec > 0) this.cooldownSec = Math.max(0, this.cooldownSec - dt);
         if (this.shieldSec > 0) this.shieldSec = Math.max(0, this.shieldSec - dt);
         if (this.hitFlashSec > 0) this.hitFlashSec = Math.max(0, this.hitFlashSec - dt);
+        if (this.transformAnimSec > 0) this.transformAnimSec = Math.max(0, this.transformAnimSec - dt);
         if (this.attackSec > 0) {
           this.attackSec = Math.max(0, this.attackSec - dt);
           if (this.attackSec === 0) this.attackKind = null;
@@ -1572,16 +1610,14 @@
         this.x += this.vx * dt;
         this.y += this.vy * dt;
 
-        if (!this.grounded) {
-          this.vy += GRAVITY * dt;
-        }
+        if (!this.grounded) this.vy += GRAVITY * dt;
         if (this.y >= FLOOR_Y) {
           this.y = FLOOR_Y;
           this.vy = 0;
           this.grounded = true;
         }
 
-        this.x = Math.max(52, Math.min(WORLD_W - 52, this.x));
+        this.x = Math.max(58, Math.min(WORLD_W - 58, this.x));
 
         if (Math.abs(this.vx) > 10 && this.grounded) {
           this.walkCycle += dt * 13;
@@ -1590,7 +1626,7 @@
         }
 
         if (opponent) {
-          const minDist = this.transformed ? 54 : 42;
+          const minDist = this.transformed ? 56 : 42;
           const dx = opponent.x - this.x;
           if (Math.abs(dx) < minDist && Math.abs(opponent.y - this.y) < 56) {
             const sep = (minDist - Math.abs(dx)) * 0.5;
@@ -1609,23 +1645,56 @@
         const baseScale = isKid ? 0.86 : 1.0;
         const bobY = this.grounded && Math.abs(this.vx) < 8 ? Math.sin(this.breatheCycle) * 2.0 : 0;
         const stepSwing = Math.sin(this.walkCycle) * 9;
+        const headY = -88 + bobY;
 
         c.fillStyle = "rgba(15, 23, 42, 0.24)";
         c.beginPath();
-        c.ellipse(0, 4, 34 * baseScale, 8 * baseScale, 0, 0, Math.PI * 2);
+        c.ellipse(0, 4, (this.transformed && this.charId === "queen" ? 44 : 34) * baseScale, 8 * baseScale, 0, 0, Math.PI * 2);
         c.fill();
 
         c.save();
         c.scale(baseScale, baseScale);
 
+        // 變身專屬光環特效（老公 LION 金鬃光環 / 老婆大肥豬粉金波紋）
         if (this.transformed) {
-          c.strokeStyle = "rgba(250, 204, 21, 0.85)";
-          c.fillStyle = "rgba(251, 146, 60, 0.22)";
-          c.lineWidth = 3.5;
-          c.beginPath();
-          c.arc(0, -56, 56 + Math.sin(frameCounter * 0.2) * 3, 0, Math.PI * 2);
-          c.fill();
-          c.stroke();
+          if (this.charId === "servant") {
+            c.save();
+            c.translate(0, headY);
+            c.rotate(frameCounter * 0.045);
+            c.strokeStyle = "#f59e0b";
+            c.fillStyle = "rgba(250, 204, 21, 0.28)";
+            c.lineWidth = 3;
+            const rays = 12;
+            for (let i = 0; i < rays; i++) {
+              const a = (Math.PI * 2 * i) / rays;
+              const rx = Math.cos(a) * 34;
+              const ry = Math.sin(a) * 34;
+              c.beginPath();
+              c.arc(rx, ry, 8.5, 0, Math.PI * 2);
+              c.fill();
+              c.stroke();
+            }
+            c.restore();
+          } else if (this.charId === "queen") {
+            const pulse = Math.sin(frameCounter * 0.18) * 4;
+            c.save();
+            c.strokeStyle = "#ec4899";
+            c.fillStyle = "rgba(249, 168, 212, 0.28)";
+            c.lineWidth = 3;
+            c.beginPath();
+            c.ellipse(0, -54, 48 + pulse, 40 + pulse * 0.7, 0, 0, Math.PI * 2);
+            c.fill();
+            c.stroke();
+            c.restore();
+          } else {
+            c.strokeStyle = "rgba(250, 204, 21, 0.85)";
+            c.fillStyle = "rgba(251, 146, 60, 0.22)";
+            c.lineWidth = 3.5;
+            c.beginPath();
+            c.arc(0, -56, 56 + Math.sin(frameCounter * 0.2) * 3, 0, Math.PI * 2);
+            c.fill();
+            c.stroke();
+          }
         }
 
         const spec = this.getSpec();
@@ -1648,11 +1717,16 @@
         c.strokeStyle = bodyStroke;
         c.lineWidth = 2.5;
         if (this.transformed && this.charId === "queen") {
-          // 老婆變大肥豬：圓滾膨脹身體
+          // 老婆變大肥豬：圓滾膨脹豬身與肚子條紋
           c.beginPath();
-          c.ellipse(0, -52 + bobY, 31, 25, 0, 0, Math.PI * 2);
+          c.ellipse(0, -52 + bobY, 35, 27, 0, 0, Math.PI * 2);
           c.fill();
           c.stroke();
+
+          c.fillStyle = "#fbcfe8";
+          c.beginPath();
+          c.ellipse(0, -48 + bobY, 19, 15, 0, 0, Math.PI * 2);
+          c.fill();
         } else if (this.charId === "queen" || this.charId === "reina") {
           c.beginPath();
           c.moveTo(-15, -72 + bobY);
@@ -1669,7 +1743,6 @@
           c.stroke();
         }
 
-        const headY = -88 + bobY;
         c.fillStyle = this.transformed && this.charId === "queen" ? "#fbcfe8" : "#fde68a";
         c.beginPath();
         c.arc(0, headY, 21, 0, Math.PI * 2);
@@ -1678,14 +1751,24 @@
         c.lineWidth = 2.5;
         c.stroke();
 
-        // 變身造型配件
         if (this.transformed) {
           c.font = "22px sans-serif";
           c.textAlign = "center";
           if (this.charId === "servant") {
-            c.fillText("🦁", 0, headY - 22);
+            c.fillText("🦁", 0, headY - 24);
           } else if (this.charId === "queen") {
-            c.fillText("🐷", this.facing * 12, headY + 6);
+            // 肥豬豬鼻與粉紅腮紅
+            c.fillStyle = "#f472b6";
+            c.beginPath();
+            c.ellipse(this.facing * 9, headY + 4, 7.5, 5.2, 0, 0, Math.PI * 2);
+            c.fill();
+            c.stroke();
+            c.fillStyle = "#9d174d";
+            c.beginPath();
+            c.arc(this.facing * 9 - 2.3, headY + 4, 1.4, 0, Math.PI * 2);
+            c.arc(this.facing * 9 + 2.3, headY + 4, 1.4, 0, Math.PI * 2);
+            c.fill();
+            c.fillText("🐷", 0, headY - 24);
           } else if (this.charId === "reina") {
             c.fillText("✨", 0, headY - 24);
           } else if (this.charId === "eian") {
@@ -1791,7 +1874,7 @@
         const slotTag = this.isPlayer1 ? "[P1] " : "[AI] ";
         const displayName = this.transformed ? spec.transformName : spec.badgeName;
         const tag = slotTag + displayName;
-        const tagY = headY - 34;
+        const tagY = headY - 38;
 
         c.font = "900 13px sans-serif";
         c.textAlign = "center";
@@ -1832,7 +1915,7 @@
         this.topColor = cfg.topColor;
         this.hatColor = cfg.hatColor;
         this.shotEmoji = cfg.shotEmoji;
-        this.x = 150;
+        this.x = 180;
         this.y = FLOOR_Y;
         this.vy = 0;
         this.grounded = true;
@@ -1954,8 +2037,8 @@
       }
     }
 
-    const p1Fighter = new Fighter2D({ isPlayer1: true, charId: p1CharId, x: 220, facing: 1 });
-    const p2AiFighter = new Fighter2D({ isPlayer1: false, charId: p2CharId, x: 590, facing: -1 });
+    const p1Fighter = new Fighter2D({ isPlayer1: true, charId: p1CharId, x: 260, facing: 1 });
+    const p2AiFighter = new Fighter2D({ isPlayer1: false, charId: p2CharId, x: 700, facing: -1 });
 
     const kidEian = new KidHelper({
       kidName: "Eian",
@@ -2016,9 +2099,7 @@
 
       syncVitalsHud();
 
-      if (defender.hp <= 0) {
-        openKoModal();
-      }
+      if (defender.hp <= 0) openKoModal();
     }
 
     // =========================================================================
@@ -2039,39 +2120,39 @@
         c.strokeStyle = "#9d174d";
         c.lineWidth = 2.5;
         c.beginPath();
-        c.roundRect(265, FLOOR_Y - 64, 270, 64, 16);
+        c.roundRect(330, FLOOR_Y - 62, 300, 62, 16);
         c.fill();
         c.stroke();
 
         c.fillStyle = "#fde047";
         c.beginPath();
-        c.arc(110, 108, 32, 0, Math.PI * 2);
+        c.arc(130, 102, 30, 0, Math.PI * 2);
         c.fill();
       } else if (currentStageKey === "kitchen") {
         c.fillStyle = "#99f6e4";
         c.strokeStyle = "#115e59";
         c.lineWidth = 2.5;
-        c.fillRect(215, FLOOR_Y - 56, 370, 56);
-        c.strokeRect(215, FLOOR_Y - 56, 370, 56);
-        c.fillRect(270, 60, 260, 52);
-        c.strokeRect(270, 60, 260, 52);
+        c.fillRect(270, FLOOR_Y - 54, 420, 54);
+        c.strokeRect(270, FLOOR_Y - 54, 420, 54);
+        c.fillRect(330, 56, 300, 48);
+        c.strokeRect(330, 56, 300, 48);
       } else if (currentStageKey === "mall") {
         c.strokeStyle = "#d97706";
         c.lineWidth = 5;
         for (let i = 0; i < 3; i++) {
-          const ax = 150 + i * 250;
+          const ax = 180 + i * 300;
           c.beginPath();
-          c.arc(ax, 186, 76, Math.PI, 0);
+          c.arc(ax, 180, 80, Math.PI, 0);
           c.stroke();
         }
       } else if (currentStageKey === "hawaii") {
         c.fillStyle = "#facc15";
         c.beginPath();
-        c.arc(650, 96, 42, 0, Math.PI * 2);
+        c.arc(780, 92, 38, 0, Math.PI * 2);
         c.fill();
 
         c.fillStyle = "#38bdf8";
-        c.fillRect(0, FLOOR_Y - 46, WORLD_W, 46);
+        c.fillRect(0, FLOOR_Y - 44, WORLD_W, 44);
       }
 
       for (const m of ambientMotes) {
@@ -2089,13 +2170,13 @@
         c.restore();
       }
 
-      c.font = "900 17px sans-serif";
+      c.font = "900 16px sans-serif";
       c.textAlign = "center";
       c.lineWidth = 4;
       c.strokeStyle = "rgba(255, 255, 255, 0.85)";
-      c.strokeText(st.label, WORLD_W / 2, 30);
+      c.strokeText(st.label, WORLD_W / 2, 26);
       c.fillStyle = "#0f172a";
-      c.fillText(st.label, WORLD_W / 2, 30);
+      c.fillText(st.label, WORLD_W / 2, 26);
 
       const floorGrad = c.createLinearGradient(0, FLOOR_Y, 0, WORLD_H);
       floorGrad.addColorStop(0, st.floorTop);
@@ -2204,14 +2285,14 @@
         c.strokeStyle = "#fde047";
         c.lineWidth = 2.5;
         c.beginPath();
-        c.roundRect(WORLD_W * 0.5 - 220, 46, 440, 32, 11);
+        c.roundRect(WORLD_W * 0.5 - 245, 42, 490, 30, 10);
         c.fill();
         c.stroke();
 
         c.font = "900 13px sans-serif";
         c.textAlign = "center";
         c.fillStyle = "#fef08a";
-        c.fillText(currentBannerText, WORLD_W * 0.5, 67);
+        c.fillText(currentBannerText, WORLD_W * 0.5, 62);
         c.restore();
       }
     }
@@ -2300,8 +2381,8 @@
     function restartBattle() {
       ensureAudioReady();
       refreshSkillButtonLabels();
-      p1Fighter.resetUnit(p1CharId, 220, 1);
-      p2AiFighter.resetUnit(p2CharId, 590, -1);
+      p1Fighter.resetUnit(p1CharId, 260, 1);
+      p2AiFighter.resetUnit(p2CharId, 700, -1);
       kidEian.resetKid(p1Fighter.x);
       kidReina.resetKid(p1Fighter.x);
       p1SuperMeter = 35;
@@ -2417,14 +2498,14 @@
     });
 
     // =========================================================================
-    // 8. 連續 2D requestAnimationFrame 主迴圈
+    // 8. 連續 requestAnimationFrame 主迴圈
     // =========================================================================
     function stepP1Movement() {
       if (battleStatus !== "active") {
         p1Fighter.vx = 0;
         return;
       }
-      const speed = 265;
+      const speed = 290;
       if (moveInput.left && !moveInput.right) {
         p1Fighter.vx = -speed;
         p1Fighter.facing = -1;
@@ -2444,10 +2525,10 @@
       const dx = p1Fighter.x - p2AiFighter.x;
       p2AiFighter.facing = dx >= 0 ? 1 : -1;
 
-      const moveSpd = aiDifficulty === "survival" ? 182 : 108;
+      const moveSpd = aiDifficulty === "survival" ? 195 : 115;
       const atkChance = aiDifficulty === "survival" ? 1.9 : 0.9;
 
-      if (Math.abs(dx) > 112) {
+      if (Math.abs(dx) > 125) {
         p2AiFighter.vx = p2AiFighter.facing * moveSpd;
       } else {
         p2AiFighter.vx = 0;
@@ -2482,8 +2563,10 @@
       updateAndDrawEffects(ctx, dt);
 
       if (screenFlashSec > 0) {
-        ctx.fillStyle = `rgba(250, 204, 21, ${Math.min(0.38, screenFlashSec)})`;
+        ctx.fillStyle = screenFlashColor;
+        ctx.globalAlpha = Math.min(0.42, screenFlashSec);
         ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+        ctx.globalAlpha = 1;
       }
 
       ctx.restore();
