@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>結婚紀念日大亂鬥：橫屏適配＋LION＆肥豬變身優化 (2014.11.23)</title>
+  <title>結婚紀念日大亂鬥：老婆限定仔女助攻＋浪漫音樂 (2014.11.23)</title>
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -509,7 +509,6 @@
       gap: 4px;
     }
 
-    /* 舞台區：在橫屏時最大化可用高度與寬度 */
     .stage-wrapper {
       position: relative;
       flex: 1 1 auto;
@@ -543,7 +542,6 @@
       touch-action: none;
     }
 
-    /* 橫屏底部控制列：高度緊湊不擋舞台 */
     .touch-dock {
       background: rgba(255, 255, 255, 0.96);
       border: 2px solid #f472b6;
@@ -643,6 +641,11 @@
       box-shadow: 0 2px 0 #854d0e;
     }
 
+    .skill-btn.assist-disabled {
+      opacity: 0.45;
+      filter: grayscale(0.6);
+    }
+
     .skill-btn.super-ready {
       animation: superPulse 0.9s infinite alternate;
     }
@@ -656,7 +659,6 @@
       transform: translateY(1px);
     }
 
-    /* 直向窄螢幕備援排版 */
     @media (orientation: portrait) and (max-width: 767px) {
       .top-hud-bar {
         grid-template-columns: 1fr 1fr;
@@ -776,7 +778,7 @@
             <span>👑 老婆大人</span>
             <span class="p1-badge">出戰</span>
           </div>
-          <div class="char-move-line">🍳 放大平底鍋連擊・🛍️ 買買買波・👂 捏耳朵</div>
+          <div class="char-move-line">🍳 放大平底鍋・🛍️ 買買買波・👦👧 仔女助攻</div>
           <div class="char-trans-line">&lt;50% 血量變身：🐷 暴走大肥豬</div>
         </button>
 
@@ -833,7 +835,7 @@
       </div>
 
       <div class="start-actions">
-        <button type="button" class="start-fight-btn" onclick="startFromTitleScreen()">⚔️ 開始對戰</button>
+        <button type="button" class="start-fight-btn" onclick="startFromTitleScreen()">⚔️ 開始對戰（含浪漫音樂）</button>
         <button type="button" class="title-exit-btn" onclick="exitGame()">✕ Exit</button>
       </div>
     </div>
@@ -868,7 +870,7 @@
           <div id="roundClock" class="timer-badge">99</div>
           <div class="top-actions">
             <button type="button" class="mini-btn" onclick="openTitleScreen()">🏠 選角</button>
-            <button id="soundToggleBtn" type="button" class="mini-btn" onclick="toggleSoundMode()">🔊</button>
+            <button id="soundToggleBtn" type="button" class="mini-btn" onclick="toggleSoundMode()">🎵🔊</button>
             <button type="button" class="mini-btn reset" onclick="restartBattle()">🔄 重開</button>
             <button type="button" class="mini-btn exit-btn" onclick="exitGame()">✕ Exit</button>
           </div>
@@ -975,10 +977,20 @@
     updateAnniversaryBadge();
 
     // =========================================================================
-    // 2. Web Audio API 音效合成器
+    // 2. Web Audio API 音效與浪漫背景音樂（BGM）合成器
     // =========================================================================
     let audioCtx = null;
     let soundEnabled = true;
+    let bgmTimerId = null;
+    let bgmNoteIndex = 0;
+
+    // 浪漫溫馨琶音旋律（Fmaj7 -> Em7 -> Dm7 -> Cmaj7 柔和音階頻率）
+    const ROMANTIC_NOTES = [
+      349.23, 440.00, 523.25, 659.25,
+      329.63, 392.00, 493.88, 587.33,
+      293.66, 349.23, 440.00, 523.25,
+      261.63, 329.63, 392.00, 493.88
+    ];
 
     function ensureAudioReady() {
       if (!soundEnabled) return;
@@ -990,13 +1002,43 @@
         if (audioCtx && audioCtx.state === "suspended") {
           audioCtx.resume().catch(function () {});
         }
+        startRomanticBgmLoop();
       } catch (err) {}
+    }
+
+    function playRomanticStep() {
+      if (!soundEnabled || !audioCtx || audioCtx.state !== "running") return;
+      try {
+        const freq = ROMANTIC_NOTES[bgmNoteIndex % ROMANTIC_NOTES.length];
+        bgmNoteIndex++;
+        const t = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, t);
+        gain.gain.setValueAtTime(0.001, t);
+        gain.gain.linearRampToValueAtTime(0.032, t + 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.0008, t + 0.68);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(t);
+        osc.stop(t + 0.72);
+      } catch (err) {}
+    }
+
+    function startRomanticBgmLoop() {
+      if (bgmTimerId !== null) return;
+      bgmTimerId = window.setInterval(function () {
+        if (soundEnabled && battleStatus !== "exited") {
+          playRomanticStep();
+        }
+      }, 460);
     }
 
     function toggleSoundMode() {
       soundEnabled = !soundEnabled;
       const btn = document.getElementById("soundToggleBtn");
-      if (btn) btn.textContent = soundEnabled ? "🔊" : "🔇";
+      if (btn) btn.textContent = soundEnabled ? "🎵🔊" : "🔇";
       if (soundEnabled) {
         ensureAudioReady();
         playSynthTone(740, 0.08, "triangle", 0.08);
@@ -1220,6 +1262,18 @@
 
     const moveInput = { left: false, right: false };
 
+    function isQueenActiveForKids() {
+      return p1CharId === "queen";
+    }
+
+    function syncAssistButtonState() {
+      const btn = document.getElementById("btnKidsAssist");
+      if (!btn) return;
+      const allowed = isQueenActiveForKids();
+      btn.classList.toggle("assist-disabled", !allowed);
+      btn.textContent = allowed ? "👦👧 Eian & Reina 助攻" : "🔒 助攻限老婆";
+    }
+
     function syncTitleCards() {
       document.querySelectorAll("[data-pick-p1]").forEach(function (card) {
         const id = card.getAttribute("data-pick-p1");
@@ -1247,6 +1301,7 @@
       p1CharId = charId;
       syncTitleCards();
       refreshSkillButtonLabels();
+      syncAssistButtonState();
       playSynthTone(620, 0.07, "triangle", 0.08);
     }
 
@@ -1289,6 +1344,7 @@
       if (slot === "p1") {
         p1CharId = charId;
         refreshSkillButtonLabels();
+        syncAssistButtonState();
       } else {
         p2CharId = charId;
       }
@@ -1424,7 +1480,6 @@
         this.breatheCycle = cfg.isPlayer1 ? 0.4 : 1.9;
         this.transformed = false;
         this.hasTransformed = false;
-        this.transformAnimSec = 0;
       }
 
       getSpec() {
@@ -1448,16 +1503,13 @@
         this.walkCycle = 0;
         this.transformed = false;
         this.hasTransformed = false;
-        this.transformAnimSec = 0;
       }
 
-      // 血量低於 50% 變身：老公變 LION（專屬獅王特效）、老婆變大肥豬（優化肥豬造型與特效）
       checkHalfHpTransform() {
         if (this.hasTransformed) return;
         if (this.hp > 0 && this.hp < this.maxHp * 0.5) {
           this.transformed = true;
           this.hasTransformed = true;
-          this.transformAnimSec = 0.85;
           const spec = this.getSpec();
 
           screenShakeSec = 0.7;
@@ -1601,7 +1653,6 @@
         if (this.cooldownSec > 0) this.cooldownSec = Math.max(0, this.cooldownSec - dt);
         if (this.shieldSec > 0) this.shieldSec = Math.max(0, this.shieldSec - dt);
         if (this.hitFlashSec > 0) this.hitFlashSec = Math.max(0, this.hitFlashSec - dt);
-        if (this.transformAnimSec > 0) this.transformAnimSec = Math.max(0, this.transformAnimSec - dt);
         if (this.attackSec > 0) {
           this.attackSec = Math.max(0, this.attackSec - dt);
           if (this.attackSec === 0) this.attackKind = null;
@@ -1655,7 +1706,6 @@
         c.save();
         c.scale(baseScale, baseScale);
 
-        // 變身專屬光環特效（老公 LION 金鬃光環 / 老婆大肥豬粉金波紋）
         if (this.transformed) {
           if (this.charId === "servant") {
             c.save();
@@ -1717,7 +1767,6 @@
         c.strokeStyle = bodyStroke;
         c.lineWidth = 2.5;
         if (this.transformed && this.charId === "queen") {
-          // 老婆變大肥豬：圓滾膨脹豬身與肚子條紋
           c.beginPath();
           c.ellipse(0, -52 + bobY, 35, 27, 0, 0, Math.PI * 2);
           c.fill();
@@ -1757,7 +1806,6 @@
           if (this.charId === "servant") {
             c.fillText("🦁", 0, headY - 24);
           } else if (this.charId === "queen") {
-            // 肥豬豬鼻與粉紅腮紅
             c.fillStyle = "#f472b6";
             c.beginPath();
             c.ellipse(this.facing * 9, headY + 4, 7.5, 5.2, 0, 0, Math.PI * 2);
@@ -1811,7 +1859,6 @@
           c.stroke();
         }
 
-        // 招式特效：放大平底鍋、女女狂哭、仔仔放臭屁
         if (this.attackSec > 0) {
           if (this.attackKind === "pan") {
             const swingProg = 1 - Math.max(0, this.attackSec / 0.36);
@@ -1934,7 +1981,7 @@
       }
 
       fireAssist(enemy, boost) {
-        if (!enemy || battleStatus !== "active") return;
+        if (!enemy || battleStatus !== "active" || !isQueenActiveForKids()) return;
         this.vy = -435;
         this.grounded = false;
 
@@ -1959,7 +2006,7 @@
 
       updateKid(dt, p1, enemy) {
         this.bobPhase += dt * 4.8;
-        if (battleStatus !== "active") return;
+        if (battleStatus !== "active" || !isQueenActiveForKids()) return;
 
         const targetX = Math.max(34, Math.min(WORLD_W - 80, p1.x + this.offsetX));
         const dx = targetX - this.x;
@@ -1979,6 +2026,8 @@
       }
 
       drawKid(c) {
+        if (!isQueenActiveForKids()) return;
+
         c.save();
         c.translate(this.x, this.y);
 
@@ -2062,9 +2111,15 @@
 
     function triggerKidsAssistButton() {
       if (battleStatus !== "active") return;
+      if (!isQueenActiveForKids()) {
+        addFloatingText(p1Fighter.x, p1Fighter.y - 125, "仔女助攻只有老婆大人有!", "#475569");
+        return;
+      }
       kidEian.fireAssist(p2AiFighter, true);
       setTimeout(function () {
-        if (battleStatus === "active") kidReina.fireAssist(p2AiFighter, true);
+        if (battleStatus === "active" && isQueenActiveForKids()) {
+          kidReina.fireAssist(p2AiFighter, true);
+        }
       }, 110);
     }
 
@@ -2381,6 +2436,7 @@
     function restartBattle() {
       ensureAudioReady();
       refreshSkillButtonLabels();
+      syncAssistButtonState();
       p1Fighter.resetUnit(p1CharId, 260, 1);
       p2AiFighter.resetUnit(p2CharId, 700, -1);
       kidEian.resetKid(p1Fighter.x);
@@ -2610,6 +2666,7 @@
 
     syncTitleCards();
     refreshSkillButtonLabels();
+    syncAssistButtonState();
     fitCanvasToContainer();
     syncVitalsHud();
     paintWorld(0.016);
