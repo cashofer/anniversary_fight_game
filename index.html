@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>結婚紀念日大亂鬥：老婆大人 vs 老公僕人 (2014.11.23)</title>
+  <title>結婚紀念日 3D 大亂鬥：四角色低血變身 (2014.11.23)</title>
   <style>
-    /* 全域重設與 Safari 防誤觸滾動、縮放與選取 */
     *, *::before, *::after {
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
@@ -29,7 +28,6 @@
       overscroll-behavior: none;
     }
 
-    /* 橫屏優先全畫面主容器 */
     .game-shell {
       width: 100vw;
       width: 100dvw;
@@ -45,7 +43,6 @@
       overflow: hidden;
     }
 
-    /* 精湊頂部 HUD 列：左側老婆大人 HP & 超必殺能量條、中央紀念日天數/倒數/場景/AI、右側老公僕人 HP & 攻防倍率 */
     .top-hud-bar {
       background: rgba(255, 255, 255, 0.96);
       border: 2px solid #f472b6;
@@ -76,14 +73,14 @@
       font-weight: 900;
     }
 
-    .queen-name {
+    .p1-name {
       color: #be185d;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .servant-name {
+    .p2-name {
       color: #1d4ed8;
       white-space: nowrap;
       overflow: hidden;
@@ -94,7 +91,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 3px;
+      gap: 2.5px;
     }
 
     .center-top-row {
@@ -108,7 +105,7 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 900;
       color: #9d174d;
       white-space: nowrap;
@@ -119,8 +116,8 @@
       color: #713f12;
       border: 1.5px solid #ca8a04;
       border-radius: 999px;
-      padding: 1px 7px;
-      font-size: 10.5px;
+      padding: 1px 6px;
+      font-size: 10px;
       font-weight: 900;
       white-space: nowrap;
     }
@@ -128,7 +125,7 @@
     .top-actions {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 3.5px;
     }
 
     .mini-btn {
@@ -137,7 +134,7 @@
       color: #be185d;
       border-radius: 8px;
       padding: 2px 6px;
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 800;
       cursor: pointer;
       touch-action: none;
@@ -167,18 +164,20 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      flex-wrap: nowrap;
+      gap: 5px;
+      flex-wrap: wrap;
     }
 
     .pill-group {
       display: flex;
       align-items: center;
-      gap: 3px;
+      gap: 2.5px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .selector-label {
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 800;
       color: #64748b;
       white-space: nowrap;
@@ -189,18 +188,30 @@
       background: #f8fafc;
       color: #334155;
       border-radius: 999px;
-      padding: 1px 6px;
-      font-size: 10px;
+      padding: 1px 5.5px;
+      font-size: 9.5px;
       font-weight: 800;
       white-space: nowrap;
       cursor: pointer;
       touch-action: none;
     }
 
-    .choice-pill.stage-active {
+    .choice-pill.p1-active {
       background: linear-gradient(180deg, #fdf2f8 0%, #fbcfe8 100%);
       border-color: #db2777;
       color: #9d174d;
+    }
+
+    .choice-pill.p2-active {
+      background: linear-gradient(180deg, #f3e8ff 0%, #e9d5ff 100%);
+      border-color: #7e22ce;
+      color: #581c87;
+    }
+
+    .choice-pill.stage-active {
+      background: linear-gradient(180deg, #fef9c3 0%, #fef08a 100%);
+      border-color: #ca8a04;
+      color: #713f12;
     }
 
     .choice-pill.ai-active {
@@ -214,8 +225,8 @@
       color: #713f12;
       border: 1.5px solid #ca8a04;
       border-radius: 999px;
-      padding: 1px 8px;
-      font-size: 11.5px;
+      padding: 1px 7px;
+      font-size: 11px;
       font-weight: 900;
       white-space: nowrap;
     }
@@ -231,14 +242,14 @@
       white-space: nowrap;
     }
 
-    .status-chip.giant-active {
-      background: linear-gradient(90deg, #ef4444 0%, #b91c1c 100%);
+    .status-chip.transformed {
+      background: linear-gradient(90deg, #f59e0b 0%, #dc2626 100%);
       color: #ffffff;
       border-color: #7f1d1d;
     }
 
     .hp-track {
-      height: 13px;
+      height: 12px;
       background: #e2e8f0;
       border-radius: 7px;
       border: 1.5px solid #94a3b8;
@@ -246,14 +257,14 @@
       position: relative;
     }
 
-    .hp-fill-queen {
+    .hp-fill-p1 {
       height: 100%;
       width: 100%;
       background: linear-gradient(90deg, #f472b6 0%, #ec4899 55%, #e11d48 100%);
       transition: width 0.08s linear;
     }
 
-    .hp-fill-servant {
+    .hp-fill-p2 {
       height: 100%;
       width: 100%;
       margin-left: auto;
@@ -261,8 +272,9 @@
       transition: width 0.08s linear;
     }
 
-    .hp-fill-servant.giant-mode {
-      background: linear-gradient(270deg, #f87171 0%, #dc2626 55%, #991b1b 100%);
+    .hp-fill-p1.transformed,
+    .hp-fill-p2.transformed {
+      background: linear-gradient(90deg, #facc15 0%, #f97316 55%, #dc2626 100%);
     }
 
     .hp-text {
@@ -281,9 +293,8 @@
       justify-content: flex-end;
     }
 
-    /* 老婆大人超必殺能量條 */
     .super-track {
-      height: 8px;
+      height: 7.5px;
       background: #fce7f3;
       border-radius: 999px;
       border: 1px solid #f472b6;
@@ -304,13 +315,13 @@
       color: #9d174d;
       display: flex;
       justify-content: space-between;
+      gap: 4px;
     }
 
-    /* 橫屏戰鬥舞台外框 */
     .stage-wrapper {
       position: relative;
       flex: 1 1 auto;
-      min-height: 150px;
+      min-height: 140px;
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -326,9 +337,6 @@
       .center-hud {
         grid-column: 1 / -1;
         order: -1;
-      }
-      .selectors-line {
-        flex-wrap: wrap;
       }
       .touch-dock {
         flex-direction: column;
@@ -350,7 +358,7 @@
       height: 100%;
       max-width: 100%;
       max-height: 100%;
-      background: #fff1f2;
+      background: #1e1b4b;
       border: 3px solid #db2777;
       border-radius: 16px;
       overflow: hidden;
@@ -358,14 +366,66 @@
       touch-action: none;
     }
 
-    canvas#battleCanvas {
+    #threeMount {
       display: block;
       width: 100%;
       height: 100%;
       touch-action: none;
     }
 
-    /* 底部左右分區觸控列 */
+    .stage-hud-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .stage-title-badge {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.88);
+      border: 2px solid #db2777;
+      color: #0f172a;
+      border-radius: 999px;
+      padding: 2px 12px;
+      font-size: 13px;
+      font-weight: 900;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      white-space: nowrap;
+    }
+
+    .transform-banner {
+      position: absolute;
+      top: 42px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(153, 27, 27, 0.94);
+      border: 2px solid #fde047;
+      color: #fef08a;
+      border-radius: 11px;
+      padding: 4px 14px;
+      font-size: 13px;
+      font-weight: 900;
+      display: none;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .transform-banner.show {
+      display: block;
+    }
+
+    .floating-3d-tag {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      font-size: 13px;
+      font-weight: 900;
+      text-shadow: 0 0 4px #ffffff, 0 2px 4px rgba(0, 0, 0, 0.45);
+      white-space: nowrap;
+    }
+
     .touch-dock {
       background: rgba(255, 255, 255, 0.96);
       border: 2px solid #f472b6;
@@ -479,7 +539,6 @@
       box-shadow: 0 1px 0 #831843;
     }
 
-    /* K.O. 紀念日條約彈窗與離開畫面 */
     .ko-modal {
       position: fixed;
       inset: 0;
@@ -497,7 +556,7 @@
 
     .ko-card {
       width: 100%;
-      max-width: 430px;
+      max-width: 440px;
       background: linear-gradient(180deg, #fffdf7 0%, #ffe4e6 100%);
       border: 3px solid #db2777;
       border-radius: 22px;
@@ -561,30 +620,28 @@
       display: flex;
     }
   </style>
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
 </head>
 <body>
   <div class="game-shell">
-    <!-- 1. 精湊頂部 HUD 列 -->
     <header class="top-hud-bar">
-      <!-- 左側：老婆大人 HP & 超必殺能量條 -->
       <div class="side-hud">
         <div class="side-header">
-          <span class="queen-name">👑 老婆大人（Eian・Reina）</span>
-          <span id="queenHpText" style="color:#be185d;">HP 100</span>
+          <span id="p1HudLabel" class="p1-name">👑 老婆大人</span>
+          <span id="p1HpText" style="color:#be185d;">HP 100</span>
         </div>
         <div class="hp-track">
-          <div id="queenHpBar" class="hp-fill-queen"></div>
+          <div id="p1HpBar" class="hp-fill-p1"></div>
         </div>
         <div class="super-label">
           <span>✨ 超必殺能量</span>
-          <span id="queenSuperText">35%</span>
+          <span id="p1SuperText">35%</span>
         </div>
         <div class="super-track">
-          <div id="queenSuperBar" class="super-fill"></div>
+          <div id="p1SuperBar" class="super-fill"></div>
         </div>
       </div>
 
-      <!-- 中央：結婚紀念日天數、倒數秒數、場景選擇、AI 難度、音效、重開與離開 -->
       <div class="center-hud">
         <div class="center-top-row">
           <div class="title-and-days">
@@ -600,6 +657,24 @@
         </div>
 
         <div class="selectors-line">
+          <div class="pill-group" role="group" aria-label="我方角色選擇">
+            <span class="selector-label">我方:</span>
+            <button type="button" class="choice-pill p1-active" data-p1="queen" onclick="selectRoster('p1', 'queen')">老婆</button>
+            <button type="button" class="choice-pill" data-p1="servant" onclick="selectRoster('p1', 'servant')">老公</button>
+            <button type="button" class="choice-pill" data-p1="reina" onclick="selectRoster('p1', 'reina')">女女</button>
+            <button type="button" class="choice-pill" data-p1="eian" onclick="selectRoster('p1', 'eian')">仔仔</button>
+          </div>
+
+          <div class="pill-group" role="group" aria-label="對手角色選擇">
+            <span class="selector-label">對手:</span>
+            <button type="button" class="choice-pill" data-p2="queen" onclick="selectRoster('p2', 'queen')">老婆</button>
+            <button type="button" class="choice-pill p2-active" data-p2="servant" onclick="selectRoster('p2', 'servant')">老公</button>
+            <button type="button" class="choice-pill" data-p2="reina" onclick="selectRoster('p2', 'reina')">女女</button>
+            <button type="button" class="choice-pill" data-p2="eian" onclick="selectRoster('p2', 'eian')">仔仔</button>
+          </div>
+        </div>
+
+        <div class="selectors-line">
           <div class="pill-group" role="group" aria-label="場景選擇">
             <span class="selector-label">場景:</span>
             <button type="button" class="choice-pill stage-active" data-stage="living" onclick="selectStage('living')">甜蜜客廳</button>
@@ -610,37 +685,39 @@
 
           <div class="pill-group" role="group" aria-label="AI 難度">
             <span class="selector-label">AI:</span>
-            <button type="button" class="choice-pill ai-active" data-ai="gentle" onclick="selectAiDifficulty('gentle')">溫柔老公</button>
-            <button type="button" class="choice-pill" data-ai="survival" onclick="selectAiDifficulty('survival')">求生慾滿格</button>
+            <button type="button" class="choice-pill ai-active" data-ai="gentle" onclick="selectAiDifficulty('gentle')">溫柔</button>
+            <button type="button" class="choice-pill" data-ai="survival" onclick="selectAiDifficulty('survival')">求生慾</button>
           </div>
         </div>
       </div>
 
-      <!-- 右側：老公僕人 HP & 攻防倍率徽章 -->
       <div class="side-hud">
         <div class="side-header">
-          <span id="servantStatusChip" class="status-chip">👓 僕人常態 (ATK x1 · DEF x1)</span>
-          <span class="servant-name">🙇‍♂️ 老公僕人</span>
+          <span id="p2StatusChip" class="status-chip">常態 (ATK x1 · DEF x1)</span>
+          <span id="p2HudLabel" class="p2-name">🙇‍♂️ 老公僕人</span>
         </div>
         <div class="hp-track">
-          <div id="servantHpBar" class="hp-fill-servant"></div>
-          <span id="servantHpText" class="hp-text align-right">HP 100</span>
+          <div id="p2HpBar" class="hp-fill-p2"></div>
+          <span id="p2HpText" class="hp-text align-right">HP 100</span>
         </div>
         <div class="super-label" style="color:#1e40af;">
-          <span>血量 &lt; 50% 變身暴走大怪獸</span>
-          <span id="servantMultText">x1 / x1</span>
+          <span>血量 &lt; 50% 3D 變身覺醒</span>
+          <span id="p2MultText">x1 / x1</span>
         </div>
       </div>
     </header>
 
-    <!-- 2. 全畫面戰鬥畫布區 -->
     <main class="stage-wrapper" id="stageWrapper">
       <div class="canvas-stage-box" id="canvasStageBox">
-        <canvas id="battleCanvas" width="800" height="450"></canvas>
+        <div id="threeMount"></div>
+        <div class="stage-hud-overlay" id="overlayLayer">
+          <div id="stageBadge" class="stage-title-badge">甜蜜客廳（3D）</div>
+          <div id="transformBanner" class="transform-banner">3D 變身覺醒！</div>
+          <div id="floatingTextsLayer"></div>
+        </div>
       </div>
     </main>
 
-    <!-- 3. 底部左右分區觸控控制區 -->
     <footer class="touch-dock" aria-label="觸控操作">
       <div class="dpad-group">
         <button id="btnMoveLeft" type="button" class="pad-btn" aria-label="向左移動">◀</button>
@@ -649,16 +726,15 @@
       </div>
 
       <div class="skills-group">
-        <button id="btnSkillPan" type="button" class="skill-btn">🍳 平底鍋連擊</button>
-        <button id="btnSkillShop" type="button" class="skill-btn">🛍️ 買買買波</button>
-        <button id="btnSkillPinch" type="button" class="skill-btn">👂 捏耳朵神功</button>
+        <button id="btnSkill1" type="button" class="skill-btn">🍳 平底鍋連擊</button>
+        <button id="btnSkill2" type="button" class="skill-btn">🛍️ 買買買波</button>
+        <button id="btnSkill3" type="button" class="skill-btn">👂 捏耳朵神功</button>
         <button id="btnSkillShield" type="button" class="skill-btn shield-btn">🛡️ 防禦護盾</button>
         <button id="btnKidsAssist" type="button" class="skill-btn assist-btn">👦👧 Eian &amp; Reina 助攻</button>
       </div>
     </footer>
   </div>
 
-  <!-- 4. 離開遊戲畫面 -->
   <div id="exitScreen" class="exit-screen" role="dialog" aria-modal="true" aria-labelledby="exitTitle">
     <div class="ko-card">
       <div class="ko-banner" style="color:#be185d;">💖 EXIT</div>
@@ -671,7 +747,6 @@
     </div>
   </div>
 
-  <!-- 5. K.O. 紀念日條約彈窗 -->
   <div id="koModal" class="ko-modal" role="dialog" aria-modal="true" aria-labelledby="koModalTitle">
     <div class="ko-card">
       <div class="ko-banner">K.O.！</div>
@@ -700,13 +775,13 @@
           badge.textContent = `${days} 天（${years} 年）`;
         }
       } catch (err) {
-        // 日期例外安全略過
+        // 忽略日期例外
       }
     }
     updateAnniversaryBadge();
 
     // =========================================================================
-    // 2. 零外部音效依賴的安全 Web Audio API 音效合成器
+    // 2. Web Audio API 音效合成器
     // =========================================================================
     let audioCtx = null;
     let soundEnabled = true;
@@ -716,9 +791,7 @@
       try {
         if (!audioCtx) {
           const Ctx = window.AudioContext || window.webkitAudioContext;
-          if (Ctx) {
-            audioCtx = new Ctx();
-          }
+          if (Ctx) audioCtx = new Ctx();
         }
         if (audioCtx && audioCtx.state === "suspended") {
           audioCtx.resume().catch(function () {});
@@ -731,9 +804,7 @@
     function toggleSoundMode() {
       soundEnabled = !soundEnabled;
       const btn = document.getElementById("soundToggleBtn");
-      if (btn) {
-        btn.textContent = soundEnabled ? "🔊 音效開" : "🔇 音效關";
-      }
+      if (btn) btn.textContent = soundEnabled ? "🔊" : "🔇";
       if (soundEnabled) {
         ensureAudioReady();
         playSynthTone(740, 0.08, "triangle", 0.08);
@@ -757,23 +828,30 @@
         osc.start(t);
         osc.stop(t + duration + 0.01);
       } catch (err) {
-        // 單次音效例外安全略過
+        // 忽略單次音效錯誤
       }
     }
 
     function playActionSfx(kind) {
       if (kind === "pan") {
-        playSynthTone(320, 0.11, "triangle", 0.13);
-      } else if (kind === "shop" || kind === "card") {
+        playSynthTone(310, 0.12, "triangle", 0.14);
+      } else if (kind === "proj") {
         playSynthTone(640, 0.08, "sine", 0.11);
         setTimeout(function () { playSynthTone(880, 0.09, "sine", 0.11); }, 50);
       } else if (kind === "pinch") {
         playSynthTone(820, 0.15, "sawtooth", 0.11);
+      } else if (kind === "cry") {
+        playSynthTone(960, 0.14, "sine", 0.12);
+        setTimeout(function () { playSynthTone(480, 0.18, "triangle", 0.12); }, 90);
+      } else if (kind === "fart") {
+        playSynthTone(130, 0.16, "sawtooth", 0.15);
+        setTimeout(function () { playSynthTone(92, 0.24, "square", 0.12); }, 85);
       } else if (kind === "shield") {
         playSynthTone(460, 0.1, "sine", 0.09);
-      } else if (kind === "mutate") {
-        playSynthTone(145, 0.22, "sawtooth", 0.16);
-        setTimeout(function () { playSynthTone(95, 0.28, "sawtooth", 0.16); }, 110);
+      } else if (kind === "transform") {
+        playSynthTone(220, 0.14, "triangle", 0.15);
+        setTimeout(function () { playSynthTone(440, 0.14, "triangle", 0.15); }, 90);
+        setTimeout(function () { playSynthTone(880, 0.24, "sawtooth", 0.14); }, 180);
       } else if (kind === "ko") {
         playSynthTone(523.25, 0.12, "triangle", 0.14);
         setTimeout(function () { playSynthTone(659.25, 0.12, "triangle", 0.14); }, 100);
@@ -782,146 +860,154 @@
     }
 
     // =========================================================================
-    // 3. 畫布尺寸與立即首幀繪製保證（Safari 橫屏優先全畫面填滿）
+    // 3. 四角色設定（含低於 50% 血量 3D 變身形態）與四大場景
     // =========================================================================
-    const stageWrapper = document.getElementById("stageWrapper");
-    const stageBox = document.getElementById("canvasStageBox");
-    const canvas = document.getElementById("battleCanvas");
-    const ctx = canvas.getContext("2d");
-
-    const WORLD_W = 800;
-    const WORLD_H = 450;
-    const FLOOR_Y = 382;
-    const GRAVITY = 1520;
-
-    function fitCanvasToContainer() {
-      try {
-        const wrapW = stageWrapper ? stageWrapper.clientWidth : (window.innerWidth - 16);
-        const wrapH = stageWrapper ? stageWrapper.clientHeight : (window.innerHeight - 150);
-        const targetW = Math.max(220, Math.floor(wrapW || 800));
-        const targetH = Math.max(140, Math.floor(wrapH || 450));
-
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
-        if (stageBox) {
-          stageBox.style.width = targetW + "px";
-          stageBox.style.height = targetH + "px";
-        }
-        canvas.style.width = targetW + "px";
-        canvas.style.height = targetH + "px";
-        canvas.width = Math.max(1, Math.round(targetW * dpr));
-        canvas.height = Math.max(1, Math.round(targetH * dpr));
-      } catch (err) {
-        canvas.width = WORLD_W;
-        canvas.height = WORLD_H;
-      }
-    }
-
-    fitCanvasToContainer();
-    window.addEventListener("resize", fitCanvasToContainer);
-    window.addEventListener("orientationchange", function () {
-      fitCanvasToContainer();
-      setTimeout(fitCanvasToContainer, 120);
-    });
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener("resize", fitCanvasToContainer);
-    }
-    if (typeof ResizeObserver !== "undefined" && stageWrapper) {
-      const ro = new ResizeObserver(function () {
-        fitCanvasToContainer();
-      });
-      ro.observe(stageWrapper);
-    }
-
-    // =========================================================================
-    // 4. 場景設定、AI 難度與戰鬥狀態
-    // =========================================================================
-    const STAGES = {
-      living: {
-        label: "甜蜜客廳",
-        skyTop: "#fff1f2",
-        skyMid: "#ffe4e6",
-        skyBot: "#fbcfe8",
-        floorTop: "#f9a8d4",
-        floorBot: "#db2777",
-        line: "#9d174d",
-        mote: "💖"
+    const ROSTER = {
+      queen: {
+        id: "queen",
+        hudTitle: "👑 老婆大人",
+        baseColor: 0xec4899,
+        accentColor: 0xfacc15,
+        transformName: "🐷 暴走大肥豬",
+        transformColor: 0xf9a8d4,
+        transformAura: 0xf472b6,
+        transformBanner: "🐷 老婆大人血量低於 50% 變身「大肥豬」！ATK x1.8 · DEF x1.5！",
+        skill1: { label: "🍳 平底鍋連擊", kind: "pan", hitText: "🍳 3D 平底鍋連擊!", dmg: 14, reach: 3.1 },
+        skill2: { label: "🛍️ 買買買波", kind: "proj", projColor: 0xf472b6, hitText: "🛍️ 買買買波!", dmg: 13 },
+        skill3: { label: "👂 捏耳朵神功", kind: "pinch", hitText: "👂 捏耳朵神功!", dmg: 19, reach: 3.3 }
       },
-      kitchen: {
-        label: "夢幻廚房",
-        skyTop: "#ecfdf5",
-        skyMid: "#ccfbf1",
-        skyBot: "#99f6e4",
-        floorTop: "#5eead4",
-        floorBot: "#0d9488",
-        line: "#115e59",
-        mote: "🍳"
+      servant: {
+        id: "servant",
+        hudTitle: "🙇‍♂️ 老公僕人",
+        baseColor: 0x2563eb,
+        accentColor: 0x93c5fd,
+        transformName: "🦁 LION 獅王",
+        transformColor: 0xd97706,
+        transformAura: 0xfacc15,
+        transformBanner: "🦁 老公僕人血量低於 50% 變身「LION 獅王」！ATK x2 · DEF x2！",
+        skill1: { label: "🥣 僕人揮拳", kind: "strike", hitText: "🥣 僕人重拳!", dmg: 11, reach: 2.7 },
+        skill2: { label: "💳 卡片波", kind: "proj", projColor: 0x38bdf8, hitText: "💳 卡片波!", dmg: 11 },
+        skill3: { label: "🙇‍♂️ 求生道歉", kind: "pinch", hitText: "🙇‍♂️ 求生道歉!", dmg: 15, reach: 3.0 }
       },
-      mall: {
-        label: "百貨商場",
-        skyTop: "#fdf4ff",
-        skyMid: "#fae8ff",
-        skyBot: "#f5d0fe",
-        floorTop: "#f472b6",
-        floorBot: "#9333ea",
-        line: "#6b21a8",
-        mote: "✨"
+      reina: {
+        id: "reina",
+        hudTitle: "👧 女女 Reina",
+        baseColor: 0xf472b6,
+        accentColor: 0xfdf2f8,
+        transformName: "✨ 美少女戰士",
+        transformColor: 0xfb7185,
+        transformAura: 0xfde047,
+        transformBanner: "✨ 女女 Reina 血量低於 50% 變身「美少女戰士」！星光強化！",
+        skill1: { label: "😭 狂哭", kind: "cry", hitText: "😭 女女狂哭震波!", dmg: 17, reach: 3.8 },
+        skill2: { label: "💖 愛心波", kind: "proj", projColor: 0xfb7185, hitText: "💖 愛心波!", dmg: 12 },
+        skill3: { label: "💧 眼淚衝刺", kind: "pinch", hitText: "💧 眼淚衝刺!", dmg: 15, reach: 3.1 }
       },
-      hawaii: {
-        label: "浪漫夏威夷",
-        skyTop: "#bae6fd",
-        skyMid: "#fef9c3",
-        skyBot: "#fde047",
-        floorTop: "#fde047",
-        floorBot: "#eab308",
-        line: "#a16207",
-        mote: "🌺"
+      eian: {
+        id: "eian",
+        hudTitle: "👦 仔仔 Eian",
+        baseColor: 0x0284c7,
+        accentColor: 0xbae6fd,
+        transformName: "🦸 超人",
+        transformColor: 0xef4444,
+        transformAura: 0x38bdf8,
+        transformBanner: "🦸 仔仔 Eian 血量低於 50% 變身「超人」！超能爆發！",
+        skill1: { label: "💨 放臭屁", kind: "fart", hitText: "💨 仔仔放臭屁!", dmg: 18, reach: 3.7 },
+        skill2: { label: "⚽ 足球波", kind: "proj", projColor: 0x4ade80, hitText: "⚽ 足球波!", dmg: 12 },
+        skill3: { label: "🌪️ 臭氣衝刺", kind: "pinch", hitText: "🌪️ 臭氣衝刺!", dmg: 16, reach: 3.1 }
       }
     };
 
+    const STAGES = {
+      living: {
+        label: "甜蜜客廳（3D）",
+        bgHex: 0xffe4e6,
+        floorHex: 0xf9a8d4,
+        accentHex: 0xec4899
+      },
+      kitchen: {
+        label: "夢幻廚房（3D）",
+        bgHex: 0xccfbf1,
+        floorHex: 0x5eead4,
+        accentHex: 0x0d9488
+      },
+      mall: {
+        label: "百貨商場（3D）",
+        bgHex: 0xfae8ff,
+        floorHex: 0xe879f9,
+        accentHex: 0x9333ea
+      },
+      hawaii: {
+        label: "浪漫夏威夷（3D）",
+        bgHex: 0xbae6fd,
+        floorHex: 0xfde047,
+        accentHex: 0x0284c7
+      }
+    };
+
+    let p1CharId = "queen";
+    let p2CharId = "servant";
     let currentStageKey = "living";
-    let aiDifficulty = "gentle"; // "gentle" | "survival"
+    let aiDifficulty = "gentle";
     let battleStatus = "active"; // "active" | "finished" | "exited"
     let remainingTime = 99;
     let timeAcc = 0;
-    let frameCounter = 0;
     let lastTimestamp = 0;
     let screenShakeSec = 0;
-    let screenFlashSec = 0;
-    let mutationBannerSec = 0;
-    let queenSuperMeter = 35; // 老婆大人超必殺能量條（0 ~ 100）
+    let flashOverlayAlpha = 0;
+    let flashOverlayColor = "#ffffff";
+    let bannerTimerSec = 0;
+    let p1SuperMeter = 35;
 
-    const moveInput = {
-      left: false,
-      right: false
-    };
+    const moveInput = { left: false, right: false };
 
-    function gainQueenSuper(amount) {
-      queenSuperMeter = Math.max(0, Math.min(100, queenSuperMeter + amount));
+    function gainP1Super(amount) {
+      p1SuperMeter = Math.max(0, Math.min(100, p1SuperMeter + amount));
       syncVitalsHud();
+    }
+
+    function refreshSkillButtonLabels() {
+      const info = ROSTER[p1CharId] || ROSTER.queen;
+      const b1 = document.getElementById("btnSkill1");
+      const b2 = document.getElementById("btnSkill2");
+      const b3 = document.getElementById("btnSkill3");
+      if (b1) b1.textContent = info.skill1.label;
+      if (b2) b2.textContent = info.skill2.label;
+      if (b3) b3.textContent = info.skill3.label;
+    }
+
+    function selectRoster(slot, charId) {
+      if (!ROSTER[charId]) return;
+      if (slot === "p1") {
+        p1CharId = charId;
+        document.querySelectorAll("[data-p1]").forEach(function (el) {
+          el.classList.toggle("p1-active", el.getAttribute("data-p1") === charId);
+        });
+        refreshSkillButtonLabels();
+      } else {
+        p2CharId = charId;
+        document.querySelectorAll("[data-p2]").forEach(function (el) {
+          el.classList.toggle("p2-active", el.getAttribute("data-p2") === charId);
+        });
+      }
+      restartBattle();
     }
 
     function selectStage(stageKey) {
       if (!STAGES[stageKey]) return;
       currentStageKey = stageKey;
-      initMotes();
+      apply3dStageTheme();
       document.querySelectorAll("[data-stage]").forEach(function (el) {
-        if (el.getAttribute("data-stage") === stageKey) {
-          el.classList.add("stage-active");
-        } else {
-          el.classList.remove("stage-active");
-        }
+        el.classList.toggle("stage-active", el.getAttribute("data-stage") === stageKey);
       });
+      const badge = document.getElementById("stageBadge");
+      if (badge) badge.textContent = STAGES[stageKey].label;
       playSynthTone(560, 0.07, "sine", 0.08);
     }
 
     function selectAiDifficulty(mode) {
       aiDifficulty = mode === "survival" ? "survival" : "gentle";
       document.querySelectorAll("[data-ai]").forEach(function (el) {
-        if (el.getAttribute("data-ai") === aiDifficulty) {
-          el.classList.add("ai-active");
-        } else {
-          el.classList.remove("ai-active");
-        }
+        el.classList.toggle("ai-active", el.getAttribute("data-ai") === aiDifficulty);
       });
       playSynthTone(480, 0.07, "sine", 0.08);
     }
@@ -935,91 +1021,299 @@
       if (modalEl) modalEl.classList.remove("show");
       const exitEl = document.getElementById("exitScreen");
       if (exitEl) exitEl.classList.add("show");
-      try {
-        window.close();
-      } catch (err) {
-        // 瀏覽器限制關閉分頁時保留離開畫面提示
-      }
+      try { window.close(); } catch (err) {}
     }
 
     function reenterGame() {
       const exitEl = document.getElementById("exitScreen");
       if (exitEl) exitEl.classList.remove("show");
       restartBattle();
-      fitCanvasToContainer();
+      resizeThreeRenderer();
     }
 
     // =========================================================================
-    // 5. 特效粒子、投射物、浮動數字與格鬥角色類別
+    // 4. Three.js 3D 場景、角色模型與特效系統
     // =========================================================================
-    let activeProjectiles = [];
-    let floatingTexts = [];
-    let shockRings = [];
-    let sparkParticles = [];
-    let ambientMotes = [];
+    const mountEl = document.getElementById("threeMount");
+    const floatingLayer = document.getElementById("floatingTextsLayer");
+    const transformBannerEl = document.getElementById("transformBanner");
 
-    function initMotes() {
-      ambientMotes = [];
-      for (let i = 0; i < 16; i++) {
-        ambientMotes.push({
-          x: Math.random() * WORLD_W,
-          y: Math.random() * (FLOOR_Y - 30),
-          size: 8 + Math.random() * 8,
-          speed: 14 + Math.random() * 16,
-          phase: Math.random() * Math.PI * 2,
-          alpha: 0.35 + Math.random() * 0.4
-        });
+    const WORLD_HALF_X = 9.5;
+    const GRAVITY_3D = 34;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(44, 16 / 9, 0.1, 120);
+    camera.position.set(0, 4.4, 15.2);
+    camera.lookAt(0, 1.8, 0);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    mountEl.appendChild(renderer.domElement);
+
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xf9a8d4, 0.95);
+    scene.add(hemiLight);
+
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.15);
+    dirLight.position.set(6, 12, 9);
+    dirLight.castShadow = true;
+    dirLight.shadow.mapSize.width = 1024;
+    dirLight.shadow.mapSize.height = 1024;
+    scene.add(dirLight);
+
+    const floorGeo = new THREE.BoxGeometry(24, 1, 9);
+    const floorMat = new THREE.MeshStandardMaterial({ color: 0xf9a8d4, roughness: 0.75 });
+    const floorMesh = new THREE.Mesh(floorGeo, floorMat);
+    floorMesh.position.set(0, -0.5, 0);
+    floorMesh.receiveShadow = true;
+    scene.add(floorMesh);
+
+    const backWallGeo = new THREE.BoxGeometry(24, 9, 0.6);
+    const backWallMat = new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0.25 });
+    const backWallMesh = new THREE.Mesh(backWallGeo, backWallMat);
+    backWallMesh.position.set(0, 4, -4.4);
+    scene.add(backWallMesh);
+
+    const stagePillarGeo = new THREE.CylinderGeometry(0.32, 0.32, 5.5, 16);
+    const stagePillarMat = new THREE.MeshStandardMaterial({ color: 0xec4899, roughness: 0.4 });
+    const leftPillar = new THREE.Mesh(stagePillarGeo, stagePillarMat);
+    leftPillar.position.set(-8.5, 2.75, -3.5);
+    scene.add(leftPillar);
+
+    const rightPillar = new THREE.Mesh(stagePillarGeo, stagePillarMat);
+    rightPillar.position.set(8.5, 2.75, -3.5);
+    scene.add(rightPillar);
+
+    function apply3dStageTheme() {
+      const st = STAGES[currentStageKey] || STAGES.living;
+      scene.background = new THREE.Color(st.bgHex);
+      floorMat.color.setHex(st.floorHex);
+      stagePillarMat.color.setHex(st.accentHex);
+    }
+    apply3dStageTheme();
+
+    function resizeThreeRenderer() {
+      const box = document.getElementById("canvasStageBox");
+      if (!box) return;
+      const w = Math.max(240, box.clientWidth || 800);
+      const h = Math.max(150, box.clientHeight || 450);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h, false);
+    }
+    resizeThreeRenderer();
+    window.addEventListener("resize", resizeThreeRenderer);
+    window.addEventListener("orientationchange", function () {
+      resizeThreeRenderer();
+      setTimeout(resizeThreeRenderer, 120);
+    });
+    if (typeof ResizeObserver !== "undefined" && mountEl) {
+      new ResizeObserver(resizeThreeRenderer).observe(mountEl);
+    }
+
+    function showTransformBanner(msg) {
+      bannerTimerSec = 2.1;
+      if (transformBannerEl) {
+        transformBannerEl.textContent = msg;
+        transformBannerEl.classList.add("show");
       }
     }
-    initMotes();
 
-    function addFloatingText(x, y, text, color) {
-      floatingTexts.push({
-        x: x,
-        y: y,
-        text: text,
-        color: color || "#be185d",
-        vy: -56,
+    const activeDomTexts = [];
+    function spawnFloating3DText(worldX, worldY, text, color) {
+      const el = document.createElement("div");
+      el.className = "floating-3d-tag";
+      el.textContent = text;
+      el.style.color = color || "#be185d";
+      floatingLayer.appendChild(el);
+      activeDomTexts.push({
+        el: el,
+        x: worldX,
+        y: worldY,
+        vy: 2.2,
         life: 0.85,
         maxLife: 0.85
       });
     }
 
-    function addShockRing(x, y, color, maxR) {
-      shockRings.push({
-        x: x,
-        y: y,
-        r: 10,
-        maxR: maxR || 72,
-        color: color || "#ec4899",
-        life: 0.3,
-        maxLife: 0.3
+    const projectiles3D = [];
+    const shockRings3D = [];
+    const particles3D = [];
+
+    function spawnShockRing3D(x, y, z, color, maxScale) {
+      const geo = new THREE.TorusGeometry(0.7, 0.08, 10, 28);
+      const mat = new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.85 });
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.position.set(x, y, z || 0);
+      scene.add(mesh);
+      shockRings3D.push({
+        mesh: mesh,
+        geo: geo,
+        mat: mat,
+        maxScale: maxScale || 3.4,
+        life: 0.34,
+        maxLife: 0.34
       });
     }
 
-    function addSparks(x, y, color, count) {
-      const n = count || 9;
+    function spawnParticles3D(x, y, z, color, count, speedScale) {
+      const n = count || 12;
+      const spdBase = speedScale || 6.5;
       for (let i = 0; i < n; i++) {
-        const ang = (Math.PI * 2 * i) / n + (Math.random() - 0.5) * 0.3;
-        const spd = 85 + Math.random() * 160;
-        sparkParticles.push({
-          x: x,
-          y: y,
+        const geo = new THREE.OctahedronGeometry(0.16, 0);
+        const mat = new THREE.MeshStandardMaterial({ color: color, emissive: color, emissiveIntensity: 0.35 });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(x, y, z || 0);
+        scene.add(mesh);
+        const ang = (Math.PI * 2 * i) / n + (Math.random() - 0.5) * 0.4;
+        const spd = spdBase * (0.5 + Math.random() * 0.8);
+        particles3D.push({
+          mesh: mesh,
+          geo: geo,
+          mat: mat,
           vx: Math.cos(ang) * spd,
-          vy: Math.sin(ang) * spd - 35,
-          r: 3 + Math.random() * 3,
-          color: color || "#facc15",
-          life: 0.35,
-          maxLife: 0.35
+          vy: 2.5 + Math.random() * spd * 0.85,
+          vz: (Math.random() - 0.5) * spd * 0.6,
+          life: 0.42,
+          maxLife: 0.42
         });
       }
     }
 
-    class FighterUnit {
+    // 建立 3D 角色群組與變身模型組件
+    function buildFighter3DMesh(charId) {
+      const spec = ROSTER[charId] || ROSTER.queen;
+      const root = new THREE.Group();
+
+      const bodyGroup = new THREE.Group();
+      root.add(bodyGroup);
+
+      const torsoMat = new THREE.MeshStandardMaterial({ color: spec.baseColor, roughness: 0.45 });
+      const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.78, 1.35, 16), torsoMat);
+      torso.position.y = 1.25;
+      torso.castShadow = true;
+      bodyGroup.add(torso);
+
+      const headMat = new THREE.MeshStandardMaterial({ color: 0xfde68a, roughness: 0.5 });
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.54, 18, 18), headMat);
+      head.position.y = 2.38;
+      head.castShadow = true;
+      bodyGroup.add(head);
+
+      const shieldMat = new THREE.MeshBasicMaterial({
+        color: 0x38bdf8,
+        transparent: true,
+        opacity: 0.32,
+        wireframe: false
+      });
+      const shieldMesh = new THREE.Mesh(new THREE.SphereGeometry(1.55, 20, 20), shieldMat);
+      shieldMesh.position.y = 1.5;
+      shieldMesh.visible = false;
+      root.add(shieldMesh);
+
+      const auraMat = new THREE.MeshBasicMaterial({
+        color: spec.transformAura,
+        transparent: true,
+        opacity: 0.38
+      });
+      const auraMesh = new THREE.Mesh(new THREE.TorusGeometry(1.25, 0.08, 10, 28), auraMat);
+      auraMesh.rotation.x = Math.PI / 2;
+      auraMesh.position.y = 0.25;
+      auraMesh.visible = false;
+      root.add(auraMesh);
+
+      // 老婆大人放大 3D 平底鍋（平底鍋連擊專用）
+      const panGroup = new THREE.Group();
+      const panDiscMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.6, roughness: 0.3 });
+      const panRimMat = new THREE.MeshStandardMaterial({ color: 0xfacc15, metalness: 0.5, roughness: 0.3 });
+      const panDisc = new THREE.Mesh(new THREE.CylinderGeometry(0.72, 0.72, 0.14, 22), panDiscMat);
+      panDisc.rotation.x = Math.PI / 2;
+      const panRim = new THREE.Mesh(new THREE.TorusGeometry(0.72, 0.08, 10, 24), panRimMat);
+      const panHandle = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.16, 0.16), new THREE.MeshStandardMaterial({ color: 0x92400e }));
+      panHandle.position.set(1.12, 0, 0);
+      panGroup.add(panDisc, panRim, panHandle);
+      panGroup.position.set(1.15, 1.85, 0.45);
+      panGroup.visible = false;
+      root.add(panGroup);
+
+      // 女女狂哭 3D 波紋圈
+      const cryWaveMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.65 });
+      const cryWave = new THREE.Mesh(new THREE.RingGeometry(0.5, 1.45, 24), cryWaveMat);
+      cryWave.position.set(1.35, 1.6, 0.35);
+      cryWave.visible = false;
+      root.add(cryWave);
+
+      // 仔仔放臭屁 3D 臭氣雲球
+      const fartCloudMat = new THREE.MeshStandardMaterial({ color: 0xa3e635, transparent: true, opacity: 0.78 });
+      const fartCloud = new THREE.Mesh(new THREE.DodecahedronGeometry(0.85, 1), fartCloudMat);
+      fartCloud.position.set(1.25, 1.15, 0.3);
+      fartCloud.visible = false;
+      root.add(fartCloud);
+
+      // 變身專屬造型配件：
+      // 老公變 LION：金色獅鬃
+      const lionMane = new THREE.Mesh(
+        new THREE.TorusGeometry(0.72, 0.24, 12, 24),
+        new THREE.MeshStandardMaterial({ color: 0xb45309, roughness: 0.8 })
+      );
+      lionMane.position.y = 2.38;
+      lionMane.visible = false;
+      bodyGroup.add(lionMane);
+
+      // 老婆變大肥豬：圓滾粉紅豬身與豬鼻
+      const pigSnout = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.22, 0.22, 0.22, 14),
+        new THREE.MeshStandardMaterial({ color: 0xf472b6 })
+      );
+      pigSnout.rotation.x = Math.PI / 2;
+      pigSnout.position.set(0, 2.32, 0.56);
+      pigSnout.visible = false;
+      bodyGroup.add(pigSnout);
+
+      // 女女變美少女戰士：星光頭飾與戰士光環
+      const sailorTiara = new THREE.Mesh(
+        new THREE.ConeGeometry(0.28, 0.55, 6),
+        new THREE.MeshStandardMaterial({ color: 0xfacc15, emissive: 0xf59e0b, emissiveIntensity: 0.4 })
+      );
+      sailorTiara.position.y = 3.05;
+      sailorTiara.visible = false;
+      bodyGroup.add(sailorTiara);
+
+      // 仔仔變超人：紅色超人披風
+      const superCape = new THREE.Mesh(
+        new THREE.BoxGeometry(1.15, 1.35, 0.12),
+        new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.5 })
+      );
+      superCape.position.set(0, 1.35, -0.45);
+      superCape.visible = false;
+      bodyGroup.add(superCape);
+
+      return {
+        root: root,
+        bodyGroup: bodyGroup,
+        torso: torso,
+        torsoMat: torsoMat,
+        head: head,
+        headMat: headMat,
+        shieldMesh: shieldMesh,
+        auraMesh: auraMesh,
+        panGroup: panGroup,
+        cryWave: cryWave,
+        fartCloud: fartCloud,
+        lionMane: lionMane,
+        pigSnout: pigSnout,
+        sailorTiara: sailorTiara,
+        superCape: superCape
+      };
+    }
+
+    class Fighter3D {
       constructor(cfg) {
-        this.isQueen = cfg.isQueen;
+        this.isPlayer1 = cfg.isPlayer1;
+        this.charId = cfg.charId;
         this.x = cfg.x;
-        this.y = FLOOR_Y;
+        this.y = 0;
         this.vx = 0;
         this.vy = 0;
         this.facing = cfg.facing;
@@ -1031,15 +1325,28 @@
         this.attackKind = null;
         this.cooldownSec = 0;
         this.hitFlashSec = 0;
-        this.walkCycle = 0;
-        this.breatheCycle = cfg.isQueen ? 0.4 : 1.9;
-        this.giantMonster = false;
-        this.hasMutated = false;
+        this.walkPhase = 0;
+        this.transformed = false;
+        this.hasTransformed = false;
+        this.rig = buildFighter3DMesh(this.charId);
+        scene.add(this.rig.root);
       }
 
-      resetUnit(x, facing) {
+      getSpec() {
+        return ROSTER[this.charId] || ROSTER.queen;
+      }
+
+      rebuildModel(charId) {
+        scene.remove(this.rig.root);
+        this.charId = charId;
+        this.rig = buildFighter3DMesh(charId);
+        scene.add(this.rig.root);
+      }
+
+      resetUnit(charId, x, facing) {
+        this.rebuildModel(charId);
         this.x = x;
-        this.y = FLOOR_Y;
+        this.y = 0;
         this.vx = 0;
         this.vy = 0;
         this.facing = facing;
@@ -1050,32 +1357,57 @@
         this.attackKind = null;
         this.cooldownSec = 0;
         this.hitFlashSec = 0;
-        this.walkCycle = 0;
-        this.giantMonster = false;
-        this.hasMutated = false;
+        this.walkPhase = 0;
+        this.transformed = false;
+        this.hasTransformed = false;
+        this.syncMeshVisuals(0);
       }
 
-      // 老公僕人血量低於 50% 變身大怪獸：體型放大、震動閃光、橫幅提示、攻擊與防禦各加倍（ATK x2 · DEF x2）
-      checkGiantMutation() {
-        if (this.isQueen || this.hasMutated) return;
+      // 血量低於 50% 觸發 3D 變身
+      checkHalfHpTransform() {
+        if (this.hasTransformed) return;
         if (this.hp > 0 && this.hp < this.maxHp * 0.5) {
-          this.giantMonster = true;
-          this.hasMutated = true;
+          this.transformed = true;
+          this.hasTransformed = true;
+          const spec = this.getSpec();
+
+          this.rig.torsoMat.color.setHex(spec.transformColor);
+          this.rig.auraMesh.visible = true;
+          if (this.charId === "servant") this.rig.lionMane.visible = true;
+          if (this.charId === "queen") this.rig.pigSnout.visible = true;
+          if (this.charId === "reina") this.rig.sailorTiara.visible = true;
+          if (this.charId === "eian") this.rig.superCape.visible = true;
+
           screenShakeSec = 0.65;
-          screenFlashSec = 0.45;
-          mutationBannerSec = 2.0;
-          addShockRing(this.x, this.y - 75, "#ef4444", 125);
-          addSparks(this.x, this.y - 75, "#facc15", 14);
-          playActionSfx("mutate");
-          addFloatingText(this.x, this.y - 180, "暴走大怪獸變身！ATK x2 · DEF x2！", "#dc2626");
+          flashOverlayColor = "#fef08a";
+          flashOverlayAlpha = 0.42;
+          playActionSfx("transform");
+          spawnShockRing3D(this.x, 1.5, 0, spec.transformAura, 4.5);
+          spawnParticles3D(this.x, 1.8, 0, spec.transformAura, 18, 8.5);
+          spawnFloating3DText(this.x, 3.6, spec.transformName + " 變身!", "#dc2626");
+          showTransformBanner(spec.transformBanner);
         }
+      }
+
+      getAtkMultiplier() {
+        if (!this.transformed) return 1.0;
+        if (this.charId === "servant") return 2.0;
+        if (this.charId === "queen") return 1.8;
+        return 1.65;
+      }
+
+      getDefMultiplier() {
+        if (!this.transformed) return 1.0;
+        if (this.charId === "servant") return 2.0;
+        if (this.charId === "queen") return 1.5;
+        return 1.4;
       }
 
       jumpUnit() {
         if (this.grounded) {
-          this.vy = this.giantMonster ? -580 : -635;
+          this.vy = 14.5;
           this.grounded = false;
-          addShockRing(this.x, FLOOR_Y, this.isQueen ? "#f472b6" : "#60a5fa", 42);
+          spawnShockRing3D(this.x, 0.15, 0, this.getSpec().accentColor, 1.8);
         }
       }
 
@@ -1083,84 +1415,99 @@
         if (this.cooldownSec > 0) return;
         this.shieldSec = 0.65;
         this.cooldownSec = 0.25;
-        addShockRing(this.x, this.y - 54, "#3b82f6", 60);
         playActionSfx("shield");
-        addFloatingText(this.x, this.y - 122, "🛡️ 防禦護盾!", "#1d4ed8");
+        spawnShockRing3D(this.x, 1.5, 0, 0x38bdf8, 2.5);
+        spawnFloating3DText(this.x, 3.2, "🛡️ 3D 護盾!", "#1d4ed8");
       }
 
-      performAttack(kind, target) {
+      performSlotSkill(slotNum, target) {
         if (this.cooldownSec > 0 || this.attackSec > 0) return;
+        const spec = this.getSpec();
+        const skill = slotNum === 1 ? spec.skill1 : (slotNum === 2 ? spec.skill2 : spec.skill3);
+
         this.shieldSec = 0;
-        this.attackKind = kind;
-        this.attackSec = kind === "pan" ? 0.34 : 0.28;
-        this.cooldownSec = kind === "pinch" ? 0.36 : 0.28;
+        this.attackKind = skill.kind;
+        this.attackSec = (skill.kind === "pan" || skill.kind === "cry" || skill.kind === "fart") ? 0.36 : 0.28;
+        this.cooldownSec = skill.kind === "pinch" ? 0.36 : 0.28;
 
-        playActionSfx(kind);
+        playActionSfx(skill.kind);
 
-        // 老婆大人超必殺能量滿格時，發動招式附加超必殺加成
         let superBoost = 1.0;
         let usedSuper = false;
-        if (this.isQueen && queenSuperMeter >= 100) {
+        if (this.isPlayer1 && p1SuperMeter >= 100) {
           superBoost = 1.5;
           usedSuper = true;
-          queenSuperMeter = 0;
-          addShockRing(this.x, this.y - 58, "#facc15", 105);
-          addSparks(this.x, this.y - 58, "#ec4899", 12);
-          addFloatingText(this.x, this.y - 142, "✨ 老婆大人超必殺爆發！", "#db2777");
+          p1SuperMeter = 0;
+          spawnShockRing3D(this.x, 1.6, 0, 0xfacc15, 4.2);
+          spawnParticles3D(this.x, 1.8, 0, 0xec4899, 16, 7.5);
+          spawnFloating3DText(this.x, 3.8, "✨ 超必殺爆發!", "#db2777");
         }
 
-        // 老公僕人變身大怪獸時攻擊力加倍（ATK x2）
-        const atkMult = (!this.isQueen && this.giantMonster) ? 2.0 : 1.0;
+        const totalAtkMult = this.getAtkMultiplier() * superBoost;
 
-        if (kind === "shop" || kind === "card") {
-          const monsterShot = !this.isQueen && this.giantMonster;
-          const baseDmg = this.isQueen ? 13 : 8;
-          activeProjectiles.push({
-            x: this.x + this.facing * (this.giantMonster ? 66 : 42),
-            y: this.y - (this.giantMonster ? 92 : 62),
-            vx: this.facing * (monsterShot ? 500 : (usedSuper ? 560 : 450)),
-            fromQueen: this.isQueen,
-            icon: monsterShot ? "🔥" : (kind === "shop" ? (usedSuper ? "👑🛍️" : "🛍️") : "💳"),
-            dmg: Math.round(baseDmg * atkMult * superBoost),
-            scale: monsterShot ? 1.35 : (usedSuper ? 1.3 : 1.0),
-            life: 1.35
+        if (skill.kind === "proj") {
+          const pGeo = new THREE.SphereGeometry(usedSuper ? 0.45 : 0.34, 14, 14);
+          const pMat = new THREE.MeshStandardMaterial({
+            color: skill.projColor || 0xf472b6,
+            emissive: skill.projColor || 0xf472b6,
+            emissiveIntensity: 0.45
           });
-          if (this.isQueen && !usedSuper) gainQueenSuper(12);
+          const pMesh = new THREE.Mesh(pGeo, pMat);
+          pMesh.position.set(this.x + this.facing * 1.15, this.y + 1.55, 0);
+          scene.add(pMesh);
+
+          projectiles3D.push({
+            mesh: pMesh,
+            geo: pGeo,
+            mat: pMat,
+            x: this.x + this.facing * 1.15,
+            y: this.y + 1.55,
+            vx: this.facing * (usedSuper ? 14 : 11.5),
+            fromPlayer1: this.isPlayer1,
+            dmg: Math.round(skill.dmg * totalAtkMult),
+            hitText: skill.hitText,
+            life: 1.4
+          });
+          if (this.isPlayer1 && !usedSuper) gainP1Super(12);
           return;
         }
 
-        if (kind === "pinch") {
-          this.x += this.facing * (usedSuper ? 58 : 40);
-          this.x = Math.max(60, Math.min(WORLD_W - 60, this.x));
-          addShockRing(this.x, this.y - 56, "#f43f5e", usedSuper ? 95 : 70);
-          if (this.isQueen && !usedSuper) gainQueenSuper(14);
-        } else if (kind === "pan") {
-          addShockRing(this.x + this.facing * 42, this.y - 62, "#fbbf24", usedSuper ? 105 : 78);
-          if (this.isQueen && !usedSuper) gainQueenSuper(10);
+        if (skill.kind === "pinch") {
+          this.x = Math.max(-WORLD_HALF_X, Math.min(WORLD_HALF_X, this.x + this.facing * (usedSuper ? 1.5 : 1.05)));
+          spawnShockRing3D(this.x, 1.6, 0, 0xf43f5e, 3.0);
+          if (this.isPlayer1 && !usedSuper) gainP1Super(14);
+        } else if (skill.kind === "pan") {
+          spawnShockRing3D(this.x + this.facing * 1.2, 1.8, 0.3, 0xfacc15, 3.4);
+          spawnParticles3D(this.x + this.facing * 1.2, 1.8, 0.3, 0xfacc15, 10, 6.0);
+          if (this.isPlayer1 && !usedSuper) gainP1Super(10);
+        } else if (skill.kind === "cry") {
+          spawnShockRing3D(this.x + this.facing * 1.35, 1.6, 0.3, 0x38bdf8, 3.8);
+          spawnParticles3D(this.x + this.facing * 1.35, 1.6, 0.3, 0x7dd3fc, 14, 7.0);
+          if (this.isPlayer1 && !usedSuper) gainP1Super(13);
+        } else if (skill.kind === "fart") {
+          spawnShockRing3D(this.x + this.facing * 1.3, 1.15, 0.3, 0xa3e635, 3.8);
+          spawnParticles3D(this.x + this.facing * 1.3, 1.15, 0.3, 0xa3e635, 15, 7.2);
+          if (this.isPlayer1 && !usedSuper) gainP1Super(13);
+        } else {
+          spawnShockRing3D(this.x + this.facing * 0.9, 1.5, 0.2, 0x60a5fa, 2.4);
+          if (this.isPlayer1 && !usedSuper) gainP1Super(10);
         }
 
         if (target) {
-          const reach = kind === "pinch" ? 128 : (kind === "pan" ? 122 : (this.giantMonster ? 130 : 98));
+          const reach = skill.reach || 3.0;
           const dx = (target.x - this.x) * this.facing;
           const dy = Math.abs(target.y - this.y);
-          if (dx >= -26 && dx <= reach && dy < (this.giantMonster ? 135 : 96)) {
-            let rawDmg = 12;
-            let label = "🍳 平底鍋連擊!";
-            if (kind === "pinch") {
-              rawDmg = 19;
-              label = "👂 捏耳朵神功!";
-            } else if (kind === "servantStrike") {
-              rawDmg = this.giantMonster ? 16 : 8;
-              label = this.giantMonster ? "🦖 暴走大怪獸重擊 ATK x2!" : "🥣 僕人揮拳!";
+          if (dx >= -0.7 && dx <= reach && dy < 2.6) {
+            const finalRaw = Math.round(skill.dmg * totalAtkMult);
+            inflictDamage(this, target, finalRaw, skill.hitText);
+            if (skill.kind === "cry" || skill.kind === "fart") {
+              target.x = Math.max(-WORLD_HALF_X, Math.min(WORLD_HALF_X, target.x + this.facing * 1.35));
             }
-            const dmgVal = Math.round(rawDmg * (kind === "servantStrike" ? atkMult : superBoost));
-            inflictDamage(this, target, dmgVal, label);
           }
         }
       }
 
       updateUnit(dt, opponent) {
-        this.breatheCycle += dt * 4.2;
         if (this.cooldownSec > 0) this.cooldownSec = Math.max(0, this.cooldownSec - dt);
         if (this.shieldSec > 0) this.shieldSec = Math.max(0, this.shieldSec - dt);
         if (this.hitFlashSec > 0) this.hitFlashSec = Math.max(0, this.hitFlashSec - dt);
@@ -1173,481 +1520,167 @@
         this.y += this.vy * dt;
 
         if (!this.grounded) {
-          this.vy += GRAVITY * dt;
+          this.vy -= GRAVITY_3D * dt;
         }
-        if (this.y >= FLOOR_Y) {
-          this.y = FLOOR_Y;
+        if (this.y <= 0) {
+          this.y = 0;
           this.vy = 0;
           this.grounded = true;
         }
 
-        const margin = this.giantMonster ? 74 : 50;
-        this.x = Math.max(margin, Math.min(WORLD_W - margin, this.x));
+        this.x = Math.max(-WORLD_HALF_X, Math.min(WORLD_HALF_X, this.x));
 
-        if (Math.abs(this.vx) > 10 && this.grounded) {
-          this.walkCycle += dt * 13;
+        if (Math.abs(this.vx) > 0.2 && this.grounded) {
+          this.walkPhase += dt * 12;
         } else {
-          this.walkCycle = 0;
+          this.walkPhase = 0;
         }
 
         if (opponent) {
-          const minDist = this.giantMonster ? 66 : 42;
           const dx = opponent.x - this.x;
-          if (Math.abs(dx) < minDist && Math.abs(opponent.y - this.y) < 56) {
+          const minDist = this.transformed ? 1.45 : 1.05;
+          if (Math.abs(dx) < minDist && Math.abs(opponent.y - this.y) < 1.5) {
             const sep = (minDist - Math.abs(dx)) * 0.5;
             const sgn = dx >= 0 ? -1 : 1;
             this.x += sgn * sep;
             opponent.x -= sgn * sep;
           }
         }
+
+        this.syncMeshVisuals(dt);
       }
 
-      drawUnit(c) {
-        c.save();
-        c.translate(this.x, this.y);
+      syncMeshVisuals(dt) {
+        const r = this.rig;
+        r.root.position.set(this.x, this.y, 0);
+        r.root.rotation.y = this.facing >= 0 ? 0 : Math.PI;
 
-        const scaleFactor = (!this.isQueen && this.giantMonster) ? 1.42 : 1.0;
-        const bobY = this.grounded && Math.abs(this.vx) < 8 ? Math.sin(this.breatheCycle) * 2.0 : 0;
-        const stepSwing = Math.sin(this.walkCycle) * 9;
-
-        // 地面陰影
-        c.fillStyle = "rgba(15, 23, 42, 0.24)";
-        c.beginPath();
-        c.ellipse(0, 4, 34 * scaleFactor, 8 * scaleFactor, 0, 0, Math.PI * 2);
-        c.fill();
-
-        if (this.isQueen) {
-          // 老婆大人：粉紅禮服、雙馬尾與皇冠
-          c.strokeStyle = "#be185d";
-          c.lineWidth = 7;
-          c.lineCap = "round";
-          c.beginPath();
-          c.moveTo(-9, -32);
-          c.lineTo(-10 + stepSwing, 0);
-          c.moveTo(9, -32);
-          c.lineTo(10 - stepSwing, 0);
-          c.stroke();
-
-          c.fillStyle = "#ec4899";
-          c.strokeStyle = "#831843";
-          c.lineWidth = 2.5;
-          c.beginPath();
-          c.moveTo(-15, -72 + bobY);
-          c.lineTo(15, -72 + bobY);
-          c.lineTo(27, -28 + bobY * 0.4);
-          c.lineTo(-27, -28 + bobY * 0.4);
-          c.closePath();
-          c.fill();
-          c.stroke();
-
-          const headY = -88 + bobY;
-          c.fillStyle = "#fde68a";
-          c.beginPath();
-          c.arc(0, headY, 21, 0, Math.PI * 2);
-          c.fill();
-          c.strokeStyle = "#831843";
-          c.lineWidth = 2.5;
-          c.stroke();
-
-          c.fillStyle = "#db2777";
-          c.beginPath();
-          c.arc(-23, headY, 9, 0, Math.PI * 2);
-          c.arc(23, headY, 9, 0, Math.PI * 2);
-          c.fill();
-
-          c.fillStyle = "#facc15";
-          c.strokeStyle = "#92400e";
-          c.lineWidth = 2;
-          c.beginPath();
-          c.moveTo(-14, headY - 18);
-          c.lineTo(-17, headY - 33);
-          c.lineTo(-6, headY - 24);
-          c.lineTo(0, headY - 37);
-          c.lineTo(6, headY - 24);
-          c.lineTo(17, headY - 33);
-          c.lineTo(14, headY - 18);
-          c.closePath();
-          c.fill();
-          c.stroke();
-
-          c.fillStyle = "#1e1b4b";
-          c.beginPath();
-          c.arc(this.facing * 5 - 3, headY, 2.6, 0, Math.PI * 2);
-          c.arc(this.facing * 5 + 6, headY, 2.6, 0, Math.PI * 2);
-          c.fill();
-
-          if (this.attackSec > 0) {
-            if (this.attackKind === "pan") {
-              // 放大平底鍋視覺與揮擊光弧
-              const swingProg = 1 - Math.max(0, this.attackSec / 0.34);
-              const panX = this.facing * (54 + Math.sin(swingProg * Math.PI) * 14);
-              const panY = headY + 8 - Math.cos(swingProg * Math.PI) * 10;
-
-              c.save();
-              c.strokeStyle = "rgba(250, 204, 21, 0.78)";
-              c.lineWidth = 5;
-              c.beginPath();
-              c.arc(this.facing * 26, headY + 12, 46, -0.85, 0.65);
-              c.stroke();
-
-              c.translate(panX, panY);
-              c.scale(this.facing * 1.65, 1.65);
-              c.rotate(-0.45 + swingProg * 0.95);
-              c.font = "34px sans-serif";
-              c.textAlign = "center";
-              c.textBaseline = "middle";
-              c.fillText("🍳", 0, 0);
-              c.restore();
-            } else if (this.attackKind === "pinch") {
-              c.font = "28px sans-serif";
-              c.textAlign = "center";
-              c.fillText("👂", this.facing * 46, headY + 12);
-            }
-          }
-
-          c.font = "900 13px sans-serif";
-          c.textAlign = "center";
-          c.lineWidth = 3.5;
-          c.strokeStyle = "#ffffff";
-          c.strokeText("👑 老婆大人", 0, headY - 43);
-          c.fillStyle = "#831843";
-          c.fillText("👑 老婆大人", 0, headY - 43);
-        } else {
-          // 老公僕人 / 低於 50% 血量變身大怪獸（皆配戴清晰眼鏡）
-          c.save();
-          c.scale(scaleFactor, scaleFactor);
-
-          if (this.giantMonster) {
-            c.strokeStyle = "rgba(239, 68, 68, 0.85)";
-            c.fillStyle = "rgba(248, 113, 113, 0.24)";
-            c.lineWidth = 3.5;
-            c.beginPath();
-            c.arc(0, -56, 58 + Math.sin(frameCounter * 0.2) * 3, 0, Math.PI * 2);
-            c.fill();
-            c.stroke();
-          }
-
-          c.strokeStyle = this.giantMonster ? "#7f1d1d" : "#1e3a8a";
-          c.lineWidth = 7;
-          c.lineCap = "round";
-          c.beginPath();
-          c.moveTo(-9, -32);
-          c.lineTo(-10 + stepSwing, 0);
-          c.moveTo(9, -32);
-          c.lineTo(10 - stepSwing, 0);
-          c.stroke();
-
-          c.fillStyle = this.giantMonster ? "#dc2626" : "#2563eb";
-          c.strokeStyle = this.giantMonster ? "#450a0a" : "#1e3a8a";
-          c.lineWidth = 2.5;
-          c.beginPath();
-          c.roundRect(-18, -74 + bobY, 36, 42, 7);
-          c.fill();
-          c.stroke();
-
-          if (!this.giantMonster) {
-            c.fillStyle = "#ffffff";
-            c.beginPath();
-            c.moveTo(-12, -56 + bobY);
-            c.lineTo(12, -56 + bobY);
-            c.lineTo(15, -32 + bobY * 0.4);
-            c.lineTo(-15, -32 + bobY * 0.4);
-            c.closePath();
-            c.fill();
+        let scaleX = 1.0;
+        let scaleY = 1.0;
+        let scaleZ = 1.0;
+        if (this.transformed) {
+          if (this.charId === "queen") {
+            // 老婆變大肥豬：橫向與前後明顯膨脹
+            scaleX = 1.48;
+            scaleY = 1.16;
+            scaleZ = 1.48;
+          } else if (this.charId === "servant") {
+            // 老公變 LION：威猛放大
+            scaleX = 1.38;
+            scaleY = 1.34;
+            scaleZ = 1.34;
           } else {
-            c.fillStyle = "#fef08a";
-            c.beginPath();
-            c.moveTo(16, -62 + bobY);
-            c.lineTo(34, -56 + bobY);
-            c.lineTo(16, -48 + bobY);
-            c.closePath();
-            c.fill();
+            // 美少女戰士與超人
+            scaleX = 1.24;
+            scaleY = 1.28;
+            scaleZ = 1.24;
           }
-
-          const headY = -88 + bobY;
-          c.fillStyle = this.giantMonster ? "#ef4444" : "#fed7aa";
-          c.beginPath();
-          c.arc(0, headY, 21, 0, Math.PI * 2);
-          c.fill();
-          c.strokeStyle = this.giantMonster ? "#450a0a" : "#1e3a8a";
-          c.lineWidth = 2.5;
-          c.stroke();
-
-          if (this.giantMonster) {
-            c.fillStyle = "#facc15";
-            c.beginPath();
-            c.moveTo(-14, headY - 14);
-            c.lineTo(-22, headY - 34);
-            c.lineTo(-4, headY - 19);
-            c.moveTo(14, headY - 14);
-            c.lineTo(22, headY - 34);
-            c.lineTo(4, headY - 19);
-            c.closePath();
-            c.fill();
-          } else {
-            c.fillStyle = "#1e293b";
-            c.beginPath();
-            c.arc(0, headY - 6, 20, Math.PI, Math.PI * 2);
-            c.fill();
-          }
-
-          c.fillStyle = this.giantMonster ? "#fef08a" : "#0f172a";
-          c.beginPath();
-          c.arc(this.facing * 5 - 3, headY, 2.8, 0, Math.PI * 2);
-          c.arc(this.facing * 5 + 6, headY, 2.8, 0, Math.PI * 2);
-          c.fill();
-
-          // 老公僕人眼鏡
-          const gx = this.facing * 5 + 1.5;
-          c.fillStyle = "rgba(255, 255, 255, 0.4)";
-          c.strokeStyle = this.giantMonster ? "#fef08a" : "#0f172a";
-          c.lineWidth = 2.3;
-          c.beginPath();
-          c.roundRect(gx - 12, headY - 6.5, 10, 9, 2.2);
-          c.roundRect(gx + 2, headY - 6.5, 10, 9, 2.2);
-          c.moveTo(gx - 2, headY - 2);
-          c.lineTo(gx + 2, headY - 2);
-          c.fill();
-          c.stroke();
-
-          if (this.attackSec > 0 && this.attackKind === "servantStrike") {
-            c.font = "24px sans-serif";
-            c.textAlign = "center";
-            c.fillText(this.giantMonster ? "💥" : "🥣", this.facing * 44, headY + 18);
-          }
-
-          c.font = "900 13px sans-serif";
-          c.textAlign = "center";
-          c.lineWidth = 3.5;
-          c.strokeStyle = "#ffffff";
-          const tag = this.giantMonster ? "🦖 暴走大怪獸 (ATK x2 · DEF x2)" : "🙇‍♂️ 老公僕人";
-          const tagY = headY - (this.giantMonster ? 40 : 30);
-          c.strokeText(tag, 0, tagY);
-          c.fillStyle = this.giantMonster ? "#991b1b" : "#1e3a8a";
-          c.fillText(tag, 0, tagY);
-
-          c.restore();
         }
 
-        if (this.shieldSec > 0) {
-          c.strokeStyle = this.isQueen ? "#db2777" : "#2563eb";
-          c.fillStyle = this.isQueen ? "rgba(244, 114, 182, 0.26)" : "rgba(59, 130, 246, 0.26)";
-          c.lineWidth = 3.5;
-          c.beginPath();
-          c.arc(0, -54, 48, 0, Math.PI * 2);
-          c.fill();
-          c.stroke();
+        const hopBob = this.grounded ? Math.abs(Math.sin(this.walkPhase)) * 0.14 : 0;
+        r.bodyGroup.scale.set(scaleX, scaleY, scaleZ);
+        r.bodyGroup.position.y = hopBob;
+
+        r.shieldMesh.visible = this.shieldSec > 0;
+        if (r.auraMesh.visible) {
+          r.auraMesh.rotation.z += dt * 3.5;
+        }
+
+        const activeAttack = this.attackSec > 0;
+        r.panGroup.visible = activeAttack && this.attackKind === "pan";
+        if (r.panGroup.visible) {
+          const prog = 1 - Math.max(0, this.attackSec / 0.36);
+          r.panGroup.scale.setScalar(1.55);
+          r.panGroup.rotation.z = -0.7 + prog * 1.55;
+        }
+
+        r.cryWave.visible = activeAttack && this.attackKind === "cry";
+        if (r.cryWave.visible) {
+          const s = 0.8 + (1 - this.attackSec / 0.36) * 1.4;
+          r.cryWave.scale.setScalar(s);
+        }
+
+        r.fartCloud.visible = activeAttack && this.attackKind === "fart";
+        if (r.fartCloud.visible) {
+          const s = 0.85 + (1 - this.attackSec / 0.36) * 1.35;
+          r.fartCloud.scale.setScalar(s);
+          r.fartCloud.rotation.y += dt * 8;
         }
 
         if (this.hitFlashSec > 0) {
-          c.fillStyle = "rgba(255, 255, 255, 0.55)";
-          c.beginPath();
-          c.arc(0, -54, 44, 0, Math.PI * 2);
-          c.fill();
+          r.torsoMat.emissive.setHex(0xffffff);
+          r.torsoMat.emissiveIntensity = 0.55;
+        } else {
+          r.torsoMat.emissive.setHex(0x000000);
+          r.torsoMat.emissiveIntensity = 0;
         }
-
-        c.restore();
       }
     }
 
-    class KidHelper {
-      constructor(cfg) {
-        this.kidName = cfg.kidName;
-        this.badgeText = cfg.badgeText;
-        this.offsetX = cfg.offsetX;
-        this.topColor = cfg.topColor;
-        this.hatColor = cfg.hatColor;
-        this.shotEmoji = cfg.shotEmoji;
-        this.x = 150;
-        this.y = FLOOR_Y;
-        this.vy = 0;
-        this.grounded = true;
-        this.assistCooldown = cfg.initDelay || 1.8;
-        this.runPhase = 0;
-        this.bobPhase = cfg.initDelay || 0;
-      }
-
-      resetKid(queenX) {
-        this.x = Math.max(36, Math.min(WORLD_W - 80, queenX + this.offsetX));
-        this.y = FLOOR_Y;
-        this.vy = 0;
-        this.grounded = true;
-        this.assistCooldown = this.kidName === "Eian" ? 1.7 : 2.4;
-        this.runPhase = 0;
-      }
-
-      fireAssist(enemy, boost) {
-        if (!enemy || battleStatus !== "active") return;
-        this.vy = -435;
-        this.grounded = false;
-
-        const dir = enemy.x >= this.x ? 1 : -1;
-        activeProjectiles.push({
-          x: this.x + dir * 20,
-          y: this.y - 34,
-          vx: dir * (boost ? 415 : 355),
-          fromQueen: true,
-          icon: this.shotEmoji,
-          dmg: boost ? 9 : 6,
-          scale: boost ? 1.15 : 0.94,
-          life: 1.25
-        });
-
-        addShockRing(this.x, this.y - 26, this.topColor, 34);
-        playSynthTone(this.kidName === "Eian" ? 680 : 800, 0.08, "triangle", 0.09);
-        addFloatingText(this.x, this.y - 68, `${this.kidName} 助攻!`, "#0f172a");
-        gainQueenSuper(boost ? 14 : 6);
-        this.assistCooldown = boost ? 1.15 : (this.kidName === "Eian" ? 3.0 : 3.6);
-      }
-
-      updateKid(dt, queen, enemy) {
-        this.bobPhase += dt * 4.8;
-        if (battleStatus !== "active") return;
-
-        const targetX = Math.max(34, Math.min(WORLD_W - 80, queen.x + this.offsetX));
-        const dx = targetX - this.x;
-        this.x += dx * Math.min(1, dt * 6.5);
-        this.runPhase += Math.abs(dx) > 2 ? dt * 14 : 0;
-
-        this.y += this.vy * dt;
-        if (!this.grounded) {
-          this.vy += GRAVITY * dt;
-        }
-        if (this.y >= FLOOR_Y) {
-          this.y = FLOOR_Y;
-          this.vy = 0;
-          this.grounded = true;
-        }
-
-        this.assistCooldown -= dt;
-        if (this.assistCooldown <= 0) {
-          this.fireAssist(enemy, false);
-        }
-      }
-
-      drawKid(c) {
-        c.save();
-        c.translate(this.x, this.y);
-
-        const idleBob = this.grounded && Math.abs(this.runPhase) < 0.2 ? Math.sin(this.bobPhase) * 1.6 : 0;
-        const legSwing = Math.sin(this.runPhase) * 5;
-
-        c.fillStyle = "rgba(15, 23, 42, 0.22)";
-        c.beginPath();
-        c.ellipse(0, 3, 18, 5, 0, 0, Math.PI * 2);
-        c.fill();
-
-        c.strokeStyle = "#334155";
-        c.lineWidth = 4.5;
-        c.lineCap = "round";
-        c.beginPath();
-        c.moveTo(-5, -16);
-        c.lineTo(-6 + legSwing, 0);
-        c.moveTo(5, -16);
-        c.lineTo(6 - legSwing, 0);
-        c.stroke();
-
-        c.fillStyle = this.topColor;
-        c.strokeStyle = "#1e293b";
-        c.lineWidth = 2;
-        c.beginPath();
-        c.roundRect(-11, -38 + idleBob, 22, 23, 6);
-        c.fill();
-        c.stroke();
-
-        c.fillStyle = "#fde68a";
-        c.beginPath();
-        c.arc(0, -48 + idleBob, 13, 0, Math.PI * 2);
-        c.fill();
-        c.stroke();
-
-        c.fillStyle = this.hatColor;
-        c.beginPath();
-        c.arc(0, -54 + idleBob, 12, Math.PI, Math.PI * 2);
-        c.fill();
-
-        c.fillStyle = "#0f172a";
-        c.beginPath();
-        c.arc(2, -48 + idleBob, 1.8, 0, Math.PI * 2);
-        c.arc(7, -48 + idleBob, 1.8, 0, Math.PI * 2);
-        c.fill();
-
-        c.font = "900 11px sans-serif";
-        c.textAlign = "center";
-        c.lineWidth = 3;
-        c.strokeStyle = "#ffffff";
-        c.strokeText(this.badgeText, 0, -67 + idleBob);
-        c.fillStyle = "#0f172a";
-        c.fillText(this.badgeText, 0, -67 + idleBob);
-
-        c.restore();
-      }
-    }
-
-    const queenPlayer = new FighterUnit({ isQueen: true, x: 220, facing: 1 });
-    const servantAi = new FighterUnit({ isQueen: false, x: 590, facing: -1 });
-
-    const kidEian = new KidHelper({
-      kidName: "Eian",
-      badgeText: "👦 Eian",
-      offsetX: -58,
-      topColor: "#38bdf8",
-      hatColor: "#0284c7",
-      shotEmoji: "⚽",
-      initDelay: 1.6
-    });
-
-    const kidReina = new KidHelper({
-      kidName: "Reina",
-      badgeText: "👧 Reina",
-      offsetX: -100,
-      topColor: "#f9a8d4",
-      hatColor: "#db2777",
-      shotEmoji: "💖",
-      initDelay: 2.3
-    });
+    const p1Fighter = new Fighter3D({ isPlayer1: true, charId: p1CharId, x: -3.6, facing: 1 });
+    const p2AiFighter = new Fighter3D({ isPlayer1: false, charId: p2CharId, x: 3.6, facing: -1 });
 
     function triggerKidsAssistButton() {
       if (battleStatus !== "active") return;
-      kidEian.fireAssist(servantAi, true);
-      setTimeout(function () {
-        if (battleStatus === "active") {
-          kidReina.fireAssist(servantAi, true);
-        }
-      }, 110);
+      const dir = p2AiFighter.x >= p1Fighter.x ? 1 : -1;
+      const icons = [0x38bdf8, 0xf472b6];
+      icons.forEach(function (col, idx) {
+        setTimeout(function () {
+          if (battleStatus !== "active") return;
+          const geo = new THREE.SphereGeometry(0.32, 12, 12);
+          const mat = new THREE.MeshStandardMaterial({ color: col, emissive: col, emissiveIntensity: 0.35 });
+          const mesh = new THREE.Mesh(geo, mat);
+          mesh.position.set(p1Fighter.x + dir * 0.9, 1.35, (idx - 0.5) * 0.5);
+          scene.add(mesh);
+          projectiles3D.push({
+            mesh: mesh,
+            geo: geo,
+            mat: mat,
+            x: mesh.position.x,
+            y: mesh.position.y,
+            vx: dir * 12.5,
+            fromPlayer1: true,
+            dmg: 8,
+            hitText: idx === 0 ? "👦 Eian 助攻!" : "👧 Reina 助攻!",
+            life: 1.3
+          });
+          gainP1Super(7);
+        }, idx * 110);
+      });
+      playSynthTone(760, 0.09, "triangle", 0.1);
+      spawnFloating3DText(p1Fighter.x, 3.1, "👦👧 Eian & Reina 助攻!", "#0f172a");
     }
 
     function inflictDamage(attacker, defender, rawDamage, hitText) {
       if (!defender || battleStatus !== "active") return;
 
-      // 老公僕人變身大怪獸時防禦力加倍（DEF x2 -> 承傷減半 0.5x）
-      const defMult = (!defender.isQueen && defender.giantMonster) ? 0.5 : 1.0;
-      let finalDmg = Math.max(1, Math.round(rawDamage * defMult));
+      const defMult = defender.getDefMultiplier();
+      let finalDmg = Math.max(1, Math.round(rawDamage / defMult));
 
       if (defender.shieldSec > 0) {
         finalDmg = Math.max(1, Math.round(finalDmg * 0.25));
-        addShockRing(defender.x, defender.y - 54, "#3b82f6", 52);
-        addFloatingText(defender.x, defender.y - 112, "🛡️ 護盾減傷!", "#1d4ed8");
+        spawnShockRing3D(defender.x, 1.5, 0, 0x3b82f6, 2.2);
+        spawnFloating3DText(defender.x, 3.1, "🛡️ 護盾減傷!", "#1d4ed8");
       } else {
         defender.hitFlashSec = 0.16;
-        addShockRing(defender.x, defender.y - 56, attacker && attacker.isQueen ? "#ec4899" : "#ef4444", 56);
-        addSparks(defender.x, defender.y - 56, attacker && attacker.isQueen ? "#facc15" : "#fca5a5", 8);
-        const defTag = (!defender.isQueen && defender.giantMonster) ? " [DEF x2]" : "";
-        addFloatingText(
+        screenShakeSec = Math.max(screenShakeSec, 0.14);
+        const effColor = attacker && attacker.isPlayer1 ? 0xec4899 : 0xef4444;
+        spawnShockRing3D(defender.x, 1.55, 0, effColor, 2.4);
+        spawnParticles3D(defender.x, 1.55, 0, effColor, 9, 6.0);
+        const defTag = defender.transformed ? " [變身防禦]" : "";
+        spawnFloating3DText(
           defender.x,
-          defender.y - 118,
+          3.2,
           `${hitText}${defTag} -${finalDmg}`,
-          attacker && attacker.isQueen ? "#be185d" : "#1d4ed8"
+          attacker && attacker.isPlayer1 ? "#be185d" : "#1d4ed8"
         );
       }
 
       defender.hp = Math.max(0, defender.hp - finalDmg);
-      if (!defender.isQueen) {
-        defender.checkGiantMutation();
-        gainQueenSuper(7);
-      } else {
-        gainQueenSuper(9);
-      }
+      defender.checkHalfHpTransform();
+
+      if (!defender.isPlayer1) gainP1Super(7);
+      else gainP1Super(9);
 
       syncVitalsHud();
 
@@ -1657,254 +1690,65 @@
     }
 
     // =========================================================================
-    // 6. 明亮多層背景、粒子、特效與 UI 同步
+    // 5. HUD 同步、K.O. 結算與重開
     // =========================================================================
-    function drawSceneLayer(c) {
-      const st = STAGES[currentStageKey] || STAGES.living;
-
-      const grad = c.createLinearGradient(0, 0, 0, FLOOR_Y);
-      grad.addColorStop(0, st.skyTop);
-      grad.addColorStop(0.55, st.skyMid);
-      grad.addColorStop(1, st.skyBot);
-      c.fillStyle = grad;
-      c.fillRect(0, 0, WORLD_W, FLOOR_Y);
-
-      if (currentStageKey === "living") {
-        c.fillStyle = "#f472b6";
-        c.strokeStyle = "#9d174d";
-        c.lineWidth = 2.5;
-        c.beginPath();
-        c.roundRect(265, FLOOR_Y - 64, 270, 64, 16);
-        c.fill();
-        c.stroke();
-
-        c.fillStyle = "#fde047";
-        c.beginPath();
-        c.arc(110, 108, 32, 0, Math.PI * 2);
-        c.fill();
-      } else if (currentStageKey === "kitchen") {
-        c.fillStyle = "#99f6e4";
-        c.strokeStyle = "#115e59";
-        c.lineWidth = 2.5;
-        c.fillRect(215, FLOOR_Y - 56, 370, 56);
-        c.strokeRect(215, FLOOR_Y - 56, 370, 56);
-        c.fillRect(270, 60, 260, 52);
-        c.strokeRect(270, 60, 260, 52);
-      } else if (currentStageKey === "mall") {
-        c.strokeStyle = "#d97706";
-        c.lineWidth = 5;
-        for (let i = 0; i < 3; i++) {
-          const ax = 150 + i * 250;
-          c.beginPath();
-          c.arc(ax, 186, 76, Math.PI, 0);
-          c.stroke();
-        }
-      } else if (currentStageKey === "hawaii") {
-        c.fillStyle = "#facc15";
-        c.beginPath();
-        c.arc(650, 96, 42, 0, Math.PI * 2);
-        c.fill();
-
-        c.fillStyle = "#38bdf8";
-        c.fillRect(0, FLOOR_Y - 46, WORLD_W, 46);
-      }
-
-      for (const m of ambientMotes) {
-        m.y -= m.speed * 0.016;
-        m.x += Math.sin(m.phase + frameCounter * 0.04) * 0.55;
-        if (m.y < 16) {
-          m.y = FLOOR_Y - 12;
-          m.x = Math.random() * WORLD_W;
-        }
-        c.save();
-        c.globalAlpha = m.alpha;
-        c.font = `${Math.round(m.size)}px sans-serif`;
-        c.textAlign = "center";
-        c.fillText(st.mote, m.x, m.y);
-        c.restore();
-      }
-
-      c.font = "900 17px sans-serif";
-      c.textAlign = "center";
-      c.lineWidth = 4;
-      c.strokeStyle = "rgba(255, 255, 255, 0.85)";
-      c.strokeText(st.label, WORLD_W / 2, 30);
-      c.fillStyle = "#0f172a";
-      c.fillText(st.label, WORLD_W / 2, 30);
-
-      const floorGrad = c.createLinearGradient(0, FLOOR_Y, 0, WORLD_H);
-      floorGrad.addColorStop(0, st.floorTop);
-      floorGrad.addColorStop(1, st.floorBot);
-      c.fillStyle = floorGrad;
-      c.fillRect(0, FLOOR_Y, WORLD_W, WORLD_H - FLOOR_Y);
-
-      c.strokeStyle = st.line;
-      c.lineWidth = 4;
-      c.beginPath();
-      c.moveTo(0, FLOOR_Y);
-      c.lineTo(WORLD_W, FLOOR_Y);
-      c.stroke();
-    }
-
-    function updateAndDrawEffects(c, dt) {
-      for (let i = activeProjectiles.length - 1; i >= 0; i--) {
-        const p = activeProjectiles[i];
-        p.x += p.vx * dt;
-        p.life -= dt;
-
-        const target = p.fromQueen ? servantAi : queenPlayer;
-        const attacker = p.fromQueen ? queenPlayer : servantAi;
-        const hitW = (!p.fromQueen && target.giantMonster) ? 54 : 38;
-        const hitH = (!p.fromQueen && target.giantMonster) ? 72 : 52;
-        const cy = (!p.fromQueen && target.giantMonster) ? target.y - 76 : target.y - 56;
-
-        if (Math.abs(p.x - target.x) < hitW && Math.abs(p.y - cy) < hitH) {
-          inflictDamage(attacker, target, p.dmg, `${p.icon} 波!`);
-          activeProjectiles.splice(i, 1);
-          continue;
-        }
-
-        if (p.life <= 0 || p.x < -30 || p.x > WORLD_W + 30) {
-          activeProjectiles.splice(i, 1);
-        }
-      }
-
-      for (let i = floatingTexts.length - 1; i >= 0; i--) {
-        const ft = floatingTexts[i];
-        ft.y += ft.vy * dt;
-        ft.life -= dt;
-        if (ft.life <= 0) floatingTexts.splice(i, 1);
-      }
-
-      for (let i = shockRings.length - 1; i >= 0; i--) {
-        const sr = shockRings[i];
-        sr.life -= dt;
-        const prog = 1 - Math.max(0, sr.life / sr.maxLife);
-        sr.r = 10 + (sr.maxR - 10) * prog;
-        if (sr.life <= 0) shockRings.splice(i, 1);
-      }
-
-      for (let i = sparkParticles.length - 1; i >= 0; i--) {
-        const sp = sparkParticles[i];
-        sp.x += sp.vx * dt;
-        sp.y += sp.vy * dt;
-        sp.vy += 420 * dt;
-        sp.life -= dt;
-        if (sp.life <= 0) sparkParticles.splice(i, 1);
-      }
-
-      for (const sr of shockRings) {
-        c.save();
-        c.globalAlpha = Math.max(0, sr.life / sr.maxLife) * 0.75;
-        c.strokeStyle = sr.color;
-        c.lineWidth = 3.5;
-        c.beginPath();
-        c.arc(sr.x, sr.y, sr.r, 0, Math.PI * 2);
-        c.stroke();
-        c.restore();
-      }
-
-      for (const sp of sparkParticles) {
-        c.save();
-        c.globalAlpha = Math.max(0, sp.life / sp.maxLife);
-        c.fillStyle = sp.color;
-        c.beginPath();
-        c.arc(sp.x, sp.y, sp.r, 0, Math.PI * 2);
-        c.fill();
-        c.restore();
-      }
-
-      for (const p of activeProjectiles) {
-        c.save();
-        c.font = `${Math.round(26 * (p.scale || 1))}px sans-serif`;
-        c.textAlign = "center";
-        c.fillText(p.icon, p.x, p.y);
-        c.restore();
-      }
-
-      for (const ft of floatingTexts) {
-        c.save();
-        c.globalAlpha = Math.max(0, ft.life / ft.maxLife);
-        c.font = "900 16px sans-serif";
-        c.textAlign = "center";
-        c.lineWidth = 4;
-        c.strokeStyle = "#ffffff";
-        c.strokeText(ft.text, ft.x, ft.y);
-        c.fillStyle = ft.color;
-        c.fillText(ft.text, ft.x, ft.y);
-        c.restore();
-      }
-
-      if (mutationBannerSec > 0) {
-        c.save();
-        c.globalAlpha = Math.min(1, mutationBannerSec);
-        c.fillStyle = "rgba(153, 27, 27, 0.92)";
-        c.strokeStyle = "#fde047";
-        c.lineWidth = 2.5;
-        c.beginPath();
-        c.roundRect(WORLD_W * 0.5 - 180, 48, 360, 32, 11);
-        c.fill();
-        c.stroke();
-
-        c.font = "900 13.5px sans-serif";
-        c.textAlign = "center";
-        c.fillStyle = "#fef08a";
-        c.fillText("🦖 老公僕人變身暴走大怪獸！ATK x2・DEF x2！", WORLD_W * 0.5, 69);
-        c.restore();
-      }
-    }
-
     function syncVitalsHud() {
-      const qPct = Math.max(0, Math.min(100, (queenPlayer.hp / queenPlayer.maxHp) * 100));
-      const sPct = Math.max(0, Math.min(100, (servantAi.hp / servantAi.maxHp) * 100));
-      const spPct = Math.max(0, Math.min(100, queenSuperMeter));
+      const p1Pct = Math.max(0, Math.min(100, (p1Fighter.hp / p1Fighter.maxHp) * 100));
+      const p2Pct = Math.max(0, Math.min(100, (p2AiFighter.hp / p2AiFighter.maxHp) * 100));
+      const spPct = Math.max(0, Math.min(100, p1SuperMeter));
 
-      const qBar = document.getElementById("queenHpBar");
-      const sBar = document.getElementById("servantHpBar");
-      const qTxt = document.getElementById("queenHpText");
-      const sTxt = document.getElementById("servantHpText");
-      const spBar = document.getElementById("queenSuperBar");
-      const spTxt = document.getElementById("queenSuperText");
-      const multTxt = document.getElementById("servantMultText");
+      const p1Label = document.getElementById("p1HudLabel");
+      const p2Label = document.getElementById("p2HudLabel");
+      const p1Bar = document.getElementById("p1HpBar");
+      const p2Bar = document.getElementById("p2HpBar");
+      const p1Txt = document.getElementById("p1HpText");
+      const p2Txt = document.getElementById("p2HpText");
+      const spBar = document.getElementById("p1SuperBar");
+      const spTxt = document.getElementById("p1SuperText");
+      const multTxt = document.getElementById("p2MultText");
       const clk = document.getElementById("roundClock");
-      const chip = document.getElementById("servantStatusChip");
-      const panBtn = document.getElementById("btnSkillPan");
-      const shopBtn = document.getElementById("btnSkillShop");
-      const pinchBtn = document.getElementById("btnSkillPinch");
+      const chip = document.getElementById("p2StatusChip");
+      const b1 = document.getElementById("btnSkill1");
+      const b2 = document.getElementById("btnSkill2");
+      const b3 = document.getElementById("btnSkill3");
 
-      if (qBar) qBar.style.width = `${qPct}%`;
-      if (sBar) {
-        sBar.style.width = `${sPct}%`;
-        if (servantAi.giantMonster) {
-          sBar.classList.add("giant-mode");
-        } else {
-          sBar.classList.remove("giant-mode");
-        }
+      const s1 = p1Fighter.getSpec();
+      const s2 = p2AiFighter.getSpec();
+
+      if (p1Label) p1Label.textContent = p1Fighter.transformed ? s1.transformName : s1.hudTitle;
+      if (p2Label) p2Label.textContent = p2AiFighter.transformed ? s2.transformName : s2.hudTitle;
+
+      if (p1Bar) {
+        p1Bar.style.width = `${p1Pct}%`;
+        p1Bar.classList.toggle("transformed", p1Fighter.transformed);
       }
-      if (qTxt) qTxt.textContent = `HP ${Math.ceil(queenPlayer.hp)}`;
-      if (sTxt) sTxt.textContent = `HP ${Math.ceil(servantAi.hp)}`;
+      if (p2Bar) {
+        p2Bar.style.width = `${p2Pct}%`;
+        p2Bar.classList.toggle("transformed", p2AiFighter.transformed);
+      }
+
+      if (p1Txt) p1Txt.textContent = `HP ${Math.ceil(p1Fighter.hp)}`;
+      if (p2Txt) p2Txt.textContent = `HP ${Math.ceil(p2AiFighter.hp)}`;
       if (spBar) spBar.style.width = `${spPct}%`;
       if (spTxt) spTxt.textContent = spPct >= 100 ? "MAX 超必殺!" : `${Math.floor(spPct)}%`;
       if (clk) clk.textContent = `${Math.max(0, Math.ceil(remainingTime))}`;
 
       const isReady = spPct >= 100;
-      [panBtn, shopBtn, pinchBtn].forEach(function (b) {
-        if (!b) return;
-        if (isReady) b.classList.add("super-ready");
-        else b.classList.remove("super-ready");
+      [b1, b2, b3].forEach(function (b) {
+        if (b) b.classList.toggle("super-ready", isReady);
       });
 
       if (chip) {
-        if (servantAi.giantMonster) {
-          chip.textContent = "🦖 暴走大怪獸 (ATK x2 · DEF x2)";
-          chip.classList.add("giant-active");
+        if (p2AiFighter.transformed) {
+          chip.textContent = `${s2.transformName} (x${p2AiFighter.getAtkMultiplier()} / x${p2AiFighter.getDefMultiplier()})`;
+          chip.classList.add("transformed");
         } else {
-          chip.textContent = "👓 僕人常態 (ATK x1 · DEF x1)";
-          chip.classList.remove("giant-active");
+          chip.textContent = `${s2.hudTitle} (ATK x1 · DEF x1)`;
+          chip.classList.remove("transformed");
         }
       }
       if (multTxt) {
-        multTxt.textContent = servantAi.giantMonster ? "ATK x2 / DEF x2" : "ATK x1 / DEF x1";
+        multTxt.textContent = `x${p2AiFighter.getAtkMultiplier()} / x${p2AiFighter.getDefMultiplier()}`;
       }
     }
 
@@ -1917,49 +1761,70 @@
       const bodyEl = document.getElementById("koModalBody");
       const modalEl = document.getElementById("koModal");
 
-      if (queenPlayer.hp >= servantAi.hp) {
-        if (titleEl) titleEl.textContent = "👑 老婆大人聯手 Eian、Reina 獲勝！";
-        if (bodyEl) {
-          bodyEl.textContent =
-            "自 2014 年 11 月 23 日結婚紀念日至今，老婆大人攜手仔仔 Eian 與女女 Reina 完勝老公僕人！今晚家務與甜蜜宵夜全包～";
-        }
-      } else {
-        if (titleEl) titleEl.textContent = "🙇‍♂️ 老公僕人變身暴走大怪獸也乖乖認輸！";
-        if (bodyEl) {
-          bodyEl.textContent =
-            "就算老公僕人一度變身暴走大怪獸（ATK x2 · DEF x2），在 2014.11.23 結婚紀念日還是最愛老婆大人、Eian 與 Reina，立刻投降認錯！";
-        }
+      const s1 = p1Fighter.getSpec();
+      const s2 = p2AiFighter.getSpec();
+      const winSpec = p1Fighter.hp >= p2AiFighter.hp ? s1 : s2;
+      const loseSpec = p1Fighter.hp >= p2AiFighter.hp ? s2 : s1;
+
+      if (titleEl) titleEl.textContent = `🏆 ${winSpec.hudTitle} 拿下 3D 大亂鬥勝利！`;
+      if (bodyEl) {
+        bodyEl.textContent =
+          `自 2014 年 11 月 23 日結婚紀念日至今，${winSpec.hudTitle} 擊敗變身後的 ${loseSpec.hudTitle}！今晚全家一起慶祝紀念日～`;
       }
 
       if (modalEl) modalEl.classList.add("show");
     }
 
+    function clear3dEffects() {
+      for (const p of projectiles3D) {
+        scene.remove(p.mesh);
+        p.geo.dispose();
+        p.mat.dispose();
+      }
+      projectiles3D.length = 0;
+
+      for (const sr of shockRings3D) {
+        scene.remove(sr.mesh);
+        sr.geo.dispose();
+        sr.mat.dispose();
+      }
+      shockRings3D.length = 0;
+
+      for (const sp of particles3D) {
+        scene.remove(sp.mesh);
+        sp.geo.dispose();
+        sp.mat.dispose();
+      }
+      particles3D.length = 0;
+
+      for (const ft of activeDomTexts) {
+        if (ft.el && ft.el.parentNode) ft.el.parentNode.removeChild(ft.el);
+      }
+      activeDomTexts.length = 0;
+    }
+
     function restartBattle() {
       ensureAudioReady();
-      queenPlayer.resetUnit(220, 1);
-      servantAi.resetUnit(590, -1);
-      kidEian.resetKid(queenPlayer.x);
-      kidReina.resetKid(queenPlayer.x);
-      queenSuperMeter = 35;
-      activeProjectiles = [];
-      floatingTexts = [];
-      shockRings = [];
-      sparkParticles = [];
-      screenShakeSec = 0;
-      screenFlashSec = 0;
-      mutationBannerSec = 0;
+      refreshSkillButtonLabels();
+      clear3dEffects();
+
+      p1Fighter.resetUnit(p1CharId, -3.6, 1);
+      p2AiFighter.resetUnit(p2CharId, 3.6, -1);
+      p1SuperMeter = 35;
       remainingTime = 99;
       timeAcc = 0;
+      screenShakeSec = 0;
+      flashOverlayAlpha = 0;
+      bannerTimerSec = 0;
+      if (transformBannerEl) transformBannerEl.classList.remove("show");
       battleStatus = "active";
-      syncVitalsHud();
 
-      const modalEl = document.getElementById("koModal");
-      if (modalEl) modalEl.classList.remove("show");
+      syncVitalsHud();
       playSynthTone(640, 0.08, "triangle", 0.09);
     }
 
     // =========================================================================
-    // 7. 觸控與鍵盤事件綁定
+    // 6. 觸控與鍵盤事件綁定
     // =========================================================================
     function bindPadControl(id, onPress, onRelease) {
       const el = document.getElementById(id);
@@ -1987,7 +1852,7 @@
       "btnMoveLeft",
       function () {
         moveInput.left = true;
-        queenPlayer.facing = -1;
+        p1Fighter.facing = -1;
       },
       function () {
         moveInput.left = false;
@@ -1998,7 +1863,7 @@
       "btnMoveRight",
       function () {
         moveInput.right = true;
-        queenPlayer.facing = 1;
+        p1Fighter.facing = 1;
       },
       function () {
         moveInput.right = false;
@@ -2006,23 +1871,23 @@
     );
 
     bindPadControl("btnJump", function () {
-      if (battleStatus === "active") queenPlayer.jumpUnit();
+      if (battleStatus === "active") p1Fighter.jumpUnit();
     });
 
-    bindPadControl("btnSkillPan", function () {
-      if (battleStatus === "active") queenPlayer.performAttack("pan", servantAi);
+    bindPadControl("btnSkill1", function () {
+      if (battleStatus === "active") p1Fighter.performSlotSkill(1, p2AiFighter);
     });
 
-    bindPadControl("btnSkillShop", function () {
-      if (battleStatus === "active") queenPlayer.performAttack("shop", servantAi);
+    bindPadControl("btnSkill2", function () {
+      if (battleStatus === "active") p1Fighter.performSlotSkill(2, p2AiFighter);
     });
 
-    bindPadControl("btnSkillPinch", function () {
-      if (battleStatus === "active") queenPlayer.performAttack("pinch", servantAi);
+    bindPadControl("btnSkill3", function () {
+      if (battleStatus === "active") p1Fighter.performSlotSkill(3, p2AiFighter);
     });
 
     bindPadControl("btnSkillShield", function () {
-      if (battleStatus === "active") queenPlayer.activateShield();
+      if (battleStatus === "active") p1Fighter.activateShield();
     });
 
     bindPadControl("btnKidsAssist", function () {
@@ -2033,20 +1898,20 @@
       const k = ev.key.toLowerCase();
       if (k === "arrowleft" || k === "a") {
         moveInput.left = true;
-        queenPlayer.facing = -1;
+        p1Fighter.facing = -1;
       } else if (k === "arrowright" || k === "d") {
         moveInput.right = true;
-        queenPlayer.facing = 1;
+        p1Fighter.facing = 1;
       } else if (k === "arrowup" || k === "w") {
-        if (battleStatus === "active") queenPlayer.jumpUnit();
+        if (battleStatus === "active") p1Fighter.jumpUnit();
       } else if (k === "j" || k === "z") {
-        if (battleStatus === "active") queenPlayer.performAttack("pan", servantAi);
+        if (battleStatus === "active") p1Fighter.performSlotSkill(1, p2AiFighter);
       } else if (k === "k" || k === "x") {
-        if (battleStatus === "active") queenPlayer.performAttack("shop", servantAi);
+        if (battleStatus === "active") p1Fighter.performSlotSkill(2, p2AiFighter);
       } else if (k === "l" || k === "c") {
-        if (battleStatus === "active") queenPlayer.performAttack("pinch", servantAi);
+        if (battleStatus === "active") p1Fighter.performSlotSkill(3, p2AiFighter);
       } else if (k === "i" || k === "s" || k === "arrowdown") {
-        if (battleStatus === "active") queenPlayer.activateShield();
+        if (battleStatus === "active") p1Fighter.activateShield();
       } else if (ev.code === "Space" || k === "e") {
         if (ev.code === "Space") ev.preventDefault();
         if (battleStatus === "active") triggerKidsAssistButton();
@@ -2060,124 +1925,189 @@
     });
 
     // =========================================================================
-    // 8. 連續 requestAnimationFrame 主迴圈（首幀即刻繪製）
+    // 7. 3D 主迴圈與特效更新
     // =========================================================================
-    function stepQueenMovement() {
+    function stepP1Movement() {
       if (battleStatus !== "active") {
-        queenPlayer.vx = 0;
+        p1Fighter.vx = 0;
         return;
       }
-      const speed = 265;
+      const speed = 6.8;
       if (moveInput.left && !moveInput.right) {
-        queenPlayer.vx = -speed;
-        queenPlayer.facing = -1;
+        p1Fighter.vx = -speed;
+        p1Fighter.facing = -1;
       } else if (moveInput.right && !moveInput.left) {
-        queenPlayer.vx = speed;
-        queenPlayer.facing = 1;
+        p1Fighter.vx = speed;
+        p1Fighter.facing = 1;
       } else {
-        queenPlayer.vx = 0;
+        p1Fighter.vx = 0;
       }
     }
 
-    function stepServantBrain(dt) {
+    function stepAiBrain(dt) {
       if (battleStatus !== "active") {
-        servantAi.vx = 0;
+        p2AiFighter.vx = 0;
         return;
       }
-      const dx = queenPlayer.x - servantAi.x;
-      servantAi.facing = dx >= 0 ? 1 : -1;
+      const dx = p1Fighter.x - p2AiFighter.x;
+      p2AiFighter.facing = dx >= 0 ? 1 : -1;
 
-      const moveSpd = aiDifficulty === "survival" ? 182 : 108;
+      const moveSpd = aiDifficulty === "survival" ? 4.6 : 2.8;
       const atkChance = aiDifficulty === "survival" ? 1.9 : 0.9;
 
-      if (Math.abs(dx) > 105) {
-        servantAi.vx = servantAi.facing * moveSpd;
+      if (Math.abs(dx) > 2.9) {
+        p2AiFighter.vx = p2AiFighter.facing * moveSpd;
       } else {
-        servantAi.vx = 0;
+        p2AiFighter.vx = 0;
         if (Math.random() < dt * atkChance) {
-          servantAi.performAttack(Math.random() < 0.65 ? "servantStrike" : "card", queenPlayer);
+          const r = Math.random();
+          const slot = r < 0.45 ? 1 : (r < 0.78 ? 2 : 3);
+          p2AiFighter.performSlotSkill(slot, p1Fighter);
         }
       }
 
       if (Math.random() < dt * 0.55) {
-        servantAi.jumpUnit();
+        p2AiFighter.jumpUnit();
       }
     }
 
-    function paintWorld(dt) {
-      ctx.save();
-      const sx = canvas.width / WORLD_W;
-      const sy = canvas.height / WORLD_H;
-      ctx.scale(sx, sy);
+    function update3dEffects(dt) {
+      for (let i = projectiles3D.length - 1; i >= 0; i--) {
+        const p = projectiles3D[i];
+        p.x += p.vx * dt;
+        p.life -= dt;
+        p.mesh.position.x = p.x;
+        p.mesh.rotation.y += dt * 10;
 
-      if (screenShakeSec > 0) {
-        const mag = screenShakeSec * 18;
-        ctx.translate((Math.random() - 0.5) * mag, (Math.random() - 0.5) * mag);
+        const target = p.fromPlayer1 ? p2AiFighter : p1Fighter;
+        const attacker = p.fromPlayer1 ? p1Fighter : p2AiFighter;
+        const hitDist = target.transformed ? 1.45 : 1.05;
+
+        if (Math.abs(p.x - target.x) < hitDist && Math.abs(p.y - (target.y + 1.5)) < 1.65) {
+          inflictDamage(attacker, target, p.dmg, p.hitText);
+          scene.remove(p.mesh);
+          p.geo.dispose();
+          p.mat.dispose();
+          projectiles3D.splice(i, 1);
+          continue;
+        }
+
+        if (p.life <= 0 || Math.abs(p.x) > 12) {
+          scene.remove(p.mesh);
+          p.geo.dispose();
+          p.mat.dispose();
+          projectiles3D.splice(i, 1);
+        }
       }
 
-      drawSceneLayer(ctx);
-      kidReina.drawKid(ctx);
-      kidEian.drawKid(ctx);
-      queenPlayer.drawUnit(ctx);
-      servantAi.drawUnit(ctx);
-      updateAndDrawEffects(ctx, dt);
-
-      if (screenFlashSec > 0) {
-        ctx.fillStyle = `rgba(239, 68, 68, ${Math.min(0.45, screenFlashSec)})`;
-        ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+      for (let i = shockRings3D.length - 1; i >= 0; i--) {
+        const sr = shockRings3D[i];
+        sr.life -= dt;
+        const prog = 1 - Math.max(0, sr.life / sr.maxLife);
+        sr.mesh.scale.setScalar(0.4 + prog * sr.maxScale);
+        sr.mat.opacity = Math.max(0, (1 - prog) * 0.85);
+        if (sr.life <= 0) {
+          scene.remove(sr.mesh);
+          sr.geo.dispose();
+          sr.mat.dispose();
+          shockRings3D.splice(i, 1);
+        }
       }
 
-      ctx.font = "700 11px monospace";
-      ctx.textAlign = "right";
-      ctx.fillStyle = "rgba(15, 23, 42, 0.7)";
-      ctx.fillText(`FRAME #${frameCounter}`, WORLD_W - 10, 20);
+      for (let i = particles3D.length - 1; i >= 0; i--) {
+        const sp = particles3D[i];
+        sp.life -= dt;
+        sp.vy -= 18 * dt;
+        sp.mesh.position.x += sp.vx * dt;
+        sp.mesh.position.y += sp.vy * dt;
+        sp.mesh.position.z += sp.vz * dt;
+        sp.mesh.rotation.x += dt * 7;
+        sp.mesh.rotation.y += dt * 7;
+        if (sp.life <= 0 || sp.mesh.position.y < -0.5) {
+          scene.remove(sp.mesh);
+          sp.geo.dispose();
+          sp.mat.dispose();
+          particles3D.splice(i, 1);
+        }
+      }
 
-      ctx.restore();
+      const box = document.getElementById("canvasStageBox");
+      const bw = box ? box.clientWidth : 800;
+      const bh = box ? box.clientHeight : 450;
+
+      for (let i = activeDomTexts.length - 1; i >= 0; i--) {
+        const ft = activeDomTexts[i];
+        ft.y += ft.vy * dt;
+        ft.life -= dt;
+
+        const projVec = new THREE.Vector3(ft.x, ft.y, 0).project(camera);
+        const sx = (projVec.x * 0.5 + 0.5) * bw;
+        const sy = (-projVec.y * 0.5 + 0.5) * bh;
+        ft.el.style.left = sx + "px";
+        ft.el.style.top = sy + "px";
+        ft.el.style.opacity = String(Math.max(0, ft.life / ft.maxLife));
+
+        if (ft.life <= 0) {
+          if (ft.el.parentNode) ft.el.parentNode.removeChild(ft.el);
+          activeDomTexts.splice(i, 1);
+        }
+      }
     }
 
-    function loopFrame(ts) {
+    function loop3DFrame(ts) {
       try {
         if (!lastTimestamp) lastTimestamp = ts;
         const dt = Math.max(0, Math.min(0.05, (ts - lastTimestamp) / 1000));
         lastTimestamp = ts;
-        frameCounter++;
 
         if (screenShakeSec > 0) screenShakeSec = Math.max(0, screenShakeSec - dt);
-        if (screenFlashSec > 0) screenFlashSec = Math.max(0, screenFlashSec - dt);
-        if (mutationBannerSec > 0) mutationBannerSec = Math.max(0, mutationBannerSec - dt);
+        if (bannerTimerSec > 0) {
+          bannerTimerSec = Math.max(0, bannerTimerSec - dt);
+          if (bannerTimerSec === 0 && transformBannerEl) {
+            transformBannerEl.classList.remove("show");
+          }
+        }
 
         if (battleStatus === "active") {
-          stepQueenMovement();
-          stepServantBrain(dt);
+          stepP1Movement();
+          stepAiBrain(dt);
 
           timeAcc += dt;
           if (timeAcc >= 1) {
             timeAcc -= 1;
             remainingTime = Math.max(0, remainingTime - 1);
-            if (remainingTime <= 0) {
-              openKoModal();
-            }
+            if (remainingTime <= 0) openKoModal();
           }
         }
 
-        queenPlayer.updateUnit(dt, servantAi);
-        servantAi.updateUnit(dt, queenPlayer);
-        kidEian.updateKid(dt, queenPlayer, servantAi);
-        kidReina.updateKid(dt, queenPlayer, servantAi);
+        p1Fighter.updateUnit(dt, p2AiFighter);
+        p2AiFighter.updateUnit(dt, p1Fighter);
+        update3dEffects(dt);
 
-        paintWorld(dt);
+        const midX = (p1Fighter.x + p2AiFighter.x) * 0.22;
+        let shakeX = 0;
+        let shakeY = 0;
+        if (screenShakeSec > 0) {
+          const mag = screenShakeSec * 0.65;
+          shakeX = (Math.random() - 0.5) * mag;
+          shakeY = (Math.random() - 0.5) * mag;
+        }
+        camera.position.set(midX + shakeX, 4.4 + shakeY, 15.2);
+        camera.lookAt(midX, 1.8, 0);
+
+        renderer.render(scene, camera);
         syncVitalsHud();
       } catch (err) {
         // 單幀例外安全略過
       }
-      window.requestAnimationFrame(loopFrame);
+      window.requestAnimationFrame(loop3DFrame);
     }
 
-    // 立即同步尺寸、血條並繪製首幀
-    fitCanvasToContainer();
+    refreshSkillButtonLabels();
+    resizeThreeRenderer();
     syncVitalsHud();
-    paintWorld(0.016);
-    window.requestAnimationFrame(loopFrame);
+    renderer.render(scene, camera);
+    window.requestAnimationFrame(loop3DFrame);
   </script>
 </body>
 </html>
