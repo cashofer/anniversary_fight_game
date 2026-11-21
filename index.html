@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>13週年結婚紀念日大亂鬥(2026.11.23)</title>
+  <title>13週年結婚紀念日大亂鬥 (2026.11.23)</title>
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -28,7 +28,7 @@
       overscroll-behavior: none;
     }
 
-    /* 遊戲開始前主頁面 */
+    /* 遊戲前主頁面 */
     .title-screen {
       position: fixed;
       inset: 0;
@@ -764,7 +764,7 @@
   </style>
 </head>
 <body>
-  <!-- 0. 遊戲開始前主頁面 -->
+  <!-- 0. 遊戲前主頁面 -->
   <section id="titleScreen" class="title-screen" aria-label="遊戲主頁面選角">
     <div class="title-card">
       <div class="title-header">
@@ -796,8 +796,8 @@
             <span>👧 女女 Reina</span>
             <span class="p1-badge" style="display:none;">出戰</span>
           </div>
-          <div class="char-move-line">😭 狂哭震波・💖 愛心波・💧 眼淚衝刺</div>
-          <div class="char-trans-line">&lt;50% 血量變身：✨ 美少女戰士（星光特效）</div>
+          <div class="char-move-line">😭 狂哭震波・💖 愛心波（愛心飛出）・💧 眼淚衝刺</div>
+          <div class="char-trans-line">&lt;50% 血量變身：✨ 美少女戰士</div>
         </button>
 
         <button type="button" class="char-select-card" data-pick-p1="eian" onclick="pickTitleP1('eian')">
@@ -805,8 +805,8 @@
             <span>👦 仔仔 Eian</span>
             <span class="p1-badge" style="display:none;">出戰</span>
           </div>
-          <div class="char-move-line">💨 放臭屁雲團・⚽ 足球波・🌪️ 臭氣衝刺</div>
-          <div class="char-trans-line">&lt;50% 血量變身：🦸 超人（披風光環特效）</div>
+          <div class="char-move-line">💨 放臭屁雲團・🏀 射籃球（籃球飛出）・🌪️ 臭氣衝刺</div>
+          <div class="char-trans-line">&lt;50% 血量變身：🦸 超人</div>
         </button>
       </div>
 
@@ -1192,7 +1192,7 @@
         transformName: "✨ 美少女戰士",
         transformBanner: "✨ 女女 Reina 變身「美少女戰士」！星光閃耀＋ATK x1.65 · DEF x1.4！",
         skill1: { label: "😭 狂哭", kind: "cry", hitText: "😭 女女狂哭震波!", dmg: 23, reach: 158 },
-        skill2: { label: "💖 愛心波", kind: "proj", projIcon: "💖", hitText: "💖 愛心波!", dmg: 17 },
+        skill2: { label: "💖 愛心波", kind: "proj", projIcon: "💖", hitText: "💖 愛心波!", dmg: 17, trailType: "heart" },
         skill3: { label: "💧 眼淚衝刺", kind: "pinch", hitText: "💧 眼淚衝刺!", dmg: 21, reach: 126 }
       },
       eian: {
@@ -1204,7 +1204,7 @@
         transformName: "🦸 超人",
         transformBanner: "🦸 仔仔 Eian 變身「超人」！超能光環＋紅披風＋ATK x1.65 · DEF x1.4！",
         skill1: { label: "💨 放臭屁", kind: "fart", hitText: "💨 仔仔放臭屁!", dmg: 24, reach: 152 },
-        skill2: { label: "⚽ 足球波", kind: "proj", projIcon: "⚽", hitText: "⚽ 足球波!", dmg: 17 },
+        skill2: { label: "🏀 射籃球", kind: "proj", projIcon: "🏀", hitText: "🏀 射籃球命中!", dmg: 18, trailType: "basket" },
         skill3: { label: "🌪️ 臭氣衝刺", kind: "pinch", hitText: "🌪️ 臭氣衝刺!", dmg: 22, reach: 128 }
       }
     };
@@ -1405,6 +1405,7 @@
     // 5. 特效粒子、投射物、浮動數字與角色類別
     // =========================================================================
     let activeProjectiles = [];
+    let trailSprites = [];
     let floatingTexts = [];
     let shockRings = [];
     let sparkParticles = [];
@@ -1424,6 +1425,19 @@
       }
     }
     initMotes();
+
+    function addTrailSprite(x, y, glyph, vx, vy, scale, life) {
+      trailSprites.push({
+        x: x,
+        y: y,
+        glyph: glyph,
+        vx: vx || 0,
+        vy: vy || -24,
+        scale: scale || 0.72,
+        life: life || 0.36,
+        maxLife: life || 0.36
+      });
+    }
 
     function addFloatingText(x, y, text, color) {
       floatingTexts.push({
@@ -1542,7 +1556,6 @@
             playActionSfx("pig");
             addFloatingText(this.x, this.y - 172, "🐷 暴走大肥豬膨脹!", "#db2777");
           } else if (this.charId === "reina") {
-            // 女女 Reina 變身 ✨ 美少女戰士特效
             screenFlashColor = "rgba(244, 114, 182, 0.38)";
             addShockRing(this.x, this.y - 60, "#ec4899", 140);
             addShockRing(this.x, this.y - 60, "#facc15", 98);
@@ -1551,7 +1564,6 @@
             playActionSfx("sailor");
             addFloatingText(this.x, this.y - 172, "✨ 代表月亮懲罰你！美少女戰士變身!", "#db2777");
           } else if (this.charId === "eian") {
-            // 仔仔 Eian 變身 🦸 超人特效
             screenFlashColor = "rgba(56, 189, 248, 0.36)";
             addShockRing(this.x, this.y - 62, "#ef4444", 142);
             addShockRing(this.x, this.y - 62, "#facc15", 102);
@@ -1626,16 +1638,34 @@
         const totalAtkMult = this.getAtkMultiplier() * superBoost;
 
         if (skill.kind === "proj") {
+          const startX = this.x + this.facing * 44;
+          const startY = this.y - 62;
           activeProjectiles.push({
-            x: this.x + this.facing * 44,
-            y: this.y - 62,
+            x: startX,
+            y: startY,
+            baseY: startY,
             vx: this.facing * (usedSuper ? 560 : 450),
             fromPlayer1: this.isPlayer1,
             icon: usedSuper ? "👑" + skill.projIcon : skill.projIcon,
+            trailType: skill.trailType || null,
+            hitText: skill.hitText,
             dmg: Math.round(skill.dmg * totalAtkMult),
             scale: usedSuper ? 1.3 : 1.0,
+            age: 0,
+            trailTimer: 0,
             life: 1.35
           });
+
+          if (skill.trailType === "heart") {
+            addShockRing(startX, startY, "#ec4899", 56);
+            addSparks(startX, startY, "#f472b6", 8);
+            addTrailSprite(startX - this.facing * 12, startY - 6, "💖", -this.facing * 20, -28, 0.78, 0.35);
+          } else if (skill.trailType === "basket") {
+            addShockRing(startX, startY, "#f97316", 54);
+            addSparks(startX, startY, "#fb923c", 8);
+            addTrailSprite(startX - this.facing * 10, startY - 4, "🏀", -this.facing * 18, -32, 0.72, 0.32);
+          }
+
           if (this.isPlayer1 && !usedSuper) gainP1Super(12);
           return;
         }
@@ -1733,7 +1763,6 @@
         c.save();
         c.scale(baseScale, baseScale);
 
-        // 變身專屬特效光環
         if (this.transformed) {
           if (this.charId === "servant") {
             c.save();
@@ -1765,7 +1794,6 @@
             c.stroke();
             c.restore();
           } else if (this.charId === "reina") {
-            // 女女變身美少女戰士：旋轉星光光圈與閃爍星星
             c.save();
             c.translate(0, -56 + bobY);
             c.strokeStyle = "rgba(236, 72, 153, 0.85)";
@@ -1787,7 +1815,6 @@
             }
             c.restore();
           } else if (this.charId === "eian") {
-            // 仔仔變身超人：紅披風＋金藍超能光環
             c.save();
             const capeWave = Math.sin(frameCounter * 0.22) * 7;
             c.fillStyle = "#dc2626";
@@ -1858,7 +1885,6 @@
           c.stroke();
         }
 
-        // 仔仔超人胸前星徽
         if (this.transformed && this.charId === "eian") {
           c.fillStyle = "#facc15";
           c.strokeStyle = "#b91c1c";
@@ -2068,14 +2094,20 @@
         this.grounded = false;
 
         const dir = enemy.x >= this.x ? 1 : -1;
+        const py = this.y - 34;
         activeProjectiles.push({
           x: this.x + dir * 20,
-          y: this.y - 34,
+          y: py,
+          baseY: py,
           vx: dir * (boost ? 415 : 355),
           fromPlayer1: true,
           icon: this.shotEmoji,
+          trailType: this.kidName === "Reina" ? "heart" : "basket",
+          hitText: `${this.kidName} 助攻!`,
           dmg: boost ? 14 : 10,
           scale: boost ? 1.15 : 0.94,
+          age: 0,
+          trailTimer: 0,
           life: 1.25
         });
 
@@ -2177,7 +2209,7 @@
       offsetX: -58,
       topColor: "#38bdf8",
       hatColor: "#0284c7",
-      shotEmoji: "⚽",
+      shotEmoji: "🏀",
       initDelay: 1.6
     });
 
@@ -2333,13 +2365,53 @@
       for (let i = activeProjectiles.length - 1; i >= 0; i--) {
         const p = activeProjectiles[i];
         p.x += p.vx * dt;
+        p.age += dt;
         p.life -= dt;
+        p.trailTimer += dt;
+
+        if (p.trailType === "heart") {
+          p.y = (p.baseY || p.y) + Math.sin(p.age * 16) * 8;
+          if (p.trailTimer >= 0.055) {
+            p.trailTimer = 0;
+            addTrailSprite(
+              p.x,
+              p.y + (Math.random() - 0.5) * 14,
+              Math.random() < 0.7 ? "💖" : "✨",
+              -p.vx * 0.08,
+              -22 - Math.random() * 18,
+              0.68,
+              0.34
+            );
+          }
+        } else if (p.trailType === "basket") {
+          p.y = (p.baseY || p.y) - Math.abs(Math.sin(p.age * 11)) * 22;
+          if (p.trailTimer >= 0.05) {
+            p.trailTimer = 0;
+            addTrailSprite(
+              p.x,
+              p.y + 4,
+              "🏀",
+              -p.vx * 0.06,
+              15,
+              0.58,
+              0.28
+            );
+            addSparks(p.x, p.y, "#fb923c", 2);
+          }
+        }
 
         const target = p.fromPlayer1 ? p2AiFighter : p1Fighter;
         const attacker = p.fromPlayer1 ? p1Fighter : p2AiFighter;
 
-        if (Math.abs(p.x - target.x) < 42 && Math.abs(p.y - (target.y - 56)) < 56) {
-          inflictDamage(attacker, target, p.dmg, `${p.icon} 波!`);
+        if (Math.abs(p.x - target.x) < 42 && Math.abs(p.y - (target.y - 56)) < 58) {
+          if (p.trailType === "heart") {
+            addSparks(p.x, p.y, "#ec4899", 12);
+            addShockRing(p.x, p.y, "#f472b6", 64);
+          } else if (p.trailType === "basket") {
+            addSparks(p.x, p.y, "#f97316", 12);
+            addShockRing(p.x, p.y, "#fb923c", 64);
+          }
+          inflictDamage(attacker, target, p.dmg, p.hitText || `${p.icon} 波!`);
           activeProjectiles.splice(i, 1);
           continue;
         }
@@ -2347,6 +2419,14 @@
         if (p.life <= 0 || p.x < -30 || p.x > WORLD_W + 30) {
           activeProjectiles.splice(i, 1);
         }
+      }
+
+      for (let i = trailSprites.length - 1; i >= 0; i--) {
+        const tspr = trailSprites[i];
+        tspr.x += tspr.vx * dt;
+        tspr.y += tspr.vy * dt;
+        tspr.life -= dt;
+        if (tspr.life <= 0) trailSprites.splice(i, 1);
       }
 
       for (let i = floatingTexts.length - 1; i >= 0; i--) {
@@ -2394,11 +2474,41 @@
         c.restore();
       }
 
+      for (const tspr of trailSprites) {
+        const ratio = Math.max(0, tspr.life / tspr.maxLife);
+        c.save();
+        c.globalAlpha = ratio * 0.85;
+        c.translate(tspr.x, tspr.y);
+        c.scale(tspr.scale * (0.65 + ratio * 0.4), tspr.scale * (0.65 + ratio * 0.4));
+        c.font = "22px sans-serif";
+        c.textAlign = "center";
+        c.textBaseline = "middle";
+        c.fillText(tspr.glyph, 0, 0);
+        c.restore();
+      }
+
       for (const p of activeProjectiles) {
         c.save();
-        c.font = `${Math.round(26 * (p.scale || 1))}px sans-serif`;
+        c.translate(p.x, p.y);
+        if (p.trailType === "basket") {
+          c.rotate((p.vx >= 0 ? 1 : -1) * p.age * 16);
+          c.strokeStyle = "rgba(249, 115, 22, 0.55)";
+          c.lineWidth = 3;
+          c.beginPath();
+          c.arc(0, 0, 17, 0, Math.PI * 2);
+          c.stroke();
+        } else if (p.trailType === "heart") {
+          c.strokeStyle = "rgba(236, 72, 153, 0.55)";
+          c.lineWidth = 3;
+          c.beginPath();
+          c.arc(0, 0, 18 + Math.sin(p.age * 20) * 3, 0, Math.PI * 2);
+          c.stroke();
+        }
+        c.scale(p.scale || 1, p.scale || 1);
+        c.font = "26px sans-serif";
         c.textAlign = "center";
-        c.fillText(p.icon, p.x, p.y);
+        c.textBaseline = "middle";
+        c.fillText(p.icon, 0, 0);
         c.restore();
       }
 
@@ -2525,6 +2635,7 @@
       kidReina.resetKid(p1Fighter.x);
       p1SuperMeter = 35;
       activeProjectiles = [];
+      trailSprites = [];
       floatingTexts = [];
       shockRings = [];
       sparkParticles = [];
