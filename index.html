@@ -1,0 +1,2132 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>結婚紀念日大亂鬥：老婆大人 vs 老公僕人 (2014.11.23)</title>
+  <style>
+    /* 全域重設與手機防誤觸滾動、縮放與選取 */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: linear-gradient(135deg, #fff1f5 0%, #ffe4e6 50%, #fce7f3 100%);
+      color: #0f172a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    /* 橫向主容器：鎖定寬度與高度於可視區域內，避免裁切與溢出 */
+    .game-shell {
+      width: 100vw;
+      width: 100dvw;
+      height: 100vh;
+      height: 100dvh;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: calc(env(safe-area-inset-top, 0px) + 5px) calc(env(safe-area-inset-right, 0px) + 8px) calc(env(safe-area-inset-bottom, 0px) + 5px) calc(env(safe-area-inset-left, 0px) + 8px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 5px;
+      overflow: hidden;
+    }
+
+    /* 精湊頂部 HUD 列：左側老婆大人 HP & 超必殺能量條、中央紀念日天數/倒數/場景/AI、右側老公僕人 HP & 攻防倍率 */
+    .top-hud-bar {
+      background: rgba(255, 255, 255, 0.96);
+      border: 2px solid #f472b6;
+      border-radius: 13px;
+      padding: 5px 8px;
+      display: grid;
+      grid-template-columns: 1.15fr auto 1.15fr;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 0 3px 10px rgba(219, 39, 119, 0.14);
+      touch-action: none;
+      z-index: 10;
+    }
+
+    .side-hud {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    .side-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .queen-name {
+      color: #be185d;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .servant-name {
+      color: #1d4ed8;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .center-hud {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .center-top-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: nowrap;
+    }
+
+    .title-and-days {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 900;
+      color: #9d174d;
+      white-space: nowrap;
+    }
+
+    .days-badge {
+      background: linear-gradient(180deg, #fef08a 0%, #facc15 100%);
+      color: #713f12;
+      border: 1.5px solid #ca8a04;
+      border-radius: 999px;
+      padding: 1px 7px;
+      font-size: 10.5px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .mini-btn {
+      border: 1.5px solid #db2777;
+      background: #ffffff;
+      color: #be185d;
+      border-radius: 8px;
+      padding: 2px 6px;
+      font-size: 10.5px;
+      font-weight: 800;
+      cursor: pointer;
+      touch-action: none;
+      box-shadow: 0 2px 0 #fbcfe8;
+      white-space: nowrap;
+    }
+
+    .mini-btn.reset {
+      background: linear-gradient(180deg, #f472b6 0%, #be185d 100%);
+      color: #ffffff;
+      border-color: #831843;
+      box-shadow: 0 2px 0 #831843;
+    }
+
+    .mini-btn:active {
+      transform: translateY(1px);
+    }
+
+    .selectors-line {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      flex-wrap: nowrap;
+    }
+
+    .pill-group {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .selector-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: #64748b;
+      white-space: nowrap;
+    }
+
+    .choice-pill {
+      border: 1.5px solid #cbd5e1;
+      background: #f8fafc;
+      color: #334155;
+      border-radius: 999px;
+      padding: 1px 6px;
+      font-size: 10px;
+      font-weight: 800;
+      white-space: nowrap;
+      cursor: pointer;
+      touch-action: none;
+    }
+
+    .choice-pill.stage-active {
+      background: linear-gradient(180deg, #fdf2f8 0%, #fbcfe8 100%);
+      border-color: #db2777;
+      color: #9d174d;
+    }
+
+    .choice-pill.ai-active {
+      background: linear-gradient(180deg, #eff6ff 0%, #bfdbfe 100%);
+      border-color: #2563eb;
+      color: #1d4ed8;
+    }
+
+    .timer-badge {
+      background: linear-gradient(180deg, #fef08a 0%, #facc15 100%);
+      color: #713f12;
+      border: 1.5px solid #ca8a04;
+      border-radius: 999px;
+      padding: 1px 8px;
+      font-size: 11.5px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .status-chip {
+      background: #dbeafe;
+      color: #1e40af;
+      border: 1px solid #60a5fa;
+      border-radius: 999px;
+      padding: 1px 6px;
+      font-size: 9.5px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .status-chip.giant-active {
+      background: linear-gradient(90deg, #ef4444 0%, #b91c1c 100%);
+      color: #ffffff;
+      border-color: #7f1d1d;
+    }
+
+    .hp-track {
+      height: 13px;
+      background: #e2e8f0;
+      border-radius: 7px;
+      border: 1.5px solid #94a3b8;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hp-fill-queen {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #f472b6 0%, #ec4899 55%, #e11d48 100%);
+      transition: width 0.08s linear;
+    }
+
+    .hp-fill-servant {
+      height: 100%;
+      width: 100%;
+      margin-left: auto;
+      background: linear-gradient(270deg, #60a5fa 0%, #2563eb 60%, #1d4ed8 100%);
+      transition: width 0.08s linear;
+    }
+
+    .hp-fill-servant.giant-mode {
+      background: linear-gradient(270deg, #f87171 0%, #dc2626 55%, #991b1b 100%);
+    }
+
+    .hp-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      font-size: 9.5px;
+      font-weight: 900;
+      color: #ffffff;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+    }
+
+    .hp-text.align-right {
+      justify-content: flex-end;
+    }
+
+    /* 老婆大人超必殺能量條 */
+    .super-track {
+      height: 8px;
+      background: #fce7f3;
+      border-radius: 999px;
+      border: 1px solid #f472b6;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .super-fill {
+      height: 100%;
+      width: 35%;
+      background: linear-gradient(90deg, #facc15 0%, #ec4899 100%);
+      transition: width 0.08s linear;
+    }
+
+    .super-label {
+      font-size: 9.5px;
+      font-weight: 900;
+      color: #9d174d;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* 橫向 16:9 戰鬥舞台外框：自適應可用空間並維持橫向比例 */
+    .stage-wrapper {
+      position: relative;
+      flex: 1 1 auto;
+      min-height: 150px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .rotate-hint-banner {
+      display: none;
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(131, 24, 67, 0.9);
+      color: #fef08a;
+      border: 1.5px solid #facc15;
+      border-radius: 999px;
+      padding: 2px 10px;
+      font-size: 10px;
+      font-weight: 900;
+      white-space: nowrap;
+      z-index: 12;
+      pointer-events: none;
+    }
+
+    @media (orientation: portrait) and (max-width: 767px) {
+      .rotate-hint-banner {
+        display: block;
+      }
+      .top-hud-bar {
+        grid-template-columns: 1fr 1fr;
+      }
+      .center-hud {
+        grid-column: 1 / -1;
+        order: -1;
+      }
+      .selectors-line {
+        flex-wrap: wrap;
+      }
+    }
+
+    .canvas-stage-box {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      aspect-ratio: 16 / 9;
+      max-height: 100%;
+      background: #fff1f2;
+      border: 3px solid #db2777;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(190, 24, 93, 0.2);
+      touch-action: none;
+    }
+
+    canvas#battleCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+    }
+
+    /* 底部左右分區橫向觸控列 */
+    .touch-dock {
+      background: rgba(255, 255, 255, 0.96);
+      border: 2px solid #f472b6;
+      border-radius: 14px;
+      padding: 5px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      box-shadow: 0 3px 10px rgba(190, 24, 93, 0.15);
+      touch-action: none;
+      z-index: 10;
+    }
+
+    .dpad-group {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+
+    .pad-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 11px;
+      border: 2px solid #be185d;
+      background: linear-gradient(180deg, #ffffff 0%, #fce7f3 100%);
+      color: #9d174d;
+      font-size: 16px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      touch-action: none;
+      box-shadow: 0 3px 0 #fbcfe8;
+    }
+
+    .pad-btn.up-btn {
+      background: linear-gradient(180deg, #fef9c3 0%, #fde047 100%);
+      border-color: #ca8a04;
+      color: #854d0e;
+      box-shadow: 0 3px 0 #eab308;
+    }
+
+    .pad-btn.pressed {
+      background: #ec4899;
+      color: #ffffff;
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #9d174d;
+    }
+
+    .skills-group {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 5px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .skills-group::-webkit-scrollbar {
+      display: none;
+    }
+
+    .skill-btn {
+      height: 42px;
+      padding: 0 8px;
+      border-radius: 11px;
+      border: 2px solid #9d174d;
+      background: linear-gradient(180deg, #f472b6 0%, #db2777 100%);
+      color: #ffffff;
+      font-size: 10.5px;
+      font-weight: 900;
+      line-height: 1.1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      white-space: nowrap;
+      cursor: pointer;
+      touch-action: none;
+      box-shadow: 0 3px 0 #831843;
+    }
+
+    .skill-btn.shield-btn {
+      background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%);
+      border-color: #1e40af;
+      box-shadow: 0 3px 0 #1e3a8a;
+    }
+
+    .skill-btn.assist-btn {
+      background: linear-gradient(180deg, #fde047 0%, #eab308 100%);
+      border-color: #a16207;
+      color: #1e293b;
+      box-shadow: 0 3px 0 #854d0e;
+    }
+
+    .skill-btn.super-ready {
+      animation: superPulse 0.9s infinite alternate;
+    }
+
+    @keyframes superPulse {
+      from { box-shadow: 0 0 4px #facc15; }
+      to { box-shadow: 0 0 14px #ec4899; }
+    }
+
+    .skill-btn:active, .skill-btn.pressed {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #831843;
+    }
+
+    /* K.O. 紀念日條約彈窗 */
+    .ko-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.72);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 80;
+    }
+
+    .ko-modal.show {
+      display: flex;
+    }
+
+    .ko-card {
+      width: 100%;
+      max-width: 430px;
+      background: linear-gradient(180deg, #fffdf7 0%, #ffe4e6 100%);
+      border: 3px solid #db2777;
+      border-radius: 22px;
+      padding: 18px 16px;
+      text-align: center;
+      box-shadow: 0 20px 44px rgba(0, 0, 0, 0.35);
+    }
+
+    .ko-banner {
+      font-size: 32px;
+      font-weight: 900;
+      color: #dc2626;
+      letter-spacing: 3px;
+    }
+
+    .ko-title {
+      font-size: 17px;
+      font-weight: 900;
+      color: #831843;
+      margin: 4px 0 10px;
+    }
+
+    .ko-treaty {
+      background: #ffffff;
+      border: 1.5px solid #f9a8d4;
+      border-radius: 14px;
+      padding: 12px;
+      font-size: 13px;
+      line-height: 1.65;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 14px;
+    }
+
+    .replay-big-btn {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-weight: 900;
+      color: #ffffff;
+      background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+      box-shadow: 0 5px 14px rgba(190, 24, 93, 0.35);
+      cursor: pointer;
+      touch-action: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-shell">
+    <!-- 1. 橫向精湊頂部 HUD 列 -->
+    <header class="top-hud-bar">
+      <!-- 左側：老婆大人 HP & 超必殺能量條 -->
+      <div class="side-hud">
+        <div class="side-header">
+          <span class="queen-name">👑 老婆大人（Eian・Reina）</span>
+          <span id="queenHpText" style="color:#be185d;">HP 100</span>
+        </div>
+        <div class="hp-track">
+          <div id="queenHpBar" class="hp-fill-queen"></div>
+        </div>
+        <div class="super-label">
+          <span>✨ 超必殺能量</span>
+          <span id="queenSuperText">35%</span>
+        </div>
+        <div class="super-track">
+          <div id="queenSuperBar" class="super-fill"></div>
+        </div>
+      </div>
+
+      <!-- 中央：結婚紀念日天數、倒數秒數、場景選擇、AI 難度、音效與重開 -->
+      <div class="center-hud">
+        <div class="center-top-row">
+          <div class="title-and-days">
+            <span>💍 2014.11.23</span>
+            <span id="annivCounter" class="days-badge">計算中...</span>
+          </div>
+          <div id="roundClock" class="timer-badge">99</div>
+          <div class="top-actions">
+            <button id="soundToggleBtn" type="button" class="mini-btn" onclick="toggleSoundMode()">🔊</button>
+            <button type="button" class="mini-btn reset" onclick="restartBattle()">🔄 重開</button>
+          </div>
+        </div>
+
+        <div class="selectors-line">
+          <div class="pill-group" role="group" aria-label="場景選擇">
+            <span class="selector-label">場景:</span>
+            <button type="button" class="choice-pill stage-active" data-stage="living" onclick="selectStage('living')">甜蜜客廳</button>
+            <button type="button" class="choice-pill" data-stage="kitchen" onclick="selectStage('kitchen')">夢幻廚房</button>
+            <button type="button" class="choice-pill" data-stage="mall" onclick="selectStage('mall')">百貨商場</button>
+            <button type="button" class="choice-pill" data-stage="hawaii" onclick="selectStage('hawaii')">浪漫夏威夷</button>
+          </div>
+
+          <div class="pill-group" role="group" aria-label="AI 難度">
+            <span class="selector-label">AI:</span>
+            <button type="button" class="choice-pill ai-active" data-ai="gentle" onclick="selectAiDifficulty('gentle')">溫柔老公</button>
+            <button type="button" class="choice-pill" data-ai="survival" onclick="selectAiDifficulty('survival')">求生慾滿格</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右側：老公僕人 HP & 攻防倍率徽章 -->
+      <div class="side-hud">
+        <div class="side-header">
+          <span id="servantStatusChip" class="status-chip">👓 僕人常態 (ATK x1 · DEF x1)</span>
+          <span class="servant-name">🙇‍♂️ 老公僕人</span>
+        </div>
+        <div class="hp-track">
+          <div id="servantHpBar" class="hp-fill-servant"></div>
+          <span id="servantHpText" class="hp-text align-right">HP 100</span>
+        </div>
+        <div class="super-label" style="color:#1e40af;">
+          <span>血量 &lt; 50% 變身暴走大怪獸</span>
+          <span id="servantMultText">x1 / x1</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. 橫向 16:9 戰鬥畫布區 -->
+    <main class="stage-wrapper" id="stageWrapper">
+      <div class="rotate-hint-banner">📱 橫向螢幕遊玩體驗最佳！</div>
+      <div class="canvas-stage-box" id="canvasStageBox">
+        <canvas id="battleCanvas" width="800" height="450"></canvas>
+      </div>
+    </main>
+
+    <!-- 3. 底部左右分區橫向觸控控制區 -->
+    <footer class="touch-dock" aria-label="橫向觸控操作">
+      <div class="dpad-group">
+        <button id="btnMoveLeft" type="button" class="pad-btn" aria-label="向左移動">◀</button>
+        <button id="btnMoveRight" type="button" class="pad-btn" aria-label="向右移動">▶</button>
+        <button id="btnJump" type="button" class="pad-btn up-btn" aria-label="跳躍">▲</button>
+      </div>
+
+      <div class="skills-group">
+        <button id="btnSkillPan" type="button" class="skill-btn">🍳 平底鍋連擊</button>
+        <button id="btnSkillShop" type="button" class="skill-btn">🛍️ 買買買波</button>
+        <button id="btnSkillPinch" type="button" class="skill-btn">👂 捏耳朵神功</button>
+        <button id="btnSkillShield" type="button" class="skill-btn shield-btn">🛡️ 防禦護盾</button>
+        <button id="btnKidsAssist" type="button" class="skill-btn assist-btn">👦👧 Eian &amp; Reina 助攻</button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- 5. K.O. 紀念日條約彈窗 -->
+  <div id="koModal" class="ko-modal" role="dialog" aria-modal="true" aria-labelledby="koModalTitle">
+    <div class="ko-card">
+      <div class="ko-banner">K.O.！</div>
+      <div id="koModalTitle" class="ko-title">👑 老婆大人聯手仔仔 Eian、女女 Reina 獲勝！</div>
+      <div id="koModalBody" class="ko-treaty">
+        【2014.11.23 結婚紀念日幸福條約】<br />
+        老婆大人永遠是家中第一號女皇！老公僕人今晚負責洗碗、按摩、倒垃圾，並全力支持老婆大人與 Eian、Reina 的快樂時光～
+      </div>
+      <button type="button" class="replay-big-btn" onclick="restartBattle()">再打一場</button>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. 結婚紀念日計時（自 2014-11-23 起算）
+    // =========================================================================
+    const WEDDING_DATE = new Date(2014, 10, 23, 0, 0, 0);
+
+    function updateAnniversaryBadge() {
+      try {
+        const now = new Date();
+        const days = Math.max(0, Math.floor((now - WEDDING_DATE) / 86400000));
+        const years = (days / 365.2425).toFixed(1);
+        const badge = document.getElementById("annivCounter");
+        if (badge) {
+          badge.textContent = `${days} 天（${years} 年）`;
+        }
+      } catch (err) {
+        // 日期例外安全略過
+      }
+    }
+    updateAnniversaryBadge();
+
+    // =========================================================================
+    // 2. 零外部音效依賴的安全 Web Audio API 音效合成器
+    // =========================================================================
+    let audioCtx = null;
+    let soundEnabled = true;
+
+    function ensureAudioReady() {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) {
+          const Ctx = window.AudioContext || window.webkitAudioContext;
+          if (Ctx) {
+            audioCtx = new Ctx();
+          }
+        }
+        if (audioCtx && audioCtx.state === "suspended") {
+          audioCtx.resume().catch(function () {});
+        }
+      } catch (err) {
+        // 忽略受限裝置音效錯誤
+      }
+    }
+
+    function toggleSoundMode() {
+      soundEnabled = !soundEnabled;
+      const btn = document.getElementById("soundToggleBtn");
+      if (btn) {
+        btn.textContent = soundEnabled ? "🔊 音效開" : "🔇 音效關";
+      }
+      if (soundEnabled) {
+        ensureAudioReady();
+        playSynthTone(740, 0.08, "triangle", 0.08);
+      }
+    }
+
+    function playSynthTone(freq, duration, waveType, gainVal) {
+      if (!soundEnabled) return;
+      try {
+        ensureAudioReady();
+        if (!audioCtx) return;
+        const t = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = waveType || "sine";
+        osc.frequency.setValueAtTime(freq, t);
+        gain.gain.setValueAtTime(gainVal || 0.1, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(t);
+        osc.stop(t + duration + 0.01);
+      } catch (err) {
+        // 單次音效例外安全略過
+      }
+    }
+
+    function playActionSfx(kind) {
+      if (kind === "pan") {
+        playSynthTone(320, 0.11, "triangle", 0.13);
+      } else if (kind === "shop" || kind === "card") {
+        playSynthTone(640, 0.08, "sine", 0.11);
+        setTimeout(function () { playSynthTone(880, 0.09, "sine", 0.11); }, 50);
+      } else if (kind === "pinch") {
+        playSynthTone(820, 0.15, "sawtooth", 0.11);
+      } else if (kind === "shield") {
+        playSynthTone(460, 0.1, "sine", 0.09);
+      } else if (kind === "mutate") {
+        playSynthTone(145, 0.22, "sawtooth", 0.16);
+        setTimeout(function () { playSynthTone(95, 0.28, "sawtooth", 0.16); }, 110);
+      } else if (kind === "ko") {
+        playSynthTone(523.25, 0.12, "triangle", 0.14);
+        setTimeout(function () { playSynthTone(659.25, 0.12, "triangle", 0.14); }, 100);
+        setTimeout(function () { playSynthTone(1046.5, 0.24, "triangle", 0.15); }, 200);
+      }
+    }
+
+    // =========================================================================
+    // 3. 畫布尺寸與立即首幀繪製保證（不依賴 ResizeObserver 延遲）
+    // =========================================================================
+    const stageBox = document.getElementById("canvasStageBox");
+    const canvas = document.getElementById("battleCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const WORLD_W = 800;
+    const WORLD_H = 450;
+    const FLOOR_Y = 382;
+    const GRAVITY = 1520;
+
+    function fitCanvasToContainer() {
+      try {
+        const wrapW = stageWrapper ? stageWrapper.clientWidth : (window.innerWidth - 16);
+        const wrapH = stageWrapper ? stageWrapper.clientHeight : (window.innerHeight - 150);
+        const availW = Math.max(240, wrapW || 800);
+        const availH = Math.max(135, wrapH || 450);
+
+        // 嚴格維持 16:9 橫向比例並填滿可用空間
+        let targetW = availW;
+        let targetH = Math.round(targetW * 9 / 16);
+        if (targetH > availH) {
+          targetH = availH;
+          targetW = Math.round(targetH * 16 / 9);
+        }
+
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        if (stageBox) {
+          stageBox.style.width = targetW + "px";
+          stageBox.style.height = targetH + "px";
+        }
+        canvas.style.width = targetW + "px";
+        canvas.style.height = targetH + "px";
+        canvas.width = Math.max(1, Math.round(WORLD_W * dpr));
+        canvas.height = Math.max(1, Math.round(WORLD_H * dpr));
+      } catch (err) {
+        canvas.width = WORLD_W;
+        canvas.height = WORLD_H;
+      }
+    }
+
+    fitCanvasToContainer();
+    window.addEventListener("resize", fitCanvasToContainer);
+    window.addEventListener("orientationchange", function () {
+      fitCanvasToContainer();
+      setTimeout(fitCanvasToContainer, 90);
+    });
+    if (typeof ResizeObserver !== "undefined" && stageWrapper) {
+      const ro = new ResizeObserver(function () {
+        fitCanvasToContainer();
+      });
+      ro.observe(stageWrapper);
+    }
+
+    fitCanvasToContainer();
+    window.addEventListener("resize", fitCanvasToContainer);
+    window.addEventListener("orientationchange", function () {
+      fitCanvasToContainer();
+      setTimeout(fitCanvasToContainer, 80);
+    });
+    if (typeof ResizeObserver !== "undefined" && stageBox) {
+      const ro = new ResizeObserver(function () {
+        fitCanvasToContainer();
+      });
+      ro.observe(stageBox);
+    }
+
+    // =========================================================================
+    // 4. 場景設定、AI 難度與戰鬥狀態
+    // =========================================================================
+    const STAGES = {
+      living: {
+        label: "甜蜜客廳",
+        skyTop: "#fff1f2",
+        skyMid: "#ffe4e6",
+        skyBot: "#fbcfe8",
+        floorTop: "#f9a8d4",
+        floorBot: "#db2777",
+        line: "#9d174d",
+        mote: "💖"
+      },
+      kitchen: {
+        label: "夢幻廚房",
+        skyTop: "#ecfdf5",
+        skyMid: "#ccfbf1",
+        skyBot: "#99f6e4",
+        floorTop: "#5eead4",
+        floorBot: "#0d9488",
+        line: "#115e59",
+        mote: "🍳"
+      },
+      mall: {
+        label: "百貨商場",
+        skyTop: "#fdf4ff",
+        skyMid: "#fae8ff",
+        skyBot: "#f5d0fe",
+        floorTop: "#f472b6",
+        floorBot: "#9333ea",
+        line: "#6b21a8",
+        mote: "✨"
+      },
+      hawaii: {
+        label: "浪漫夏威夷",
+        skyTop: "#bae6fd",
+        skyMid: "#fef9c3",
+        skyBot: "#fde047",
+        floorTop: "#fde047",
+        floorBot: "#eab308",
+        line: "#a16207",
+        mote: "🌺"
+      }
+    };
+
+    let currentStageKey = "living";
+    let aiDifficulty = "gentle"; // "gentle" | "survival"
+    let battleStatus = "active"; // "active" | "finished"
+    let remainingTime = 99;
+    let timeAcc = 0;
+    let frameCounter = 0;
+    let lastTimestamp = 0;
+    let screenShakeSec = 0;
+    let screenFlashSec = 0;
+    let mutationBannerSec = 0;
+    let queenSuperMeter = 35; // 老婆大人超必殺能量條（0 ~ 100）
+
+    const moveInput = {
+      left: false,
+      right: false
+    };
+
+    function gainQueenSuper(amount) {
+      queenSuperMeter = Math.max(0, Math.min(100, queenSuperMeter + amount));
+      syncVitalsHud();
+    }
+
+    function selectStage(stageKey) {
+      if (!STAGES[stageKey]) return;
+      currentStageKey = stageKey;
+      initMotes();
+      document.querySelectorAll("[data-stage]").forEach(function (el) {
+        if (el.getAttribute("data-stage") === stageKey) {
+          el.classList.add("stage-active");
+        } else {
+          el.classList.remove("stage-active");
+        }
+      });
+      playSynthTone(560, 0.07, "sine", 0.08);
+    }
+
+    function selectAiDifficulty(mode) {
+      aiDifficulty = mode === "survival" ? "survival" : "gentle";
+      document.querySelectorAll("[data-ai]").forEach(function (el) {
+        if (el.getAttribute("data-ai") === aiDifficulty) {
+          el.classList.add("ai-active");
+        } else {
+          el.classList.remove("ai-active");
+        }
+      });
+      playSynthTone(480, 0.07, "sine", 0.08);
+    }
+
+    // =========================================================================
+    // 5. 特效粒子、投射物、浮動數字與格鬥角色類別
+    // =========================================================================
+    let activeProjectiles = [];
+    let floatingTexts = [];
+    let shockRings = [];
+    let sparkParticles = [];
+    let ambientMotes = [];
+
+    function initMotes() {
+      ambientMotes = [];
+      for (let i = 0; i < 16; i++) {
+        ambientMotes.push({
+          x: Math.random() * WORLD_W,
+          y: Math.random() * (FLOOR_Y - 30),
+          size: 8 + Math.random() * 8,
+          speed: 14 + Math.random() * 16,
+          phase: Math.random() * Math.PI * 2,
+          alpha: 0.35 + Math.random() * 0.4
+        });
+      }
+    }
+    initMotes();
+
+    function addFloatingText(x, y, text, color) {
+      floatingTexts.push({
+        x: x,
+        y: y,
+        text: text,
+        color: color || "#be185d",
+        vy: -56,
+        life: 0.85,
+        maxLife: 0.85
+      });
+    }
+
+    function addShockRing(x, y, color, maxR) {
+      shockRings.push({
+        x: x,
+        y: y,
+        r: 10,
+        maxR: maxR || 72,
+        color: color || "#ec4899",
+        life: 0.3,
+        maxLife: 0.3
+      });
+    }
+
+    function addSparks(x, y, color, count) {
+      const n = count || 9;
+      for (let i = 0; i < n; i++) {
+        const ang = (Math.PI * 2 * i) / n + (Math.random() - 0.5) * 0.3;
+        const spd = 85 + Math.random() * 160;
+        sparkParticles.push({
+          x: x,
+          y: y,
+          vx: Math.cos(ang) * spd,
+          vy: Math.sin(ang) * spd - 35,
+          r: 3 + Math.random() * 3,
+          color: color || "#facc15",
+          life: 0.35,
+          maxLife: 0.35
+        });
+      }
+    }
+
+    class FighterUnit {
+      constructor(cfg) {
+        this.isQueen = cfg.isQueen;
+        this.x = cfg.x;
+        this.y = FLOOR_Y;
+        this.vx = 0;
+        this.vy = 0;
+        this.facing = cfg.facing;
+        this.maxHp = 100;
+        this.hp = 100;
+        this.grounded = true;
+        this.shieldSec = 0;
+        this.attackSec = 0;
+        this.attackKind = null;
+        this.cooldownSec = 0;
+        this.hitFlashSec = 0;
+        this.walkCycle = 0;
+        this.breatheCycle = cfg.isQueen ? 0.4 : 1.9;
+        this.giantMonster = false;
+        this.hasMutated = false;
+      }
+
+      resetUnit(x, facing) {
+        this.x = x;
+        this.y = FLOOR_Y;
+        this.vx = 0;
+        this.vy = 0;
+        this.facing = facing;
+        this.hp = this.maxHp;
+        this.grounded = true;
+        this.shieldSec = 0;
+        this.attackSec = 0;
+        this.attackKind = null;
+        this.cooldownSec = 0;
+        this.hitFlashSec = 0;
+        this.walkCycle = 0;
+        this.giantMonster = false;
+        this.hasMutated = false;
+      }
+
+      // 老公僕人血量低於 50% 變身大怪獸：體型放大、震動閃光、橫幅提示、攻擊與防禦各加倍（ATK x2 · DEF x2）
+      checkGiantMutation() {
+        if (this.isQueen || this.hasMutated) return;
+        if (this.hp > 0 && this.hp < this.maxHp * 0.5) {
+          this.giantMonster = true;
+          this.hasMutated = true;
+          screenShakeSec = 0.65;
+          screenFlashSec = 0.45;
+          mutationBannerSec = 2.0;
+          addShockRing(this.x, this.y - 75, "#ef4444", 125);
+          addSparks(this.x, this.y - 75, "#facc15", 14);
+          playActionSfx("mutate");
+          addFloatingText(this.x, this.y - 180, "暴走大怪獸變身！ATK x2 · DEF x2！", "#dc2626");
+        }
+      }
+
+      jumpUnit() {
+        if (this.grounded) {
+          this.vy = this.giantMonster ? -580 : -635;
+          this.grounded = false;
+          addShockRing(this.x, FLOOR_Y, this.isQueen ? "#f472b6" : "#60a5fa", 42);
+        }
+      }
+
+      activateShield() {
+        if (this.cooldownSec > 0) return;
+        this.shieldSec = 0.65;
+        this.cooldownSec = 0.25;
+        addShockRing(this.x, this.y - 54, "#3b82f6", 60);
+        playActionSfx("shield");
+        addFloatingText(this.x, this.y - 122, "🛡️ 防禦護盾!", "#1d4ed8");
+      }
+
+      performAttack(kind, target) {
+        if (this.cooldownSec > 0 || this.attackSec > 0) return;
+        this.shieldSec = 0;
+        this.attackKind = kind;
+        this.attackSec = 0.28;
+        this.cooldownSec = kind === "pinch" ? 0.36 : 0.28;
+
+        playActionSfx(kind);
+
+        // 老婆大人超必殺能量滿格時，發動招式附加超必殺加成
+        let superBoost = 1.0;
+        let usedSuper = false;
+        if (this.isQueen && queenSuperMeter >= 100) {
+          superBoost = 1.5;
+          usedSuper = true;
+          queenSuperMeter = 0;
+          addShockRing(this.x, this.y - 58, "#facc15", 105);
+          addSparks(this.x, this.y - 58, "#ec4899", 12);
+          addFloatingText(this.x, this.y - 142, "✨ 老婆大人超必殺爆發！", "#db2777");
+        }
+
+        // 老公僕人變身大怪獸時攻擊力加倍（ATK x2）
+        const atkMult = (!this.isQueen && this.giantMonster) ? 2.0 : 1.0;
+
+        if (kind === "shop" || kind === "card") {
+          const monsterShot = !this.isQueen && this.giantMonster;
+          const baseDmg = this.isQueen ? 13 : 8;
+          activeProjectiles.push({
+            x: this.x + this.facing * (this.giantMonster ? 66 : 42),
+            y: this.y - (this.giantMonster ? 92 : 62),
+            vx: this.facing * (monsterShot ? 500 : (usedSuper ? 560 : 450)),
+            fromQueen: this.isQueen,
+            icon: monsterShot ? "🔥" : (kind === "shop" ? (usedSuper ? "👑🛍️" : "🛍️") : "💳"),
+            dmg: Math.round(baseDmg * atkMult * superBoost),
+            scale: monsterShot ? 1.35 : (usedSuper ? 1.3 : 1.0),
+            life: 1.35
+          });
+          if (this.isQueen && !usedSuper) gainQueenSuper(12);
+          return;
+        }
+
+        if (kind === "pinch") {
+          this.x += this.facing * (usedSuper ? 58 : 40);
+          this.x = Math.max(60, Math.min(WORLD_W - 60, this.x));
+          addShockRing(this.x, this.y - 56, "#f43f5e", usedSuper ? 95 : 70);
+          if (this.isQueen && !usedSuper) gainQueenSuper(14);
+        } else if (kind === "pan") {
+          addShockRing(this.x + this.facing * 30, this.y - 56, "#fbbf24", usedSuper ? 85 : 58);
+          if (this.isQueen && !usedSuper) gainQueenSuper(10);
+        }
+
+        if (target) {
+          const reach = kind === "pinch" ? 128 : (this.giantMonster ? 130 : 98);
+          const dx = (target.x - this.x) * this.facing;
+          const dy = Math.abs(target.y - this.y);
+          if (dx >= -26 && dx <= reach && dy < (this.giantMonster ? 135 : 96)) {
+            let rawDmg = 12;
+            let label = "🍳 平底鍋連擊!";
+            if (kind === "pinch") {
+              rawDmg = 19;
+              label = "👂 捏耳朵神功!";
+            } else if (kind === "servantStrike") {
+              rawDmg = this.giantMonster ? 16 : 8;
+              label = this.giantMonster ? "🦖 暴走大怪獸重擊 ATK x2!" : "🥣 僕人揮拳!";
+            }
+            const dmgVal = Math.round(rawDmg * (kind === "servantStrike" ? atkMult : superBoost));
+            inflictDamage(this, target, dmgVal, label);
+          }
+        }
+      }
+
+      updateUnit(dt, opponent) {
+        this.breatheCycle += dt * 4.2;
+        if (this.cooldownSec > 0) this.cooldownSec = Math.max(0, this.cooldownSec - dt);
+        if (this.shieldSec > 0) this.shieldSec = Math.max(0, this.shieldSec - dt);
+        if (this.hitFlashSec > 0) this.hitFlashSec = Math.max(0, this.hitFlashSec - dt);
+        if (this.attackSec > 0) {
+          this.attackSec = Math.max(0, this.attackSec - dt);
+          if (this.attackSec === 0) this.attackKind = null;
+        }
+
+        this.x += this.vx * dt;
+        this.y += this.vy * dt;
+
+        if (!this.grounded) {
+          this.vy += GRAVITY * dt;
+        }
+        if (this.y >= FLOOR_Y) {
+          this.y = FLOOR_Y;
+          this.vy = 0;
+          this.grounded = true;
+        }
+
+        const margin = this.giantMonster ? 74 : 50;
+        this.x = Math.max(margin, Math.min(WORLD_W - margin, this.x));
+
+        if (Math.abs(this.vx) > 10 && this.grounded) {
+          this.walkCycle += dt * 13;
+        } else {
+          this.walkCycle = 0;
+        }
+
+        if (opponent) {
+          const minDist = this.giantMonster ? 66 : 42;
+          const dx = opponent.x - this.x;
+          if (Math.abs(dx) < minDist && Math.abs(opponent.y - this.y) < 56) {
+            const sep = (minDist - Math.abs(dx)) * 0.5;
+            const sgn = dx >= 0 ? -1 : 1;
+            this.x += sgn * sep;
+            opponent.x -= sgn * sep;
+          }
+        }
+      }
+
+      drawUnit(c) {
+        c.save();
+        c.translate(this.x, this.y);
+
+        const scaleFactor = (!this.isQueen && this.giantMonster) ? 1.42 : 1.0;
+        const bobY = this.grounded && Math.abs(this.vx) < 8 ? Math.sin(this.breatheCycle) * 2.0 : 0;
+        const stepSwing = Math.sin(this.walkCycle) * 9;
+
+        // 地面陰影
+        c.fillStyle = "rgba(15, 23, 42, 0.24)";
+        c.beginPath();
+        c.ellipse(0, 4, 34 * scaleFactor, 8 * scaleFactor, 0, 0, Math.PI * 2);
+        c.fill();
+
+        if (this.isQueen) {
+          // 老婆大人：粉紅禮服、雙馬尾與皇冠
+          c.strokeStyle = "#be185d";
+          c.lineWidth = 7;
+          c.lineCap = "round";
+          c.beginPath();
+          c.moveTo(-9, -32);
+          c.lineTo(-10 + stepSwing, 0);
+          c.moveTo(9, -32);
+          c.lineTo(10 - stepSwing, 0);
+          c.stroke();
+
+          c.fillStyle = "#ec4899";
+          c.strokeStyle = "#831843";
+          c.lineWidth = 2.5;
+          c.beginPath();
+          c.moveTo(-15, -72 + bobY);
+          c.lineTo(15, -72 + bobY);
+          c.lineTo(27, -28 + bobY * 0.4);
+          c.lineTo(-27, -28 + bobY * 0.4);
+          c.closePath();
+          c.fill();
+          c.stroke();
+
+          const headY = -88 + bobY;
+          c.fillStyle = "#fde68a";
+          c.beginPath();
+          c.arc(0, headY, 21, 0, Math.PI * 2);
+          c.fill();
+          c.strokeStyle = "#831843";
+          c.lineWidth = 2.5;
+          c.stroke();
+
+          c.fillStyle = "#db2777";
+          c.beginPath();
+          c.arc(-23, headY, 9, 0, Math.PI * 2);
+          c.arc(23, headY, 9, 0, Math.PI * 2);
+          c.fill();
+
+          c.fillStyle = "#facc15";
+          c.strokeStyle = "#92400e";
+          c.lineWidth = 2;
+          c.beginPath();
+          c.moveTo(-14, headY - 18);
+          c.lineTo(-17, headY - 33);
+          c.lineTo(-6, headY - 24);
+          c.lineTo(0, headY - 37);
+          c.lineTo(6, headY - 24);
+          c.lineTo(17, headY - 33);
+          c.lineTo(14, headY - 18);
+          c.closePath();
+          c.fill();
+          c.stroke();
+
+          c.fillStyle = "#1e1b4b";
+          c.beginPath();
+          c.arc(this.facing * 5 - 3, headY, 2.6, 0, Math.PI * 2);
+          c.arc(this.facing * 5 + 6, headY, 2.6, 0, Math.PI * 2);
+          c.fill();
+
+          if (this.attackSec > 0) {
+            c.font = "26px sans-serif";
+            c.textAlign = "center";
+            if (this.attackKind === "pan") {
+              c.fillText("🍳", this.facing * 46, headY + 14);
+            } else if (this.attackKind === "pinch") {
+              c.fillText("👂", this.facing * 46, headY + 12);
+            }
+          }
+
+          c.font = "900 13px sans-serif";
+          c.textAlign = "center";
+          c.lineWidth = 3.5;
+          c.strokeStyle = "#ffffff";
+          c.strokeText("👑 老婆大人", 0, headY - 43);
+          c.fillStyle = "#831843";
+          c.fillText("👑 老婆大人", 0, headY - 43);
+        } else {
+          // 老公僕人 / 低於 50% 血量變身大怪獸（皆配戴清晰眼鏡）
+          c.save();
+          c.scale(scaleFactor, scaleFactor);
+
+          if (this.giantMonster) {
+            c.strokeStyle = "rgba(239, 68, 68, 0.85)";
+            c.fillStyle = "rgba(248, 113, 113, 0.24)";
+            c.lineWidth = 3.5;
+            c.beginPath();
+            c.arc(0, -56, 58 + Math.sin(frameCounter * 0.2) * 3, 0, Math.PI * 2);
+            c.fill();
+            c.stroke();
+          }
+
+          c.strokeStyle = this.giantMonster ? "#7f1d1d" : "#1e3a8a";
+          c.lineWidth = 7;
+          c.lineCap = "round";
+          c.beginPath();
+          c.moveTo(-9, -32);
+          c.lineTo(-10 + stepSwing, 0);
+          c.moveTo(9, -32);
+          c.lineTo(10 - stepSwing, 0);
+          c.stroke();
+
+          c.fillStyle = this.giantMonster ? "#dc2626" : "#2563eb";
+          c.strokeStyle = this.giantMonster ? "#450a0a" : "#1e3a8a";
+          c.lineWidth = 2.5;
+          c.beginPath();
+          c.roundRect(-18, -74 + bobY, 36, 42, 7);
+          c.fill();
+          c.stroke();
+
+          if (!this.giantMonster) {
+            c.fillStyle = "#ffffff";
+            c.beginPath();
+            c.moveTo(-12, -56 + bobY);
+            c.lineTo(12, -56 + bobY);
+            c.lineTo(15, -32 + bobY * 0.4);
+            c.lineTo(-15, -32 + bobY * 0.4);
+            c.closePath();
+            c.fill();
+          } else {
+            c.fillStyle = "#fef08a";
+            c.beginPath();
+            c.moveTo(16, -62 + bobY);
+            c.lineTo(34, -56 + bobY);
+            c.lineTo(16, -48 + bobY);
+            c.closePath();
+            c.fill();
+          }
+
+          const headY = -88 + bobY;
+          c.fillStyle = this.giantMonster ? "#ef4444" : "#fed7aa";
+          c.beginPath();
+          c.arc(0, headY, 21, 0, Math.PI * 2);
+          c.fill();
+          c.strokeStyle = this.giantMonster ? "#450a0a" : "#1e3a8a";
+          c.lineWidth = 2.5;
+          c.stroke();
+
+          if (this.giantMonster) {
+            c.fillStyle = "#facc15";
+            c.beginPath();
+            c.moveTo(-14, headY - 14);
+            c.lineTo(-22, headY - 34);
+            c.lineTo(-4, headY - 19);
+            c.moveTo(14, headY - 14);
+            c.lineTo(22, headY - 34);
+            c.lineTo(4, headY - 19);
+            c.closePath();
+            c.fill();
+          } else {
+            c.fillStyle = "#1e293b";
+            c.beginPath();
+            c.arc(0, headY - 6, 20, Math.PI, Math.PI * 2);
+            c.fill();
+          }
+
+          c.fillStyle = this.giantMonster ? "#fef08a" : "#0f172a";
+          c.beginPath();
+          c.arc(this.facing * 5 - 3, headY, 2.8, 0, Math.PI * 2);
+          c.arc(this.facing * 5 + 6, headY, 2.8, 0, Math.PI * 2);
+          c.fill();
+
+          // 老公僕人眼鏡
+          const gx = this.facing * 5 + 1.5;
+          c.fillStyle = "rgba(255, 255, 255, 0.4)";
+          c.strokeStyle = this.giantMonster ? "#fef08a" : "#0f172a";
+          c.lineWidth = 2.3;
+          c.beginPath();
+          c.roundRect(gx - 12, headY - 6.5, 10, 9, 2.2);
+          c.roundRect(gx + 2, headY - 6.5, 10, 9, 2.2);
+          c.moveTo(gx - 2, headY - 2);
+          c.lineTo(gx + 2, headY - 2);
+          c.fill();
+          c.stroke();
+
+          if (this.attackSec > 0 && this.attackKind === "servantStrike") {
+            c.font = "24px sans-serif";
+            c.textAlign = "center";
+            c.fillText(this.giantMonster ? "💥" : "🥣", this.facing * 44, headY + 18);
+          }
+
+          c.font = "900 13px sans-serif";
+          c.textAlign = "center";
+          c.lineWidth = 3.5;
+          c.strokeStyle = "#ffffff";
+          const tag = this.giantMonster ? "🦖 暴走大怪獸 (ATK x2 · DEF x2)" : "🙇‍♂️ 老公僕人";
+          const tagY = headY - (this.giantMonster ? 40 : 30);
+          c.strokeText(tag, 0, tagY);
+          c.fillStyle = this.giantMonster ? "#991b1b" : "#1e3a8a";
+          c.fillText(tag, 0, tagY);
+
+          c.restore();
+        }
+
+        if (this.shieldSec > 0) {
+          c.strokeStyle = this.isQueen ? "#db2777" : "#2563eb";
+          c.fillStyle = this.isQueen ? "rgba(244, 114, 182, 0.26)" : "rgba(59, 130, 246, 0.26)";
+          c.lineWidth = 3.5;
+          c.beginPath();
+          c.arc(0, -54, 48, 0, Math.PI * 2);
+          c.fill();
+          c.stroke();
+        }
+
+        if (this.hitFlashSec > 0) {
+          c.fillStyle = "rgba(255, 255, 255, 0.55)";
+          c.beginPath();
+          c.arc(0, -54, 44, 0, Math.PI * 2);
+          c.fill();
+        }
+
+        c.restore();
+      }
+    }
+
+    class KidHelper {
+      constructor(cfg) {
+        this.kidName = cfg.kidName;
+        this.badgeText = cfg.badgeText;
+        this.offsetX = cfg.offsetX;
+        this.topColor = cfg.topColor;
+        this.hatColor = cfg.hatColor;
+        this.shotEmoji = cfg.shotEmoji;
+        this.x = 150;
+        this.y = FLOOR_Y;
+        this.vy = 0;
+        this.grounded = true;
+        this.assistCooldown = cfg.initDelay || 1.8;
+        this.runPhase = 0;
+        this.bobPhase = cfg.initDelay || 0;
+      }
+
+      resetKid(queenX) {
+        this.x = Math.max(36, Math.min(WORLD_W - 80, queenX + this.offsetX));
+        this.y = FLOOR_Y;
+        this.vy = 0;
+        this.grounded = true;
+        this.assistCooldown = this.kidName === "Eian" ? 1.7 : 2.4;
+        this.runPhase = 0;
+      }
+
+      fireAssist(enemy, boost) {
+        if (!enemy || battleStatus !== "active") return;
+        this.vy = -435;
+        this.grounded = false;
+
+        const dir = enemy.x >= this.x ? 1 : -1;
+        activeProjectiles.push({
+          x: this.x + dir * 20,
+          y: this.y - 34,
+          vx: dir * (boost ? 415 : 355),
+          fromQueen: true,
+          icon: this.shotEmoji,
+          dmg: boost ? 9 : 6,
+          scale: boost ? 1.15 : 0.94,
+          life: 1.25
+        });
+
+        addShockRing(this.x, this.y - 26, this.topColor, 34);
+        playSynthTone(this.kidName === "Eian" ? 680 : 800, 0.08, "triangle", 0.09);
+        addFloatingText(this.x, this.y - 68, `${this.kidName} 助攻!`, "#0f172a");
+        gainQueenSuper(boost ? 14 : 6);
+        this.assistCooldown = boost ? 1.15 : (this.kidName === "Eian" ? 3.0 : 3.6);
+      }
+
+      updateKid(dt, queen, enemy) {
+        this.bobPhase += dt * 4.8;
+        if (battleStatus !== "active") return;
+
+        const targetX = Math.max(34, Math.min(WORLD_W - 80, queen.x + this.offsetX));
+        const dx = targetX - this.x;
+        this.x += dx * Math.min(1, dt * 6.5);
+        this.runPhase += Math.abs(dx) > 2 ? dt * 14 : 0;
+
+        this.y += this.vy * dt;
+        if (!this.grounded) {
+          this.vy += GRAVITY * dt;
+        }
+        if (this.y >= FLOOR_Y) {
+          this.y = FLOOR_Y;
+          this.vy = 0;
+          this.grounded = true;
+        }
+
+        this.assistCooldown -= dt;
+        if (this.assistCooldown <= 0) {
+          this.fireAssist(enemy, false);
+        }
+      }
+
+      drawKid(c) {
+        c.save();
+        c.translate(this.x, this.y);
+
+        const idleBob = this.grounded && Math.abs(this.runPhase) < 0.2 ? Math.sin(this.bobPhase) * 1.6 : 0;
+        const legSwing = Math.sin(this.runPhase) * 5;
+
+        c.fillStyle = "rgba(15, 23, 42, 0.22)";
+        c.beginPath();
+        c.ellipse(0, 3, 18, 5, 0, 0, Math.PI * 2);
+        c.fill();
+
+        c.strokeStyle = "#334155";
+        c.lineWidth = 4.5;
+        c.lineCap = "round";
+        c.beginPath();
+        c.moveTo(-5, -16);
+        c.lineTo(-6 + legSwing, 0);
+        c.moveTo(5, -16);
+        c.lineTo(6 - legSwing, 0);
+        c.stroke();
+
+        c.fillStyle = this.topColor;
+        c.strokeStyle = "#1e293b";
+        c.lineWidth = 2;
+        c.beginPath();
+        c.roundRect(-11, -38 + idleBob, 22, 23, 6);
+        c.fill();
+        c.stroke();
+
+        c.fillStyle = "#fde68a";
+        c.beginPath();
+        c.arc(0, -48 + idleBob, 13, 0, Math.PI * 2);
+        c.fill();
+        c.stroke();
+
+        c.fillStyle = this.hatColor;
+        c.beginPath();
+        c.arc(0, -54 + idleBob, 12, Math.PI, Math.PI * 2);
+        c.fill();
+
+        c.fillStyle = "#0f172a";
+        c.beginPath();
+        c.arc(2, -48 + idleBob, 1.8, 0, Math.PI * 2);
+        c.arc(7, -48 + idleBob, 1.8, 0, Math.PI * 2);
+        c.fill();
+
+        c.font = "900 11px sans-serif";
+        c.textAlign = "center";
+        c.lineWidth = 3;
+        c.strokeStyle = "#ffffff";
+        c.strokeText(this.badgeText, 0, -67 + idleBob);
+        c.fillStyle = "#0f172a";
+        c.fillText(this.badgeText, 0, -67 + idleBob);
+
+        c.restore();
+      }
+    }
+
+    const queenPlayer = new FighterUnit({ isQueen: true, x: 220, facing: 1 });
+    const servantAi = new FighterUnit({ isQueen: false, x: 590, facing: -1 });
+
+    const kidEian = new KidHelper({
+      kidName: "Eian",
+      badgeText: "👦 Eian",
+      offsetX: -58,
+      topColor: "#38bdf8",
+      hatColor: "#0284c7",
+      shotEmoji: "⚽",
+      initDelay: 1.6
+    });
+
+    const kidReina = new KidHelper({
+      kidName: "Reina",
+      badgeText: "👧 Reina",
+      offsetX: -100,
+      topColor: "#f9a8d4",
+      hatColor: "#db2777",
+      shotEmoji: "💖",
+      initDelay: 2.3
+    });
+
+    function triggerKidsAssistButton() {
+      if (battleStatus !== "active") return;
+      kidEian.fireAssist(servantAi, true);
+      setTimeout(function () {
+        if (battleStatus === "active") {
+          kidReina.fireAssist(servantAi, true);
+        }
+      }, 110);
+    }
+
+    function inflictDamage(attacker, defender, rawDamage, hitText) {
+      if (!defender || battleStatus !== "active") return;
+
+      // 老公僕人變身大怪獸時防禦力加倍（DEF x2 -> 承傷減半 0.5x）
+      const defMult = (!defender.isQueen && defender.giantMonster) ? 0.5 : 1.0;
+      let finalDmg = Math.max(1, Math.round(rawDamage * defMult));
+
+      if (defender.shieldSec > 0) {
+        finalDmg = Math.max(1, Math.round(finalDmg * 0.25));
+        addShockRing(defender.x, defender.y - 54, "#3b82f6", 52);
+        addFloatingText(defender.x, defender.y - 112, "🛡️ 護盾減傷!", "#1d4ed8");
+      } else {
+        defender.hitFlashSec = 0.16;
+        addShockRing(defender.x, defender.y - 56, attacker && attacker.isQueen ? "#ec4899" : "#ef4444", 56);
+        addSparks(defender.x, defender.y - 56, attacker && attacker.isQueen ? "#facc15" : "#fca5a5", 8);
+        const defTag = (!defender.isQueen && defender.giantMonster) ? " [DEF x2]" : "";
+        addFloatingText(
+          defender.x,
+          defender.y - 118,
+          `${hitText}${defTag} -${finalDmg}`,
+          attacker && attacker.isQueen ? "#be185d" : "#1d4ed8"
+        );
+      }
+
+      defender.hp = Math.max(0, defender.hp - finalDmg);
+      if (!defender.isQueen) {
+        defender.checkGiantMutation();
+        gainQueenSuper(7);
+      } else {
+        gainQueenSuper(9);
+      }
+
+      syncVitalsHud();
+
+      if (defender.hp <= 0) {
+        openKoModal();
+      }
+    }
+
+    // =========================================================================
+    // 6. 明亮多層背景、粒子、特效與 UI 同步
+    // =========================================================================
+    function drawSceneLayer(c) {
+      const st = STAGES[currentStageKey] || STAGES.living;
+
+      const grad = c.createLinearGradient(0, 0, 0, FLOOR_Y);
+      grad.addColorStop(0, st.skyTop);
+      grad.addColorStop(0.55, st.skyMid);
+      grad.addColorStop(1, st.skyBot);
+      c.fillStyle = grad;
+      c.fillRect(0, 0, WORLD_W, FLOOR_Y);
+
+      if (currentStageKey === "living") {
+        c.fillStyle = "#f472b6";
+        c.strokeStyle = "#9d174d";
+        c.lineWidth = 2.5;
+        c.beginPath();
+        c.roundRect(265, FLOOR_Y - 64, 270, 64, 16);
+        c.fill();
+        c.stroke();
+
+        c.fillStyle = "#fde047";
+        c.beginPath();
+        c.arc(110, 108, 32, 0, Math.PI * 2);
+        c.fill();
+      } else if (currentStageKey === "kitchen") {
+        c.fillStyle = "#99f6e4";
+        c.strokeStyle = "#115e59";
+        c.lineWidth = 2.5;
+        c.fillRect(215, FLOOR_Y - 56, 370, 56);
+        c.strokeRect(215, FLOOR_Y - 56, 370, 56);
+        c.fillRect(270, 60, 260, 52);
+        c.strokeRect(270, 60, 260, 52);
+      } else if (currentStageKey === "mall") {
+        c.strokeStyle = "#d97706";
+        c.lineWidth = 5;
+        for (let i = 0; i < 3; i++) {
+          const ax = 150 + i * 250;
+          c.beginPath();
+          c.arc(ax, 186, 76, Math.PI, 0);
+          c.stroke();
+        }
+      } else if (currentStageKey === "hawaii") {
+        c.fillStyle = "#facc15";
+        c.beginPath();
+        c.arc(650, 96, 42, 0, Math.PI * 2);
+        c.fill();
+
+        c.fillStyle = "#38bdf8";
+        c.fillRect(0, FLOOR_Y - 46, WORLD_W, 46);
+      }
+
+      for (const m of ambientMotes) {
+        m.y -= m.speed * 0.016;
+        m.x += Math.sin(m.phase + frameCounter * 0.04) * 0.55;
+        if (m.y < 16) {
+          m.y = FLOOR_Y - 12;
+          m.x = Math.random() * WORLD_W;
+        }
+        c.save();
+        c.globalAlpha = m.alpha;
+        c.font = `${Math.round(m.size)}px sans-serif`;
+        c.textAlign = "center";
+        c.fillText(st.mote, m.x, m.y);
+        c.restore();
+      }
+
+      c.font = "900 17px sans-serif";
+      c.textAlign = "center";
+      c.lineWidth = 4;
+      c.strokeStyle = "rgba(255, 255, 255, 0.85)";
+      c.strokeText(st.label, WORLD_W / 2, 30);
+      c.fillStyle = "#0f172a";
+      c.fillText(st.label, WORLD_W / 2, 30);
+
+      const floorGrad = c.createLinearGradient(0, FLOOR_Y, 0, WORLD_H);
+      floorGrad.addColorStop(0, st.floorTop);
+      floorGrad.addColorStop(1, st.floorBot);
+      c.fillStyle = floorGrad;
+      c.fillRect(0, FLOOR_Y, WORLD_W, WORLD_H - FLOOR_Y);
+
+      c.strokeStyle = st.line;
+      c.lineWidth = 4;
+      c.beginPath();
+      c.moveTo(0, FLOOR_Y);
+      c.lineTo(WORLD_W, FLOOR_Y);
+      c.stroke();
+    }
+
+    function updateAndDrawEffects(c, dt) {
+      for (let i = activeProjectiles.length - 1; i >= 0; i--) {
+        const p = activeProjectiles[i];
+        p.x += p.vx * dt;
+        p.life -= dt;
+
+        const target = p.fromQueen ? servantAi : queenPlayer;
+        const attacker = p.fromQueen ? queenPlayer : servantAi;
+        const hitW = (!p.fromQueen && target.giantMonster) ? 54 : 38;
+        const hitH = (!p.fromQueen && target.giantMonster) ? 72 : 52;
+        const cy = (!p.fromQueen && target.giantMonster) ? target.y - 76 : target.y - 56;
+
+        if (Math.abs(p.x - target.x) < hitW && Math.abs(p.y - cy) < hitH) {
+          inflictDamage(attacker, target, p.dmg, `${p.icon} 波!`);
+          activeProjectiles.splice(i, 1);
+          continue;
+        }
+
+        if (p.life <= 0 || p.x < -30 || p.x > WORLD_W + 30) {
+          activeProjectiles.splice(i, 1);
+        }
+      }
+
+      for (let i = floatingTexts.length - 1; i >= 0; i--) {
+        const ft = floatingTexts[i];
+        ft.y += ft.vy * dt;
+        ft.life -= dt;
+        if (ft.life <= 0) floatingTexts.splice(i, 1);
+      }
+
+      for (let i = shockRings.length - 1; i >= 0; i--) {
+        const sr = shockRings[i];
+        sr.life -= dt;
+        const prog = 1 - Math.max(0, sr.life / sr.maxLife);
+        sr.r = 10 + (sr.maxR - 10) * prog;
+        if (sr.life <= 0) shockRings.splice(i, 1);
+      }
+
+      for (let i = sparkParticles.length - 1; i >= 0; i--) {
+        const sp = sparkParticles[i];
+        sp.x += sp.vx * dt;
+        sp.y += sp.vy * dt;
+        sp.vy += 420 * dt;
+        sp.life -= dt;
+        if (sp.life <= 0) sparkParticles.splice(i, 1);
+      }
+
+      for (const sr of shockRings) {
+        c.save();
+        c.globalAlpha = Math.max(0, sr.life / sr.maxLife) * 0.75;
+        c.strokeStyle = sr.color;
+        c.lineWidth = 3.5;
+        c.beginPath();
+        c.arc(sr.x, sr.y, sr.r, 0, Math.PI * 2);
+        c.stroke();
+        c.restore();
+      }
+
+      for (const sp of sparkParticles) {
+        c.save();
+        c.globalAlpha = Math.max(0, sp.life / sp.maxLife);
+        c.fillStyle = sp.color;
+        c.beginPath();
+        c.arc(sp.x, sp.y, sp.r, 0, Math.PI * 2);
+        c.fill();
+        c.restore();
+      }
+
+      for (const p of activeProjectiles) {
+        c.save();
+        c.font = `${Math.round(26 * (p.scale || 1))}px sans-serif`;
+        c.textAlign = "center";
+        c.fillText(p.icon, p.x, p.y);
+        c.restore();
+      }
+
+      for (const ft of floatingTexts) {
+        c.save();
+        c.globalAlpha = Math.max(0, ft.life / ft.maxLife);
+        c.font = "900 16px sans-serif";
+        c.textAlign = "center";
+        c.lineWidth = 4;
+        c.strokeStyle = "#ffffff";
+        c.strokeText(ft.text, ft.x, ft.y);
+        c.fillStyle = ft.color;
+        c.fillText(ft.text, ft.x, ft.y);
+        c.restore();
+      }
+
+      if (mutationBannerSec > 0) {
+        c.save();
+        c.globalAlpha = Math.min(1, mutationBannerSec);
+        c.fillStyle = "rgba(153, 27, 27, 0.92)";
+        c.strokeStyle = "#fde047";
+        c.lineWidth = 2.5;
+        c.beginPath();
+        c.roundRect(WORLD_W * 0.5 - 180, 48, 360, 32, 11);
+        c.fill();
+        c.stroke();
+
+        c.font = "900 13.5px sans-serif";
+        c.textAlign = "center";
+        c.fillStyle = "#fef08a";
+        c.fillText("🦖 老公僕人變身暴走大怪獸！ATK x2・DEF x2！", WORLD_W * 0.5, 69);
+        c.restore();
+      }
+    }
+
+    function syncVitalsHud() {
+      const qPct = Math.max(0, Math.min(100, (queenPlayer.hp / queenPlayer.maxHp) * 100));
+      const sPct = Math.max(0, Math.min(100, (servantAi.hp / servantAi.maxHp) * 100));
+      const spPct = Math.max(0, Math.min(100, queenSuperMeter));
+
+      const qBar = document.getElementById("queenHpBar");
+      const sBar = document.getElementById("servantHpBar");
+      const qTxt = document.getElementById("queenHpText");
+      const sTxt = document.getElementById("servantHpText");
+      const spBar = document.getElementById("queenSuperBar");
+      const spTxt = document.getElementById("queenSuperText");
+      const multTxt = document.getElementById("servantMultText");
+      const clk = document.getElementById("roundClock");
+      const chip = document.getElementById("servantStatusChip");
+      const panBtn = document.getElementById("btnSkillPan");
+      const shopBtn = document.getElementById("btnSkillShop");
+      const pinchBtn = document.getElementById("btnSkillPinch");
+
+      if (qBar) qBar.style.width = `${qPct}%`;
+      if (sBar) {
+        sBar.style.width = `${sPct}%`;
+        if (servantAi.giantMonster) {
+          sBar.classList.add("giant-mode");
+        } else {
+          sBar.classList.remove("giant-mode");
+        }
+      }
+      if (qTxt) qTxt.textContent = `HP ${Math.ceil(queenPlayer.hp)}`;
+      if (sTxt) sTxt.textContent = `HP ${Math.ceil(servantAi.hp)}`;
+      if (spBar) spBar.style.width = `${spPct}%`;
+      if (spTxt) spTxt.textContent = spPct >= 100 ? "MAX 超必殺!" : `${Math.floor(spPct)}%`;
+      if (clk) clk.textContent = `${Math.max(0, Math.ceil(remainingTime))}`;
+
+      const isReady = spPct >= 100;
+      [panBtn, shopBtn, pinchBtn].forEach(function (b) {
+        if (!b) return;
+        if (isReady) b.classList.add("super-ready");
+        else b.classList.remove("super-ready");
+      });
+
+      if (chip) {
+        if (servantAi.giantMonster) {
+          chip.textContent = "🦖 暴走大怪獸 (ATK x2 · DEF x2)";
+          chip.classList.add("giant-active");
+        } else {
+          chip.textContent = "👓 僕人常態 (ATK x1 · DEF x1)";
+          chip.classList.remove("giant-active");
+        }
+      }
+      if (multTxt) {
+        multTxt.textContent = servantAi.giantMonster ? "ATK x2 / DEF x2" : "ATK x1 / DEF x1";
+      }
+    }
+
+    function openKoModal() {
+      if (battleStatus === "finished") return;
+      battleStatus = "finished";
+      playActionSfx("ko");
+
+      const titleEl = document.getElementById("koModalTitle");
+      const bodyEl = document.getElementById("koModalBody");
+      const modalEl = document.getElementById("koModal");
+
+      if (queenPlayer.hp >= servantAi.hp) {
+        if (titleEl) titleEl.textContent = "👑 老婆大人聯手 Eian、Reina 獲勝！";
+        if (bodyEl) {
+          bodyEl.textContent =
+            "自 2014 年 11 月 23 日結婚紀念日至今，老婆大人攜手仔仔 Eian 與女女 Reina 完勝老公僕人！今晚家務與甜蜜宵夜全包～";
+        }
+      } else {
+        if (titleEl) titleEl.textContent = "🙇‍♂️ 老公僕人變身暴走大怪獸也乖乖認輸！";
+        if (bodyEl) {
+          bodyEl.textContent =
+            "就算老公僕人一度變身暴走大怪獸（ATK x2 · DEF x2），在 2014.11.23 結婚紀念日還是最愛老婆大人、Eian 與 Reina，立刻投降認錯！";
+        }
+      }
+
+      if (modalEl) modalEl.classList.add("show");
+    }
+
+    function restartBattle() {
+      ensureAudioReady();
+      queenPlayer.resetUnit(220, 1);
+      servantAi.resetUnit(590, -1);
+      kidEian.resetKid(queenPlayer.x);
+      kidReina.resetKid(queenPlayer.x);
+      queenSuperMeter = 35;
+      activeProjectiles = [];
+      floatingTexts = [];
+      shockRings = [];
+      sparkParticles = [];
+      screenShakeSec = 0;
+      screenFlashSec = 0;
+      mutationBannerSec = 0;
+      remainingTime = 99;
+      timeAcc = 0;
+      battleStatus = "active";
+      syncVitalsHud();
+
+      const modalEl = document.getElementById("koModal");
+      if (modalEl) modalEl.classList.remove("show");
+      playSynthTone(640, 0.08, "triangle", 0.09);
+    }
+
+    // =========================================================================
+    // 7. 觸控與鍵盤事件綁定
+    // =========================================================================
+    function bindPadControl(id, onPress, onRelease) {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      el.addEventListener("pointerdown", function (ev) {
+        ev.preventDefault();
+        ensureAudioReady();
+        el.classList.add("pressed");
+        if (onPress) onPress();
+      });
+
+      const releaseFn = function (ev) {
+        if (ev) ev.preventDefault();
+        el.classList.remove("pressed");
+        if (onRelease) onRelease();
+      };
+
+      el.addEventListener("pointerup", releaseFn);
+      el.addEventListener("pointercancel", releaseFn);
+      el.addEventListener("pointerleave", releaseFn);
+    }
+
+    bindPadControl(
+      "btnMoveLeft",
+      function () {
+        moveInput.left = true;
+        queenPlayer.facing = -1;
+      },
+      function () {
+        moveInput.left = false;
+      }
+    );
+
+    bindPadControl(
+      "btnMoveRight",
+      function () {
+        moveInput.right = true;
+        queenPlayer.facing = 1;
+      },
+      function () {
+        moveInput.right = false;
+      }
+    );
+
+    bindPadControl("btnJump", function () {
+      if (battleStatus === "active") queenPlayer.jumpUnit();
+    });
+
+    bindPadControl("btnSkillPan", function () {
+      if (battleStatus === "active") queenPlayer.performAttack("pan", servantAi);
+    });
+
+    bindPadControl("btnSkillShop", function () {
+      if (battleStatus === "active") queenPlayer.performAttack("shop", servantAi);
+    });
+
+    bindPadControl("btnSkillPinch", function () {
+      if (battleStatus === "active") queenPlayer.performAttack("pinch", servantAi);
+    });
+
+    bindPadControl("btnSkillShield", function () {
+      if (battleStatus === "active") queenPlayer.activateShield();
+    });
+
+    bindPadControl("btnKidsAssist", function () {
+      if (battleStatus === "active") triggerKidsAssistButton();
+    });
+
+    window.addEventListener("keydown", function (ev) {
+      const k = ev.key.toLowerCase();
+      if (k === "arrowleft" || k === "a") {
+        moveInput.left = true;
+        queenPlayer.facing = -1;
+      } else if (k === "arrowright" || k === "d") {
+        moveInput.right = true;
+        queenPlayer.facing = 1;
+      } else if (k === "arrowup" || k === "w") {
+        if (battleStatus === "active") queenPlayer.jumpUnit();
+      } else if (k === "j" || k === "z") {
+        if (battleStatus === "active") queenPlayer.performAttack("pan", servantAi);
+      } else if (k === "k" || k === "x") {
+        if (battleStatus === "active") queenPlayer.performAttack("shop", servantAi);
+      } else if (k === "l" || k === "c") {
+        if (battleStatus === "active") queenPlayer.performAttack("pinch", servantAi);
+      } else if (k === "i" || k === "s" || k === "arrowdown") {
+        if (battleStatus === "active") queenPlayer.activateShield();
+      } else if (ev.code === "Space" || k === "e") {
+        if (ev.code === "Space") ev.preventDefault();
+        if (battleStatus === "active") triggerKidsAssistButton();
+      }
+    });
+
+    window.addEventListener("keyup", function (ev) {
+      const k = ev.key.toLowerCase();
+      if (k === "arrowleft" || k === "a") moveInput.left = false;
+      if (k === "arrowright" || k === "d") moveInput.right = false;
+    });
+
+    // =========================================================================
+    // 8. 連續 requestAnimationFrame 主迴圈（首幀即刻繪製）
+    // =========================================================================
+    function stepQueenMovement() {
+      if (battleStatus !== "active") {
+        queenPlayer.vx = 0;
+        return;
+      }
+      const speed = 265;
+      if (moveInput.left && !moveInput.right) {
+        queenPlayer.vx = -speed;
+        queenPlayer.facing = -1;
+      } else if (moveInput.right && !moveInput.left) {
+        queenPlayer.vx = speed;
+        queenPlayer.facing = 1;
+      } else {
+        queenPlayer.vx = 0;
+      }
+    }
+
+    function stepServantBrain(dt) {
+      if (battleStatus !== "active") {
+        servantAi.vx = 0;
+        return;
+      }
+      const dx = queenPlayer.x - servantAi.x;
+      servantAi.facing = dx >= 0 ? 1 : -1;
+
+      const moveSpd = aiDifficulty === "survival" ? 182 : 108;
+      const atkChance = aiDifficulty === "survival" ? 1.9 : 0.9;
+
+      if (Math.abs(dx) > 105) {
+        servantAi.vx = servantAi.facing * moveSpd;
+      } else {
+        servantAi.vx = 0;
+        if (Math.random() < dt * atkChance) {
+          servantAi.performAttack(Math.random() < 0.65 ? "servantStrike" : "card", queenPlayer);
+        }
+      }
+
+      if (Math.random() < dt * 0.55) {
+        servantAi.jumpUnit();
+      }
+    }
+
+    function paintWorld(dt) {
+      ctx.save();
+      const sx = canvas.width / WORLD_W;
+      const sy = canvas.height / WORLD_H;
+      ctx.scale(sx, sy);
+
+      if (screenShakeSec > 0) {
+        const mag = screenShakeSec * 18;
+        ctx.translate((Math.random() - 0.5) * mag, (Math.random() - 0.5) * mag);
+      }
+
+      drawSceneLayer(ctx);
+      kidReina.drawKid(ctx);
+      kidEian.drawKid(ctx);
+      queenPlayer.drawUnit(ctx);
+      servantAi.drawUnit(ctx);
+      updateAndDrawEffects(ctx, dt);
+
+      if (screenFlashSec > 0) {
+        ctx.fillStyle = `rgba(239, 68, 68, ${Math.min(0.45, screenFlashSec)})`;
+        ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+      }
+
+      ctx.font = "700 11px monospace";
+      ctx.textAlign = "right";
+      ctx.fillStyle = "rgba(15, 23, 42, 0.7)";
+      ctx.fillText(`FRAME #${frameCounter}`, WORLD_W - 10, 20);
+
+      ctx.restore();
+    }
+
+    function loopFrame(ts) {
+      try {
+        if (!lastTimestamp) lastTimestamp = ts;
+        const dt = Math.max(0, Math.min(0.05, (ts - lastTimestamp) / 1000));
+        lastTimestamp = ts;
+        frameCounter++;
+
+        if (screenShakeSec > 0) screenShakeSec = Math.max(0, screenShakeSec - dt);
+        if (screenFlashSec > 0) screenFlashSec = Math.max(0, screenFlashSec - dt);
+        if (mutationBannerSec > 0) mutationBannerSec = Math.max(0, mutationBannerSec - dt);
+
+        if (battleStatus === "active") {
+          stepQueenMovement();
+          stepServantBrain(dt);
+
+          timeAcc += dt;
+          if (timeAcc >= 1) {
+            timeAcc -= 1;
+            remainingTime = Math.max(0, remainingTime - 1);
+            if (remainingTime <= 0) {
+              openKoModal();
+            }
+          }
+        }
+
+        queenPlayer.updateUnit(dt, servantAi);
+        servantAi.updateUnit(dt, queenPlayer);
+        kidEian.updateKid(dt, queenPlayer, servantAi);
+        kidReina.updateKid(dt, queenPlayer, servantAi);
+
+        paintWorld(dt);
+        syncVitalsHud();
+      } catch (err) {
+        // 單幀例外安全略過
+      }
+      window.requestAnimationFrame(loopFrame);
+    }
+
+    // 立即同步尺寸、血條並繪製首幀
+    fitCanvasToContainer();
+    syncVitalsHud();
+    paintWorld(0.016);
+    window.requestAnimationFrame(loopFrame);
+  </script>
+</body>
+</html>
